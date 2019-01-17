@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="system_entries">
+        <item>Content-Based</item>
+        <item>Collaborative</item>
+        <item>Hybrid</item>
+    </string-array>
+    <string-array name="system_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+
+
+    <string-array name="miles">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+
+    </string-array>
+
+    <string-array name="cuisine_entries">
+        <item>Chinese</item>
+        <item>English</item>
+        <item>American</item>
+        <item>Indian</item>
+        <item>Mexican</item>
+    </string-array>
+
+    <string-array name="cuisine_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="ambience_entries">
+        <item>Casual</item>
+        <item>Classy</item>
+        <item>Divey</item>
+        <item>Hipster</item>
+        <item>Intimate</item>
+        <item>Romantic</item>
+        <item>Trendy</item>
+        <item>Touristy</item>
+        <item>Upscale</item>
+    </string-array>
+
+    <string-array name="ambience_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+    </string-array>
+
+    <string-array name="price_entries">
+        <item>Cheap</item>
+        <item>Average</item>
+        <item>Medium</item>
+        <item>Expensive</item>
+    </string-array>
+
+    <string-array name="price_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+</resources>

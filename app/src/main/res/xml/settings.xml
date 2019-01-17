@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <PreferenceCategory
+        android:key="settings_main"
+        android:title="System Settings">
+
+        <ListPreference
+            android:key="key"
+            android:summary="Insert Choice Here"
+            android:title="System"
+            android:dialogTitle="Choose System"
+            android:entries="@array/system_entries"
+            android:entryValues="@array/system_values"/>
+
+        <ListPreference
+            android:key="key2"
+            android:summary="Show miles radius here"
+            android:title="Radius"
+            android:dialogTitle="Choose Radius in Miles"
+            android:entries="@array/miles"
+            android:entryValues="@array/miles"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="notifications"
+        android:title="Notifications">
+
+        <SwitchPreference
+            android:key="notifications_new_message"
+            android:defaultValue="true"
+            android:title="Recommended Notifications" />
+
+        <SwitchPreference
+            android:key="vibrate"
+            android:title="Vibrate"
+            android:summary="Vibrate upon notification"
+            android:dependency="notifications_new_message"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="Preferences"
+        android:title="Preferences">
+
+        <MultiSelectListPreference
+            android:key="cuisine"
+            android:title="Cuisine"
+            android:summary="Choose your preferred cuisine type"
+            android:entries="@array/cuisine_entries"
+            android:entryValues="@array/cuisine_values"
+            android:dialogTitle="Choose your cuisines" />
+
+        <MultiSelectListPreference
+            android:key="ambience"
+            android:title="Ambience"
+            android:summary="Choose your preferred ambience type"
+            android:entries="@array/ambience_entries"
+            android:entryValues="@array/ambience_values"
+            android:dialogTitle="Choose your ambience" />
+
+        <ListPreference
+            android:key="price"
+            android:title="Price Range"
+            android:summary="Choose your preferred Price Range"
+            android:entries="@array/price_entries"
+            android:entryValues="@array/price_values"
+            android:dialogTitle="Choose your price range" />
+
+    </PreferenceCategory>
+
+    <SwitchPreference
+        android:key="wifi"
+        android:title="Wifi Available"
+        android:summary="Choose preferred wifi availability"/>
+
+    <SwitchPreference
+        android:key="children"
+        android:title="Children Friendly"
+        android:summary="Choose preferred good for children places"/>
+
+    <SwitchPreference
+        android:key="groups"
+        android:title="Group Friendly"
+        android:summary="Choose preferred good for group places"/>
+</PreferenceScreen>
