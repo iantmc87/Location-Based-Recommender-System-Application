@@ -11,8 +11,6 @@
         <item>3</item>
     </string-array>
 
-
-
     <string-array name="miles">
         <item>1</item>
         <item>2</item>
@@ -43,14 +41,19 @@
         <item>American</item>
         <item>Indian</item>
         <item>Mexican</item>
+        <item>Thai</item>
+        <item>Korean</item>
+        <item>Japanese</item>
     </string-array>
-
     <string-array name="cuisine_values">
         <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
         <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
     </string-array>
 
     <string-array name="ambience_entries">
@@ -79,8 +82,8 @@
 
     <string-array name="price_entries">
         <item>Cheap</item>
+        <item>Good Value</item>
         <item>Average</item>
-        <item>Medium</item>
         <item>Expensive</item>
     </string-array>
 
