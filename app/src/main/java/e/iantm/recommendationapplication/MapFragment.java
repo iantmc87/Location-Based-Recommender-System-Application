@@ -2,7 +2,9 @@ package e.iantm.recommendationapplication;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +12,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -24,6 +34,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -34,6 +51,10 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     Marker mCurrLocationMarker;
+    String places, updateLocation;
+    RequestQueue requestQueue;
+    Double longitude, latitude;
+    Resources res;
 
 
     @Override
@@ -64,6 +85,11 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     {
         mGoogleMap=googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        requestQueue = Volley.newRequestQueue(getContext());
+        res = getResources();
+        places = String.format(res.getString(R.string.places), res.getString(R.string.url));
+
+
 
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -83,6 +109,51 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
             mGoogleMap.setMyLocationEnabled(true);
         }
 
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, places, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray recommendations = response.getJSONArray("recommendations");
+                    int length = recommendations.length();
+                    String [] name = new String [length];
+                    Double [] longitude = new Double [length];
+                    Double [] latitude = new Double[length];
+                    Marker [] m = new Marker[length];
+
+                    for(int i = 0; i < length; i++) {
+                        JSONObject obj = recommendations.getJSONObject(i);
+                        name[i] = obj.getString("Name");
+                        longitude[i] = obj.getDouble("Longitude");
+                        latitude[i] = obj.getDouble("Latitude");
+                        if(i == 0) {
+                            m[i] = mGoogleMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(latitude[i], longitude[i]))
+                                    .title(name[i])
+                                    .snippet("Ranking: " + (i + 1))
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                        } else {
+                            m[i] = mGoogleMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(latitude[i], longitude[i]))
+                                    .title(name[i])
+                                    .snippet("Ranking: " + (i + 1))
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        }
+                    }
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), "No Recommended Places", Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+
 
     }
 
@@ -98,9 +169,9 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     @Override
     public void onConnected(Bundle bundle) {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(10000);
-        mLocationRequest.setSmallestDisplacement(1000);
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(30000);
+        mLocationRequest.setSmallestDisplacement(0);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         if (ContextCompat.checkSelfPermission(getActivity(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -118,12 +189,19 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     @Override
     public void onLocationChanged(Location location)
     {
-        mLastLocation = location;
+        //mLastLocation = location;
+        requestQueue = Volley.newRequestQueue(getContext());
+        res = getResources();
+        updateLocation = String.format(res.getString(R.string.updateLocation), res.getString(R.string.url));
+
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();
         }
 
-        LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+
+        LatLng current = new LatLng(latitude, longitude);
 
         mGoogleMap.addMarker(new MarkerOptions()
                 .position(current)
@@ -132,6 +210,28 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
         //move map camera
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current,11));
+
+        Request request = new StringRequest(Request.Method.POST, updateLocation, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parameters = new HashMap<String, String>();
+                parameters.put("longitude", longitude.toString());
+                parameters.put("latitude", latitude.toString());
+
+                return parameters;
+            }
+        };
+        requestQueue.add(request);
     }
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;

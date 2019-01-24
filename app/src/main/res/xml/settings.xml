@@ -2,7 +2,8 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#EAEAEA">
 
     <PreferenceCategory
         android:key="settings_main"
@@ -18,7 +19,7 @@
 
         <ListPreference
             android:key="radius"
-            android:summary="Show miles radius here"
+            android:summary="%s miles"
             android:title="Radius"
             android:dialogTitle="Choose Radius in Miles"
             android:entries="@array/miles"
@@ -48,7 +49,7 @@
         <MultiSelectListPreference
             android:key="cuisine"
             android:title="Cuisine"
-            android:summary="Choose your preferred cuisine type"
+            android:summary="Select preferred cuisines"
             android:entries="@array/cuisine_entries"
             android:entryValues="@array/cuisine_values"
             android:dialogTitle="Choose your cuisines" />
@@ -56,7 +57,7 @@
         <MultiSelectListPreference
             android:key="ambience"
             android:title="Ambience"
-            android:summary="Choose your preferred ambience type"
+            android:summary="Select preferred ambience"
             android:entries="@array/ambience_entries"
             android:entryValues="@array/ambience_values"
             android:dialogTitle="Choose your ambience" />
@@ -64,7 +65,7 @@
         <ListPreference
             android:key="price"
             android:title="Price Range"
-            android:summary="Choose your preferred Price Range"
+            android:summary="%s"
             android:entries="@array/price_entries"
             android:entryValues="@array/price_values"
             android:dialogTitle="Choose your price range" />
@@ -77,12 +78,17 @@
         android:summary="Choose preferred wifi availability"/>
 
     <SwitchPreference
+        android:key="wheelchair"
+        android:title="Wheelchair Accessible"
+        android:summary="Choose preferred wheelchair accessibility"/>
+
+    <SwitchPreference
         android:key="children"
         android:title="Children Friendly"
-        android:summary="Choose preferred good for children places"/>
+        android:summary="Preferred child friendly restaurant"/>
 
     <SwitchPreference
         android:key="groups"
         android:title="Group Friendly"
-        android:summary="Choose preferred good for group places"/>
+        android:summary="Preferred good for groups restaurant"/>
 </PreferenceScreen>
