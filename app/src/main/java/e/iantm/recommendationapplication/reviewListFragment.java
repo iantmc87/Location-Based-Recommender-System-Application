@@ -39,10 +39,12 @@ public class reviewListFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.review_list);
         requestQueue = Volley.newRequestQueue(getContext());
 
-        Bundle bundle = getArguments();
+        /*Bundle bundle = getArguments();
         if(bundle != null) {
             title = bundle.get("title").toString();
-        }
+        } else {
+            title = "error";
+        }*/
         res = getResources();
         //String param = (res.getString(R.string.url) + "?param=Harlow");
 
@@ -58,18 +60,21 @@ public class reviewListFragment extends Fragment {
                     for(int i = 0; i < length; i++) {
                         JSONObject obj = recommendations.getJSONObject(i);
                         item = new HashMap<String, String>();
+                        item.put("date", obj.getString("date"));
                         item.put("rating", obj.getString("stars"));
                         item.put("review", obj.getString("text"));
                         list.add(item);
                     }
 
-                    TextView textView = new TextView(getContext());
-                    textView.setText(title);
+                    /*if(title != null) {
+                        TextView textView = new TextView(getContext());
+                        textView.setText(title);
 
-                    listView.addHeaderView(textView);
+                        listView.addHeaderView(textView);
+                    }*/
 
                     adapter = new SimpleAdapter(getContext(), list, R.layout.reviewslistview,
-                            new String[] {"rating", "review"}, new int []{R.id.score, R.id.usertext});
+                            new String[] {"date", "username", "review"}, new int []{R.id.date, R.id.name, R.id.usertext});
 
                     listView.setAdapter(adapter);
 

@@ -112,9 +112,9 @@ public class HomeFragment extends Fragment {
     private boolean loadFragment1(Fragment fragment, String title) {
         //switching fragment
 
-        Bundle bundle = new Bundle();
-        bundle.putString("title", title);
-        fragment.setArguments(bundle);
+            Bundle bundle = new Bundle();
+            bundle.putString("title", title);
+            fragment.setArguments(bundle);
         if (fragment != null) {
             getFragmentManager()
                     .beginTransaction()
