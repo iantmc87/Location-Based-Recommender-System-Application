@@ -1,7 +1,7 @@
 <resources>
-    <string name="url">***INSERT SERVER URL HERE***</string>
+    <string name="url">*****INSERT URL HERE*******</string>
     <string name="systemPHP">%1$s/update_system.php</string>
-    <string name="places">%1$s/working_recommend.php</string>
+    <string name="recommendations">%1$s/testing.php</string>
     <string name="updateLocation">%1$s/update_location.php</string>
     <string name="updateRadius">%1$s/update_miles.php</string>
     <string name="updateKids">%1$s/update_kids.php</string>
@@ -9,5 +9,6 @@
     <string name="updateGroup">%1$s/update_group.php</string>
     <string name="updateWheelchair">%1$s/update_wheelchair.php</string>
     <string name="updateWifi">%1$s/update_wifi.php</string>
+    <string name="reviews">%1$s/reviews.php</string>
 
 </resources>

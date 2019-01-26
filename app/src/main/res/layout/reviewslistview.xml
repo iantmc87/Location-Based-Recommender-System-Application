@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="47dp"
+    android:layout_height="100dp"
     android:orientation="vertical">
 
 
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/score"
         android:layout_width="336dp"
         android:layout_height="wrap_content"
         android:text="TextView"
@@ -21,9 +21,9 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/summary"
+        android:id="@+id/usertext"
         android:layout_width="336dp"
-        android:layout_height="wrap_content"
+        android:layout_height="61dp"
         android:layout_marginBottom="6dp"
         android:text="TextView"
         android:textColor="#000000"

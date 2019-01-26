@@ -87,7 +87,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         requestQueue = Volley.newRequestQueue(getContext());
         res = getResources();
-        places = String.format(res.getString(R.string.places), res.getString(R.string.url));
+        places = String.format(res.getString(R.string.recommendations), res.getString(R.string.url));
 
 
 

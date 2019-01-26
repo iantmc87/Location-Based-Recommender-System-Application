@@ -9,8 +9,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,20 +30,22 @@ import java.util.HashMap;
 
 public class HomeFragment extends Fragment {
 
-    String places;
+    String places, reviews;
     RequestQueue requestQueue;
     MapFragment mapFragment;
     ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
     SimpleAdapter adapter;
     View view;
     Resources res;
+    ListView listView;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         res = getResources();
-        places = String.format(res.getString(R.string.places), res.getString(R.string.url));
+        places = String.format(res.getString(R.string.recommendations), res.getString(R.string.url));
         view =  inflater.inflate(R.layout.fragment_home, null);
+        listView = (ListView) view.findViewById(R.id.list);
         loadFragment(new MapFragment());
         requestQueue = Volley.newRequestQueue(getContext());
 
@@ -55,15 +59,15 @@ public class HomeFragment extends Fragment {
                     for(int i = 0; i < length; i++) {
                         JSONObject obj = recommendations.getJSONObject(i);
                         item = new HashMap<String, String>();
-                        item.put("title", obj.getString("Name"));
-                        item.put("summary", obj.getString("Categories"));
+                        item.put("title", obj.getString("name"));
+                        //item.put("summary", obj.getString("categories"));
                         list.add(item);
                     }
 
                     adapter = new SimpleAdapter(getContext(), list, R.layout.recommendlistview,
-                            new String[] {"title", "summary"}, new int []{R.id.title, R.id.summary});
+                            new String[] {"title"/*, "summary"*/}, new int []{R.id.title/*, R.id.summary*/});
 
-                    ((ListView) view.findViewById(R.id.list)).setAdapter(adapter);
+                    listView.setAdapter(adapter);
 
 
                 } catch (JSONException e) {
@@ -78,6 +82,18 @@ public class HomeFragment extends Fragment {
         });
         requestQueue.add(jsonObjectRequest);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                TextView selectedItem = (TextView) view.findViewById(R.id.title);
+                //String selectedItem = (String) listView.getItemAtPosition(position);
+
+                loadFragment1(new ReviewFragment(), selectedItem.getText().toString());
+
+            }
+        });
+
         return view;
     }
 
@@ -87,6 +103,22 @@ public class HomeFragment extends Fragment {
             getChildFragmentManager()
                     .beginTransaction()
                     .replace(R.id.child_fragment_container, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean loadFragment1(Fragment fragment, String title) {
+        //switching fragment
+
+        Bundle bundle = new Bundle();
+        bundle.putString("title", title);
+        fragment.setArguments(bundle);
+        if (fragment != null) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
                     .commit();
             return true;
         }
