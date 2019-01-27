@@ -9,4 +9,24 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="system">system</string>
 
+    <string name="title_activity_welcome">Home Screen</string>
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">GOT IT</string>
+
+    <string name="slide_1_title">Recommendation Page</string>
+    <string name="slide_1_desc">This page will show how to use recommendation page</string>
+
+    <string name="slide_2_title">Review Page</string>
+    <string name="slide_2_desc">This page will show how to use review page</string>
+
+    <string name="slide_3_title">System</string>
+    <string name="slide_3_desc">This page will show system descriptions</string>
+
+    <string name="slide_4_title">Settings</string>
+    <string name="slide_4_desc">This page will show how to use settings page</string>
+
+    <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
+    <string name="play_again">Play Again</string>
+
 </resources>

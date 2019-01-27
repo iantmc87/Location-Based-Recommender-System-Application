@@ -4,9 +4,11 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -90,7 +92,6 @@ public class HomeFragment extends Fragment {
                 //String selectedItem = (String) listView.getItemAtPosition(position);
 
                 loadFragment1(new ReviewFragment(), selectedItem.getText().toString());
-
             }
         });
 
