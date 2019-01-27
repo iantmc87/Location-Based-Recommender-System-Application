@@ -70,25 +70,39 @@
             android:entryValues="@array/price_values"
             android:dialogTitle="Choose your price range" />
 
+        <SwitchPreference
+            android:key="wifi"
+            android:title="Wifi Available"
+            android:summary="Choose preferred wifi availability"/>
+
+        <SwitchPreference
+            android:key="wheelchair"
+            android:title="Wheelchair Accessible"
+            android:summary="Choose preferred wheelchair accessibility"/>
+
+        <SwitchPreference
+            android:key="children"
+            android:title="Children Friendly"
+            android:summary="Preferred child friendly restaurant"/>
+
+        <SwitchPreference
+            android:key="groups"
+            android:title="Group Friendly"
+            android:summary="Preferred good for groups restaurant"/>
     </PreferenceCategory>
 
-    <SwitchPreference
-        android:key="wifi"
-        android:title="Wifi Available"
-        android:summary="Choose preferred wifi availability"/>
+    <PreferenceCategory
+        android:key="pinscreen"
+        android:title="Security">
 
-    <SwitchPreference
-        android:key="wheelchair"
-        android:title="Wheelchair Accessible"
-        android:summary="Choose preferred wheelchair accessibility"/>
+        <SwitchPreference
+            android:key="pincode"
+            android:title="Application Lock"
+            android:summary="Turn pinlock on/off" />
 
-    <SwitchPreference
-        android:key="children"
-        android:title="Children Friendly"
-        android:summary="Preferred child friendly restaurant"/>
+        <Preference
+            android:key="changepin"
+            android:title="Change Pin Code" />
+    </PreferenceCategory>
 
-    <SwitchPreference
-        android:key="groups"
-        android:title="Group Friendly"
-        android:summary="Preferred good for groups restaurant"/>
 </PreferenceScreen>

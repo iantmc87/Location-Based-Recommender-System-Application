@@ -36,6 +36,8 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_welcome"/>
+        <activity
+            android:name=".CustomPinActivity"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

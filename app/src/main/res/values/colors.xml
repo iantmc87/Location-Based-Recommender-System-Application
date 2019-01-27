@@ -41,7 +41,9 @@
         <item>@color/dot_dark_screen4</item>
     </array>
 
-
+    <color name="material_blue_500">#009688</color>
+    <color name="material_blue_700">#00796B</color>
+    <color name="material_green_A200">#FD87A9</color>
 
 
 

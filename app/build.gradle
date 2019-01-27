@@ -16,6 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    lintOptions {
+        disable 'MissingTranslation'
+    }
 }
 
 dependencies {
@@ -38,4 +42,11 @@ dependencies {
         transitive = true
     }
     implementation project(':lollipin')
+    implementation 'uk.me.lewisdeane.ldialogs:ldialogs:1.2.0@aar'
+
+    repositories {
+        maven {
+            url 'https://maven.google.com'
+        }
+    }
 }
