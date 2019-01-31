@@ -276,7 +276,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         }
                 };
 
-                return false;
+                return true;
             }
         });
 
@@ -310,7 +310,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     }
                 };
 
-                return false;
+                return true;
             }
         });
 
@@ -344,7 +344,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     }
                 };
 
-                return false;
+                return true;
             }
         });
 
@@ -378,7 +378,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     }
                 };
 
-                return false;
+                return true;
             }
         });
     }

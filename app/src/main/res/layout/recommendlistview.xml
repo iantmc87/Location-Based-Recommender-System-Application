@@ -3,14 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="47dp"
+    android:layout_height="50dp"
     android:orientation="vertical">
-
 
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="336dp"
+        android:layout_width="239dp"
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textColor="#000000"
@@ -22,7 +21,7 @@
 
     <TextView
         android:id="@+id/summary"
-        android:layout_width="336dp"
+        android:layout_width="239dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
         android:text="TextView"
@@ -31,5 +30,36 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <RatingBar
+        android:id="@+id/ratingBar2"
+        style="@style/Widget.AppCompat.RatingBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
+        android:layout_marginEnd="2dp"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:paddingBottom="-5dp"
+        android:rating="2.5"
+        android:scaleX="1"
+        android:scaleY="1"
+        app:layout_constraintBottom_toTopOf="@+id/distanceFrom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.944"
+        app:layout_constraintStart_toEndOf="@+id/title"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/distanceFrom"
+        android:layout_width="68dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="47dp"
+        android:layout_marginTop="1dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.894"
+        app:layout_constraintStart_toEndOf="@+id/summary"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar2" />
 
 </android.support.constraint.ConstraintLayout>

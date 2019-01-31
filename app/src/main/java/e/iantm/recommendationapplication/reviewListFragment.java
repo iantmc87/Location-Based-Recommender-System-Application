@@ -60,6 +60,7 @@ public class reviewListFragment extends Fragment {
                     for(int i = 0; i < length; i++) {
                         JSONObject obj = recommendations.getJSONObject(i);
                         item = new HashMap<String, String>();
+                        item.put("name", obj.getString("name"));
                         item.put("date", obj.getString("date"));
                         item.put("rating", obj.getString("stars"));
                         item.put("review", obj.getString("text"));
@@ -74,7 +75,7 @@ public class reviewListFragment extends Fragment {
                     }*/
 
                     adapter = new SimpleAdapter(getContext(), list, R.layout.reviewslistview,
-                            new String[] {"date", "username", "review"}, new int []{R.id.date, R.id.name, R.id.usertext});
+                            new String[] {"name", "date"/*, "stars"*/, "review"}, new int []{R.id.name, R.id.date/*, R.id.name*/, R.id.usertext});
 
                     listView.setAdapter(adapter);
 

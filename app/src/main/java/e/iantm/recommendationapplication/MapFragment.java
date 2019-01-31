@@ -122,9 +122,9 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
                     for(int i = 0; i < length; i++) {
                         JSONObject obj = recommendations.getJSONObject(i);
-                        name[i] = obj.getString("Name");
-                        longitude[i] = obj.getDouble("Longitude");
-                        latitude[i] = obj.getDouble("Latitude");
+                        name[i] = obj.getString("name");
+                        longitude[i] = obj.getDouble("longitude");
+                        latitude[i] = obj.getDouble("latitude");
                         if(i == 0) {
                             m[i] = mGoogleMap.addMarker(new MarkerOptions()
                                     .position(new LatLng(latitude[i], longitude[i]))
@@ -189,7 +189,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     @Override
     public void onLocationChanged(Location location)
     {
-        //mLastLocation = location;
+        mLastLocation = location;
         requestQueue = Volley.newRequestQueue(getContext());
         res = getResources();
         updateLocation = String.format(res.getString(R.string.updateLocation), res.getString(R.string.url));

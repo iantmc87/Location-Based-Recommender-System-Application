@@ -62,12 +62,12 @@ public class HomeFragment extends Fragment {
                         JSONObject obj = recommendations.getJSONObject(i);
                         item = new HashMap<String, String>();
                         item.put("title", obj.getString("name"));
-                        //item.put("summary", obj.getString("categories"));
+                        item.put("summary", obj.getString("categories"));
                         list.add(item);
                     }
 
                     adapter = new SimpleAdapter(getContext(), list, R.layout.recommendlistview,
-                            new String[] {"title"/*, "summary"*/}, new int []{R.id.title/*, R.id.summary*/});
+                            new String[] {"title", "summary"}, new int []{R.id.title, R.id.summary});
 
                     listView.setAdapter(adapter);
 
