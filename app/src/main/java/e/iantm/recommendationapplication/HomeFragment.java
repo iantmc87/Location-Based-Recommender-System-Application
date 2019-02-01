@@ -125,15 +125,4 @@ public class HomeFragment extends Fragment {
         }
         return false;
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-       if (requestCode == MapFragment.MY_PERMISSIONS_REQUEST_LOCATION){
-            mapFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-        else {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
 }

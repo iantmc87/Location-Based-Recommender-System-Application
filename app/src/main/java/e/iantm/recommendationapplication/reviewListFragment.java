@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class reviewListFragment extends Fragment {
 
@@ -39,57 +40,59 @@ public class reviewListFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.review_list);
         requestQueue = Volley.newRequestQueue(getContext());
 
-        /*Bundle bundle = getArguments();
+       /* Bundle bundle = getArguments();
         if(bundle != null) {
             title = bundle.get("title").toString();
         } else {
-            title = "error";
+
         }*/
         res = getResources();
+        /*Map<String, String> json = new HashMap<>();
+        json.put("place", title);*/
         //String param = (res.getString(R.string.url) + "?param=Harlow");
 
         reviews = String.format(res.getString(R.string.reviews), res.getString(R.string.url));
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, reviews, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray recommendations = response.getJSONArray("reviews");
-                    int length = recommendations.length();
-                    HashMap<String, String> item;
-                    for(int i = 0; i < length; i++) {
-                        JSONObject obj = recommendations.getJSONObject(i);
-                        item = new HashMap<String, String>();
-                        item.put("name", obj.getString("name"));
-                        item.put("date", obj.getString("date"));
-                        item.put("rating", obj.getString("stars"));
-                        item.put("review", obj.getString("text"));
-                        list.add(item);
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray recommendations = response.getJSONArray("reviews");
+                            int length = recommendations.length();
+                            HashMap<String, String> item;
+                            for(int i = 0; i < length; i++) {
+                                JSONObject obj = recommendations.getJSONObject(i);
+                                item = new HashMap<String, String>();
+                                item.put("id", String.valueOf(obj.getInt("id")));
+                                item.put("date", obj.getString("date"));
+                                item.put("rating", obj.getString("stars"));
+                                item.put("review", obj.getString("text"));
+                                list.add(item);
+                            }
+
+                            /*if(title != null) {
+                                TextView textView = new TextView(getContext());
+                                textView.setText(title);
+
+                                listView.addHeaderView(textView);
+                            }*/
+
+                            adapter = new SimpleAdapter(getContext(), list, R.layout.reviewslistview,
+                                    new String[] {"id", "date"/*, "stars"*/, "review"}, new int []{R.id.name, R.id.date/*, R.id.name*/, R.id.usertext});
+
+                            listView.setAdapter(adapter);
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
 
-                    /*if(title != null) {
-                        TextView textView = new TextView(getContext());
-                        textView.setText(title);
-
-                        listView.addHeaderView(textView);
-                    }*/
-
-                    adapter = new SimpleAdapter(getContext(), list, R.layout.reviewslistview,
-                            new String[] {"name", "date"/*, "stars"*/, "review"}, new int []{R.id.name, R.id.date/*, R.id.name*/, R.id.usertext});
-
-                    listView.setAdapter(adapter);
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
+                    }
+                });
         requestQueue.add(jsonObjectRequest);
 
         return view;
