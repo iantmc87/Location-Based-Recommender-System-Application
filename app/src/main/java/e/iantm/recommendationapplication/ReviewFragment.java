@@ -33,9 +33,9 @@ public class ReviewFragment extends Fragment {
 
     private boolean loadFragment(Fragment fragment, String title) {
         //switching fragment
-        Bundle bundle = new Bundle();
-        bundle.putString("title", title);
-        fragment.setArguments(bundle);
+        Bundle bundle1 = new Bundle();
+        bundle1.putString("place", title);
+        fragment.setArguments(bundle1);
 
         if (fragment != null) {
             getChildFragmentManager()

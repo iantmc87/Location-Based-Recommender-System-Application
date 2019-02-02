@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -167,50 +168,56 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                             };
                             requestQueue.add(request);
 
-                            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, places, new Response.Listener<JSONObject>() {
+                            /*final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
                                 @Override
-                                public void onResponse(JSONObject response) {
-                                    try {
-                                        JSONArray recommendations = response.getJSONArray("recommendations");
-                                        int length = recommendations.length();
-                                        String [] name = new String [length];
-                                        Double [] longitude = new Double [length];
-                                        Double [] latitude = new Double[length];
-                                        Marker [] m = new Marker[length];
+                                public void run() {*/
+                                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, places, new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            try {
+                                                JSONArray recommendations = response.getJSONArray("recommendations");
+                                                int length = recommendations.length();
+                                                String [] name = new String [length];
+                                                Double [] longitude = new Double [length];
+                                                Double [] latitude = new Double[length];
+                                                Marker [] m = new Marker[length];
 
-                                        for(int i = 0; i < length; i++) {
-                                            JSONObject obj = recommendations.getJSONObject(i);
-                                            name[i] = obj.getString("name");
-                                            longitude[i] = obj.getDouble("longitude");
-                                            latitude[i] = obj.getDouble("latitude");
-                                            if(i == 0) {
-                                                m[i] = mMap.addMarker(new MarkerOptions()
-                                                        .position(new LatLng(latitude[i], longitude[i]))
-                                                        .title(name[i])
-                                                        .snippet("Ranking: " + (i + 1))
-                                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
-                                            } else {
-                                                m[i] = mMap.addMarker(new MarkerOptions()
-                                                        .position(new LatLng(latitude[i], longitude[i]))
-                                                        .title(name[i])
-                                                        .snippet("Ranking: " + (i + 1))
-                                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                                                for(int i = 0; i < length; i++) {
+                                                    JSONObject obj = recommendations.getJSONObject(i);
+                                                    name[i] = obj.getString("name");
+                                                    longitude[i] = obj.getDouble("longitude");
+                                                    latitude[i] = obj.getDouble("latitude");
+                                                    if(i == 0) {
+                                                        m[i] = mMap.addMarker(new MarkerOptions()
+                                                                .position(new LatLng(latitude[i], longitude[i]))
+                                                                .title(name[i])
+                                                                .snippet("Ranking: " + (i + 1))
+                                                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                                                    } else {
+                                                        m[i] = mMap.addMarker(new MarkerOptions()
+                                                                .position(new LatLng(latitude[i], longitude[i]))
+                                                                .title(name[i])
+                                                                .snippet("Ranking: " + (i + 1))
+                                                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                                                    }
+                                                }
+
+
+
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
                                             }
                                         }
-
-
-
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Toast.makeText(getContext(), "No Recommended Places", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                            requestQueue.add(jsonObjectRequest);
+                                    }, new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Toast.makeText(getContext(), "No Recommended Places", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    requestQueue.add(jsonObjectRequest);
+                             /*   }
+                            }, 10000);*/
 
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");

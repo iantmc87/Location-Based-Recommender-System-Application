@@ -1,10 +1,19 @@
 package e.iantm.recommendationapplication;
 
+import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +26,19 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.github.omadahealth.lollipin.lib.managers.AppLock;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -30,6 +51,13 @@ public class WelcomeActivity extends AppCompatActivity {
     private Button btnSkip, btnNext;
     private WelcomeScreenPrefManager prefManager;
     private static final int REQUEST_CODE_ENABLE = 11;
+    private boolean accountsPermissionGranted;
+    private static final int REQUEST_GET_ACCOUNT = 112;
+    String newUser;
+    Resources res;
+    RequestQueue requestQueue;
+    StringRequest request;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +72,17 @@ public class WelcomeActivity extends AppCompatActivity {
         // Making notification bar transparent
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
+
+        if(android.os.Build.VERSION.SDK_INT > 22){
+            if(isGETACCOUNTSAllowed()){
+                // do your task
+
+                getMailAddress();
+            }else{
+                requestGET_ACCOUNTSPermission();
+            }
+
         }
 
         setContentView(R.layout.activity_welcome);
@@ -211,5 +250,92 @@ public class WelcomeActivity extends AppCompatActivity {
             View view = (View) object;
             container.removeView(view);
         }
+    }
+
+    private boolean isGETACCOUNTSAllowed() {
+        //Getting the permission status
+        int result = ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS);
+
+        //If permission is granted returning true
+        if (result == PackageManager.PERMISSION_GRANTED)
+            return true;
+
+        //If permission is not granted returning false
+        return false;
+    }
+
+
+    //if you don't have the permission then Requesting for permission
+    private void requestGET_ACCOUNTSPermission(){
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.GET_ACCOUNTS)){
+
+
+        }
+
+        //And finally ask for the permission
+        ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.GET_ACCOUNTS},REQUEST_GET_ACCOUNT);
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        //Checking the request code of our request
+        if(requestCode == REQUEST_GET_ACCOUNT){
+
+            //If permission is granted
+            if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+
+                Toast.makeText(this,"Thanks You For Permission Granted ",Toast.LENGTH_LONG).show();
+
+                getMailAddress();
+
+            }else{
+                //Displaying another toast if permission is not granted
+                Toast.makeText(this,"Oops you just denied the permission",Toast.LENGTH_LONG).show();
+            }
+        }
+
+    }
+
+    public void getMailAddress(){
+
+
+        AccountManager am = AccountManager.get(this); // "this" references the current Context
+        String acName = null;
+        int end = 0;
+        Account[] accounts = am.getAccounts();
+        for (Account ac : accounts) {
+            end = ac.name.indexOf("@");
+            if(end != -1){
+                acName = ac.name.substring(0, end);
+            }  else {
+                acName = ac.name;
+            }
+        }
+        final String user = acName;
+        requestQueue = Volley.newRequestQueue(this);
+        res = getResources();
+        newUser = String.format(res.getString(R.string.newUser), res.getString(R.string.url));
+        request = new StringRequest(Request.Method.POST, newUser, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parameters = new HashMap<String, String>();
+                parameters.put("user", user);
+
+                return parameters;
+            }
+        };
+        requestQueue.add(request);
     }
 }
