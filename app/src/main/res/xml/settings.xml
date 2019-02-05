@@ -62,13 +62,21 @@
             android:entryValues="@array/ambience_values"
             android:dialogTitle="Choose your ambience" />
 
-        <ListPreference
+        <MultiSelectListPreference
             android:key="price"
             android:title="Price Range"
             android:summary="%s"
             android:entries="@array/price_entries"
             android:entryValues="@array/price_values"
             android:dialogTitle="Choose your price range" />
+
+        <MultiSelectListPreference
+            android:key="alcohol"
+            android:title="Alcohol"
+            android:summary="Select preferred alcohol preferences"
+            android:entries="@array/alcohol_entries"
+            android:entryValues="@array/alcohol_values"
+            android:dialogTitle="Choose your alcohol preference" />
 
         <SwitchPreference
             android:key="wifi"
@@ -81,7 +89,7 @@
             android:summary="Choose preferred wheelchair accessibility"/>
 
         <SwitchPreference
-            android:key="children"
+            android:key="kids"
             android:title="Children Friendly"
             android:summary="Preferred child friendly restaurant"/>
 
@@ -89,6 +97,16 @@
             android:key="groups"
             android:title="Group Friendly"
             android:summary="Preferred good for groups restaurant"/>
+
+        <SwitchPreference
+            android:key="dogs"
+            android:title="Dog Friendly"
+            android:summary="Preferred good for dogs restaurant"/>
+
+        <SwitchPreference
+            android:key="parking"
+            android:title="Car Park"
+            android:summary="Preferred restaurant with car parking"/>
     </PreferenceCategory>
 
     <PreferenceCategory

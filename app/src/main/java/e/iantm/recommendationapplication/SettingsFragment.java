@@ -1,7 +1,9 @@
 package e.iantm.recommendationapplication;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v14.preference.MultiSelectListPreference;
 import android.support.v14.preference.SwitchPreference;
 import android.support.v7.preference.SwitchPreferenceCompat;
 import android.support.annotation.Nullable;
@@ -20,24 +22,33 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.omadahealth.lollipin.lib.managers.AppLock;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
-    ListPreference systemPreference, radiusPreference, cuisinePreference, ambiencePreference, pricePreference;
-    SwitchPreference wifiPreference, kidsPreference, groupPreference, wheelchairPreference;
+    ListPreference systemPreference, radiusPreference, cuisinePreference, ambiencePreference;
+    SwitchPreference wifiPreference, kidsPreference, groupPreference, wheelchairPreference, dogPreference;
+   /* MultiSelectListPreference pricePreference;*/
     RequestQueue requestQueue;
     StringRequest request;
-    String systemValue, radiusValue, priceValue;
-    String updateSystem, updateRadius, updatePrice, updateKids, updateGroup, updateWheelchair, updateWifi;
+    String systemValue, radiusValue;//, priceValue;
+    String updateSystem, updateRadius, /*updatePrice,*/ updateKids, updateGroup, updateWheelchair, updateWifi, updateDog;
     Resources res;
+    Preference pinChange;
+    String userName;
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings);
         requestQueue = Volley.newRequestQueue(getContext());
         res = getResources();
+
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            userName = String.valueOf(bundle.get("userName"));
+        }
 
         systemPreference = (ListPreference)findPreference("system");
         systemPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -212,7 +223,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         }); //end ambience preference on change listener*/
 
-        pricePreference = (ListPreference)findPreference("price");
+       /* pricePreference = (MultiSelectListPreference) findPreference("price");
         pricePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
@@ -244,47 +255,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                 return true;
             }
-        }); //end price preference on change listener
+        });*/ //end price preference on change listener
 
-        kidsPreference = (SwitchPreference)findPreference("children");
-        kidsPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object o) {
-                updateKids = String.format(res.getString(R.string.updateKids), res.getString(R.string.url));
-                final boolean isKidsOn = (Boolean) o;
-                request = new StringRequest(Request.Method.POST, updateKids, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                    }){
-                        @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
-                            Map<String, String> parameters = new HashMap<String, String>();
-                            if(isKidsOn) {
-                                parameters.put("kids", "Yes");
-                            } else if (!isKidsOn) {
-                                parameters.put("kids", "no");
-                            }
-
-                            return parameters;
-                        }
-                };
-
-                return true;
-            }
-        });
-
+        updateWifi = String.format(res.getString(R.string.updateWifi), res.getString(R.string.url));
         wifiPreference = (SwitchPreference)findPreference("wifi");
         wifiPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
-                updateWifi = String.format(res.getString(R.string.updateWifi), res.getString(R.string.url));
+
                 final boolean isWifiOn = (Boolean) o;
                 request = new StringRequest(Request.Method.POST, updateWifi, new Response.Listener<String>() {
                     @Override
@@ -301,9 +279,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> parameters = new HashMap<String, String>();
                         if(isWifiOn) {
-                            parameters.put("wifi", "Yes");
-                        } else if (!isWifiOn) {
-                            parameters.put("wifi", "no");
+                            parameters.put("wifi", "WiFifree");
+                            parameters.put("user_name", userName);
                         }
 
                         return parameters;
@@ -314,11 +291,46 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
+        updateDog = String.format(res.getString(R.string.updateDog), res.getString(R.string.url));
+        dogPreference = (SwitchPreference)findPreference("dogs");
+        dogPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+
+                final boolean isDogOn = (Boolean) o;
+                request = new StringRequest(Request.Method.POST, updateDog, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> parameters = new HashMap<String, String>();
+                        if(isDogOn) {
+                            parameters.put("dog", "DogsAllowedTrue");
+                            parameters.put("user_name", userName);
+                        }
+
+                        return parameters;
+                    }
+                };
+
+                return true;
+            }
+        });
+
+        updateGroup = String.format(res.getString(R.string.updateGroup), res.getString(R.string.url));
         groupPreference = (SwitchPreference)findPreference("groups");
         groupPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
-                updateGroup = String.format(res.getString(R.string.updateGroup), res.getString(R.string.url));
+
                 final boolean isGroupsOn = (Boolean) o;
                 request = new StringRequest(Request.Method.POST, updateGroup, new Response.Listener<String>() {
                     @Override
@@ -335,9 +347,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> parameters = new HashMap<String, String>();
                         if(isGroupsOn) {
-                            parameters.put("groups", "Yes");
-                        } else if (!isGroupsOn) {
-                            parameters.put("groups", "no");
+                            parameters.put("group", "RestaurantsGoodForGroupsTrue");
+                            parameters.put("user_name", userName);
                         }
 
                         return parameters;
@@ -348,11 +359,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
+        updateWheelchair = String.format(res.getString(R.string.updateWheelchair), res.getString(R.string.url));
         wheelchairPreference = (SwitchPreference)findPreference("wheelchair");
         wheelchairPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
-                updateWheelchair = String.format(res.getString(R.string.updateWheelchair), res.getString(R.string.url));
+
+                Toast.makeText(getContext(), userName, Toast.LENGTH_SHORT).show();
                 final boolean isWheelchairOn = (Boolean) o;
                 request = new StringRequest(Request.Method.POST, updateWheelchair, new Response.Listener<String>() {
                     @Override
@@ -364,20 +377,72 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     public void onErrorResponse(VolleyError error) {
 
                     }
-                }){
+                }) {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> parameters = new HashMap<String, String>();
                         if(isWheelchairOn) {
-                            parameters.put("wheelchair", "Yes");
-                        } else if (!isWheelchairOn) {
-                            parameters.put("wheelchair", "no");
+                            parameters.put("wheelchair", "WheelChairAccessibleTrue");
+                            parameters.put("user_name", userName);
+
                         }
 
                         return parameters;
+
                     }
                 };
+                requestQueue.add(request);
 
+
+                return true;
+            }
+        }); //end radius preference on change listener
+
+        updateKids = String.format(res.getString(R.string.updateKids), res.getString(R.string.url));
+        kidsPreference = (SwitchPreference)findPreference("kids");
+        kidsPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+
+                final boolean isKidsOn = (Boolean) o;
+                request = new StringRequest(Request.Method.POST, updateKids, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> parameters = new HashMap<String, String>();
+                        if(isKidsOn) {
+                            parameters.put("kids", "GoodForKidsTrue");
+                            parameters.put("user_name", userName);
+                        }
+
+                        return parameters;
+
+                    }
+                };
+                requestQueue.add(request);
+
+
+                return true;
+            }
+        }); //end radius preference on change listener
+
+        pinChange = (Preference)findPreference("changepin");
+        pinChange.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+
+                Intent intent = new Intent(getActivity(), CustomPinActivity.class);
+                intent.putExtra(AppLock.EXTRA_TYPE, AppLock.CHANGE_PIN);
+                startActivity(intent);
                 return true;
             }
         });

@@ -1,5 +1,7 @@
 package e.iantm.recommendationapplication;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -10,15 +12,26 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.github.omadahealth.lollipin.lib.managers.AppLock;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
     private static final int REQUEST_CODE_ENABLE = 11;
+    String userName = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getMailAddress();
 
         /*SharedPreferences pref = getSharedPreferences("e.iantm.recommendationapplication", MODE_PRIVATE);
         if(!pref.getBoolean("pinFirstStart", true)) {
@@ -40,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
 
-        loadFragment(new HomeFragment());
+        loadFragment(new HomeFragment(), userName);
         setTitle("Recommendations");
     }
 
@@ -69,11 +82,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 setTitle("Help");
                 break;
         }
-        return loadFragment(fragment);
+        return loadFragment(fragment, userName);
     }
 
-    private boolean loadFragment(Fragment fragment) {
+    private boolean loadFragment(Fragment fragment, String userName) {
         //switching fragment
+        Bundle bundle = new Bundle();
+        bundle.putString("userName", userName);
+        bundle.putString("title", "navBar");
+        fragment.setArguments(bundle);
         if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -114,5 +131,24 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         // Update the shared preferences with the current version code
         prefs.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode).apply();
 
+    }
+
+    public String getMailAddress(){
+
+
+        AccountManager am = AccountManager.get(this); // "this" references the current Context
+        String acName = null;
+        int end = 0;
+        Account[] accounts = am.getAccounts();
+        for (Account ac : accounts) {
+            end = ac.name.indexOf("@");
+            if(end != -1){
+                acName = ac.name.substring(0, end);
+            }  else {
+                acName = ac.name;
+            }
+        }
+        userName = acName;
+        return userName;
     }
 }

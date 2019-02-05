@@ -40,6 +40,7 @@ public class HomeFragment extends Fragment {
     View view;
     Resources res;
     ListView listView;
+    String userName;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,6 +51,11 @@ public class HomeFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.list);
         loadFragment(new MapFragment());
         requestQueue = Volley.newRequestQueue(getContext());
+
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            userName = String.valueOf(bundle.get("userName"));
+        }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, places, new Response.Listener<JSONObject>() {
             @Override
@@ -115,6 +121,7 @@ public class HomeFragment extends Fragment {
 
             Bundle bundle = new Bundle();
             bundle.putString("title", title);
+            bundle.putString("userName", userName);
             fragment.setArguments(bundle);
         if (fragment != null) {
             getFragmentManager()

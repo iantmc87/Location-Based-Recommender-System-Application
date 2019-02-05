@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ReviewFragment">
 
-    <FrameLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/child_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="461dp"
@@ -14,15 +14,31 @@
         android:text="@string/title_home"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search" />
+        app:layout_constraintTop_toBottomOf="@+id/search"
+        app:layout_constraintVertical_bias="0.872">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="148dp"
+            android:layout_marginTop="108dp"
+            android:text="Search Results will Appear Here"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
     <EditText
         android:id="@+id/search"
         android:layout_width="323dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="5dp"
         android:ems="10"
         android:hint="Enter Postcode"
@@ -42,6 +58,7 @@
         app:layout_constraintBottom_toTopOf="@+id/child_fragment_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/search"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.215" />
 
 </android.support.constraint.ConstraintLayout>

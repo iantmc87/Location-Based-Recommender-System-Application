@@ -8,26 +8,42 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class ReviewFragment extends Fragment {
 
     String title;
     EditText search;
+    TextView textView;
+    ImageView startSearch;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-
+        View view = inflater.inflate(R.layout.fragment_review, null);
+        textView = (TextView) view.findViewById(R.id.textView);
+        startSearch = (ImageView)view.findViewById(R.id.imageView);
         Bundle bundle = getArguments();
-        if(bundle != null) {
-            title = bundle.get("title").toString();
+        title = String.valueOf(bundle.get("title"));
+
+        if(title != "navBar") {
+            loadFragment(new reviewListFragment(), title);
+            textView.setVisibility(View.INVISIBLE);
+        } else {
+            //loadFragment(new SearchListFragment(), null);
         }
 
-        loadFragment(new reviewListFragment(), title);
-        View view = inflater.inflate(R.layout.fragment_review, null);
         search = (EditText) view.findViewById(R.id.search);
 
         search.setText(title);
+
+        startSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         return view;
     }
 

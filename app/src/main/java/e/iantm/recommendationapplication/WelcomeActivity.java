@@ -57,6 +57,7 @@ public class WelcomeActivity extends AppCompatActivity {
     Resources res;
     RequestQueue requestQueue;
     StringRequest request;
+    String userName = null;
 
 
     @Override
@@ -313,7 +314,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 acName = ac.name;
             }
         }
-        final String user = acName;
+        userName = acName;
         requestQueue = Volley.newRequestQueue(this);
         res = getResources();
         newUser = String.format(res.getString(R.string.newUser), res.getString(R.string.url));
@@ -331,7 +332,7 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
-                parameters.put("user", user);
+                parameters.put("user_name", userName);
 
                 return parameters;
             }

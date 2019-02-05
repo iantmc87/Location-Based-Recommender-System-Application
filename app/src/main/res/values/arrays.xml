@@ -36,14 +36,21 @@
     </string-array>
 
     <string-array name="cuisine_entries">
+        <item>All</item>
+        <item>American</item>
+        <item>Caribbean</item>
         <item>Chinese</item>
         <item>English</item>
-        <item>American</item>
+        <item>French</item>
+        <item>German</item>
         <item>Indian</item>
+        <item>Italian</item>
+        <item>Japanese</item>
+        <item>Korean</item>
         <item>Mexican</item>
         <item>Thai</item>
-        <item>Korean</item>
-        <item>Japanese</item>
+        <item>Vietnamese</item>
+
     </string-array>
     <string-array name="cuisine_values">
         <item>1</item>
@@ -54,9 +61,16 @@
         <item>6</item>
         <item>7</item>
         <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
     </string-array>
 
     <string-array name="ambience_entries">
+        <item>All</item>
         <item>Casual</item>
         <item>Classy</item>
         <item>Divey</item>
@@ -78,9 +92,11 @@
         <item>7</item>
         <item>8</item>
         <item>9</item>
+        <item>10</item>
     </string-array>
 
     <string-array name="price_entries">
+        <item>All</item>
         <item>Cheap</item>
         <item>Good Value</item>
         <item>Average</item>
@@ -92,5 +108,22 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="alcohol_entries">
+        <item>All</item>
+        <item>None</item>
+        <item>Beer and Wine</item>
+        <item>Full Bar</item>
+        <item>Bring Your Own Beer</item>
+    </string-array>
+
+    <string-array name="alcohol_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
     </string-array>
 </resources>

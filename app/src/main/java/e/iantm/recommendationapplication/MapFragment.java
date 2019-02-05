@@ -129,96 +129,97 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = task.getResult();
-                            latitude = mLastKnownLocation.getLatitude();
-                            longitude = mLastKnownLocation.getLongitude();
-                            requestQueue = Volley.newRequestQueue(getContext());
-                            res = getResources();
-                            updateLocation = String.format(res.getString(R.string.updateLocation), res.getString(R.string.url));
-                            places = String.format(res.getString(R.string.recommendations), res.getString(R.string.url));
 
-                            LatLng current = new LatLng(latitude, longitude);
+                            if(mLastKnownLocation != null) {
+                                latitude = mLastKnownLocation.getLatitude();
+                                longitude = mLastKnownLocation.getLongitude();
+                                requestQueue = Volley.newRequestQueue(getContext());
+                                res = getResources();
+                                updateLocation = String.format(res.getString(R.string.updateLocation), res.getString(R.string.url));
+                                places = String.format(res.getString(R.string.recommendations), res.getString(R.string.url));
 
-                            mMap.addMarker(new MarkerOptions()
-                                    .position(current)
-                                    .title("Current Position")
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                                LatLng current = new LatLng(latitude, longitude);
 
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    current, DEFAULT_ZOOM));
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(current)
+                                        .title("Current Position")
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
-                            Request request = new StringRequest(Request.Method.POST, updateLocation, new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                        current, DEFAULT_ZOOM));
 
-                                }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
+                                Request request = new StringRequest(Request.Method.POST, updateLocation, new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
 
-                                }
-                            }) {
-                                @Override
-                                protected Map<String, String> getParams() throws AuthFailureError {
-                                    Map<String, String> parameters = new HashMap<String, String>();
-                                    parameters.put("longitude", longitude.toString());
-                                    parameters.put("latitude", latitude.toString());
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
 
-                                    return parameters;
-                                }
-                            };
-                            requestQueue.add(request);
+                                    }
+                                }) {
+                                    @Override
+                                    protected Map<String, String> getParams() throws AuthFailureError {
+                                        Map<String, String> parameters = new HashMap<String, String>();
+                                        parameters.put("longitude", longitude.toString());
+                                        parameters.put("latitude", latitude.toString());
+
+                                        return parameters;
+                                    }
+                                };
+                                requestQueue.add(request);
 
                             /*final Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {*/
-                                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, places, new Response.Listener<JSONObject>() {
-                                        @Override
-                                        public void onResponse(JSONObject response) {
-                                            try {
-                                                JSONArray recommendations = response.getJSONArray("recommendations");
-                                                int length = recommendations.length();
-                                                String [] name = new String [length];
-                                                Double [] longitude = new Double [length];
-                                                Double [] latitude = new Double[length];
-                                                Marker [] m = new Marker[length];
+                                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, places, new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        try {
+                                            JSONArray recommendations = response.getJSONArray("recommendations");
+                                            int length = recommendations.length();
+                                            String[] name = new String[length];
+                                            Double[] longitude = new Double[length];
+                                            Double[] latitude = new Double[length];
+                                            Marker[] m = new Marker[length];
 
-                                                for(int i = 0; i < length; i++) {
-                                                    JSONObject obj = recommendations.getJSONObject(i);
-                                                    name[i] = obj.getString("name");
-                                                    longitude[i] = obj.getDouble("longitude");
-                                                    latitude[i] = obj.getDouble("latitude");
-                                                    if(i == 0) {
-                                                        m[i] = mMap.addMarker(new MarkerOptions()
-                                                                .position(new LatLng(latitude[i], longitude[i]))
-                                                                .title(name[i])
-                                                                .snippet("Ranking: " + (i + 1))
-                                                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
-                                                    } else {
-                                                        m[i] = mMap.addMarker(new MarkerOptions()
-                                                                .position(new LatLng(latitude[i], longitude[i]))
-                                                                .title(name[i])
-                                                                .snippet("Ranking: " + (i + 1))
-                                                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-                                                    }
+                                            for (int i = 0; i < length; i++) {
+                                                JSONObject obj = recommendations.getJSONObject(i);
+                                                name[i] = obj.getString("name");
+                                                longitude[i] = obj.getDouble("longitude");
+                                                latitude[i] = obj.getDouble("latitude");
+                                                if (i == 0) {
+                                                    m[i] = mMap.addMarker(new MarkerOptions()
+                                                            .position(new LatLng(latitude[i], longitude[i]))
+                                                            .title(name[i])
+                                                            .snippet("Ranking: " + (i + 1))
+                                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                                                } else {
+                                                    m[i] = mMap.addMarker(new MarkerOptions()
+                                                            .position(new LatLng(latitude[i], longitude[i]))
+                                                            .title(name[i])
+                                                            .snippet("Ranking: " + (i + 1))
+                                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
                                                 }
-
-
-
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
                                             }
+
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
                                         }
-                                    }, new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            Toast.makeText(getContext(), "No Recommended Places", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                    requestQueue.add(jsonObjectRequest);
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+
+                                    }
+                                });
+                                requestQueue.add(jsonObjectRequest);
                              /*   }
                             }, 10000);*/
-
+                            }
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
