@@ -57,7 +57,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     Marker mCurrLocationMarker;
-    String places, updateLocation;
+    String places, updateLocation, userName;
     RequestQueue requestQueue;
     Double longitude, latitude;
     Resources res;
@@ -98,7 +98,12 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap)
     {
 
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            userName = String.valueOf(bundle.get("userName"));
+        }
         mMap = googleMap;
+        //Toast.makeText(getContext(), userName, Toast.LENGTH_SHORT).show();
 
         // Use a custom info window adapter to handle multiple lines of text in the
         // info window contents.
@@ -164,16 +169,17 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                                         Map<String, String> parameters = new HashMap<String, String>();
                                         parameters.put("longitude", longitude.toString());
                                         parameters.put("latitude", latitude.toString());
+                                        parameters.put("user_name", userName);
 
                                         return parameters;
                                     }
                                 };
                                 requestQueue.add(request);
 
-                            /*final Handler handler = new Handler();
+                            final Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 @Override
-                                public void run() {*/
+                                public void run() {
                                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, places, new Response.Listener<JSONObject>() {
                                     @Override
                                     public void onResponse(JSONObject response) {
@@ -217,8 +223,8 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                                     }
                                 });
                                 requestQueue.add(jsonObjectRequest);
-                             /*   }
-                            }, 10000);*/
+                                }
+                            }, 10000);
                             }
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");

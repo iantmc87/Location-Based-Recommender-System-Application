@@ -9,7 +9,7 @@
     tools:context=".HomeFragment">
 
     <FrameLayout
-        android:id="@+id/child_fragment_container"
+        android:id="@+id/child_fragment_container_map"
         android:layout_width="match_parent"
         android:layout_height="270dp"
         android:layout_alignParentStart="true"
@@ -18,13 +18,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ListView
-        android:id="@+id/list"
-        android:layout_width="386dp"
-        android:layout_height="242dp"
-        app:layout_constraintBottom_toTopOf="@+id/child_fragment_container"
+    <FrameLayout
+        android:id="@+id/child_fragment_container_list"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="27dp"
+        android:text="@string/title_home"
+        app:layout_constraintBottom_toTopOf="@+id/child_fragment_container_map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
 </android.support.constraint.ConstraintLayout>

@@ -1,20 +1,22 @@
 package e.iantm.recommendationapplication;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,23 +32,30 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class SearchListFragment extends Fragment {
+public class RecommendedListView extends Fragment {
 
+    String places, reviews;
     RequestQueue requestQueue;
+    ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+    SimpleAdapter adapter;
+    View view;
     Resources res;
     ListView listView;
-    String places;
-    SimpleAdapter adapter;
-    ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+    String userName;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_search_list, null);
-        listView = (ListView)view.findViewById(R.id.searchList);
-        requestQueue = Volley.newRequestQueue(getContext());
         res = getResources();
         places = String.format(res.getString(R.string.recommendations), res.getString(R.string.url));
+        view =  inflater.inflate(R.layout.fragment_recommended_list_view, null);
+        listView = (ListView) view.findViewById(R.id.list);
+        requestQueue = Volley.newRequestQueue(getContext());
+
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            userName = String.valueOf(bundle.get("userName"));
+        }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, places, new Response.Listener<JSONObject>() {
             @Override
@@ -81,7 +90,7 @@ public class SearchListFragment extends Fragment {
         });
         requestQueue.add(jsonObjectRequest);
 
-        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -95,17 +104,13 @@ public class SearchListFragment extends Fragment {
                 startActivity(intent);
                 //loadFragment1(new ReviewFragment(), selectedItem.getText().toString());
             }
-        });*/
+        });
 
         return view;
     }
 
-    private boolean loadFragment(Fragment fragment, String title) {
+    private boolean loadFragment(Fragment fragment) {
         //switching fragment
-        Bundle bundle1 = new Bundle();
-        bundle1.putString("place", title);
-        fragment.setArguments(bundle1);
-
         if (fragment != null) {
             getChildFragmentManager()
                     .beginTransaction()
@@ -115,4 +120,23 @@ public class SearchListFragment extends Fragment {
         }
         return false;
     }
+
+    private boolean loadFragment1(Fragment fragment, String title) {
+        //switching fragment
+
+        Bundle bundle = new Bundle();
+        bundle.putString("title", title);
+        bundle.putString("userName", userName);
+        fragment.setArguments(bundle);
+        if (fragment != null) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
+
+
 }

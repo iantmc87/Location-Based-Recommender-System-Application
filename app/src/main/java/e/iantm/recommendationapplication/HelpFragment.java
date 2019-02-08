@@ -54,9 +54,9 @@ public class HelpFragment extends Fragment {
 
                 @Override
                 public void onGroupExpand(int groupPosition) {
-                    Toast.makeText(getContext(),
+                    /*Toast.makeText(getContext(),
                             expandableListTitle.get(groupPosition) + " List Expanded.",
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_SHORT).show();*/
                 }
             });
 
@@ -64,9 +64,9 @@ public class HelpFragment extends Fragment {
 
                 @Override
                 public void onGroupCollapse(int groupPosition) {
-                    Toast.makeText(getContext(),
+                    /*Toast.makeText(getContext(),
                             expandableListTitle.get(groupPosition) + " List Collapsed.",
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_SHORT).show();*/
 
                 }
             });
@@ -75,7 +75,7 @@ public class HelpFragment extends Fragment {
                 @Override
                 public boolean onChildClick(ExpandableListView parent, View v,
                                             int groupPosition, int childPosition, long id) {
-                    Toast.makeText(
+                   /* Toast.makeText(
                             getContext(),
                             expandableListTitle.get(groupPosition)
                                     + " -> "
@@ -83,7 +83,7 @@ public class HelpFragment extends Fragment {
                                     expandableListTitle.get(groupPosition)).get(
                                     childPosition), Toast.LENGTH_SHORT
                     )
-                            .show();
+                            .show();*/
                     return false;
                 }
             });

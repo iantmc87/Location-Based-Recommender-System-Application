@@ -65,7 +65,7 @@
         <MultiSelectListPreference
             android:key="price"
             android:title="Price Range"
-            android:summary="%s"
+            android:summary="Select preferred price"
             android:entries="@array/price_entries"
             android:entryValues="@array/price_values"
             android:dialogTitle="Choose your price range" />

@@ -15,12 +15,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -33,106 +35,65 @@ import java.util.HashMap;
 public class HomeFragment extends Fragment {
 
     String places, reviews;
-    RequestQueue requestQueue;
-    MapFragment mapFragment;
     ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-    SimpleAdapter adapter;
+
     View view;
-    Resources res;
-    ListView listView;
     String userName;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        res = getResources();
-        places = String.format(res.getString(R.string.recommendations), res.getString(R.string.url));
         view =  inflater.inflate(R.layout.fragment_home, null);
-        listView = (ListView) view.findViewById(R.id.list);
-        loadFragment(new MapFragment());
-        requestQueue = Volley.newRequestQueue(getContext());
-
         Bundle bundle = getArguments();
         if(bundle != null) {
             userName = String.valueOf(bundle.get("userName"));
         }
+        //Toast.makeText(getContext(), userName, Toast.LENGTH_SHORT).show();
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, places, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray recommendations = response.getJSONArray("recommendations");
-                    int length = recommendations.length();
-                    HashMap<String, String> item;
-                    for(int i = 0; i < length; i++) {
-                        JSONObject obj = recommendations.getJSONObject(i);
-                        item = new HashMap<String, String>();
-                        item.put("title", obj.getString("name"));
-                        item.put("summary", obj.getString("categories"));
-                        list.add(item);
-                    }
+        loadFragment(new MapFragment(), userName );
 
-                    adapter = new SimpleAdapter(getContext(), list, R.layout.recommendlistview,
-                            new String[] {"title", "summary"}, new int []{R.id.title, R.id.summary});
+        loadFragment1(new WaitingScreenFragment(), userName);
 
-                    listView.setAdapter(adapter);
+        final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loadFragment1(new RecommendedListView(), userName);
+                                }
+                            }, 10000);
 
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        requestQueue.add(jsonObjectRequest);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                TextView selectedItem = (TextView) view.findViewById(R.id.title);
-                //String selectedItem = (String) listView.getItemAtPosition(position);
-
-                loadFragment1(new ReviewFragment(), selectedItem.getText().toString());
-            }
-        });
 
         return view;
     }
 
-    private boolean loadFragment(Fragment fragment) {
+    private boolean loadFragment(Fragment fragment, String userName) {
         //switching fragment
+        Bundle bundle = new Bundle();
+        bundle.putString("userName", userName);
+        fragment.setArguments(bundle);
         if (fragment != null) {
             getChildFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.child_fragment_container, fragment)
+                    .replace(R.id.child_fragment_container_map, fragment)
                     .commit();
             return true;
         }
         return false;
     }
 
-    private boolean loadFragment1(Fragment fragment, String title) {
+    private boolean loadFragment1(Fragment fragment, String userName) {
         //switching fragment
-
-            Bundle bundle = new Bundle();
-            bundle.putString("title", title);
-            bundle.putString("userName", userName);
-            fragment.setArguments(bundle);
+        Bundle bundle = new Bundle();
+        bundle.putString("userName", userName);
+        fragment.setArguments(bundle);
         if (fragment != null) {
-            getFragmentManager()
+            getChildFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
+                    .replace(R.id.child_fragment_container_list, fragment)
                     .commit();
             return true;
         }
         return false;
     }
-
-
 }
 

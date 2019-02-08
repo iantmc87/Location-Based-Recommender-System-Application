@@ -17,7 +17,7 @@ import uk.me.lewisdeane.ldialogs.CustomDialog;
 /**
  * Created by oliviergoutay on 1/14/15.
  */
-public class CustomPinActivity extends AppLockActivity {
+public class  CustomPinActivity extends AppLockActivity {
 
     @Override
     public void showForgotDialog() {

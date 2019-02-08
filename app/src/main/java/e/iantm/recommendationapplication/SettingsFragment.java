@@ -33,7 +33,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     SwitchPreference wifiPreference, kidsPreference, groupPreference, wheelchairPreference, dogPreference;
    /* MultiSelectListPreference pricePreference;*/
     RequestQueue requestQueue;
-    StringRequest request;
+    Request request;
     String systemValue, radiusValue;//, priceValue;
     String updateSystem, updateRadius, /*updatePrice,*/ updateKids, updateGroup, updateWheelchair, updateWifi, updateDog;
     Resources res;
@@ -78,6 +78,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         } else if (systemValue.equals("3")) {
                             parameters.put("system", "Hybrid");
                         }
+                        parameters.put("user_name", userName);
 
                         return parameters;
                     }
@@ -112,6 +113,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> parameters = new HashMap<String, String>();
                         parameters.put("radius", String.valueOf(radiusValue));
+                        parameters.put("user_name", userName);
 
                         return parameters;
                     }
@@ -287,6 +289,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     }
                 };
 
+                requestQueue.add(request);
                 return true;
             }
         });
@@ -320,7 +323,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         return parameters;
                     }
                 };
-
+                requestQueue.add(request);
                 return true;
             }
         });
@@ -354,7 +357,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         return parameters;
                     }
                 };
-
+                requestQueue.add(request);
                 return true;
             }
         });
@@ -365,7 +368,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
 
-                Toast.makeText(getContext(), userName, Toast.LENGTH_SHORT).show();
                 final boolean isWheelchairOn = (Boolean) o;
                 request = new StringRequest(Request.Method.POST, updateWheelchair, new Response.Listener<String>() {
                     @Override

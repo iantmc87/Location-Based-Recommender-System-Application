@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private static final int REQUEST_CODE_ENABLE = 11;
     String userName = null;
+    String viewInfo = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,8 +54,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
 
-        loadFragment(new HomeFragment(), userName);
-        setTitle("Recommendations");
+        Intent intent = getIntent();
+        viewInfo = intent.getStringExtra("viewInfo");
+        if(viewInfo != null) {
+            loadFragment1(new ReviewFragment(), userName, viewInfo);
+            setTitle("Reviews");
+        } else {
+            loadFragment1(new HomeFragment(), userName, null);
+            setTitle("Recommendations");
+        }
     }
 
     @Override
@@ -82,14 +90,29 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 setTitle("Help");
                 break;
         }
-        return loadFragment(fragment, userName);
+        return loadFragment1(fragment, userName,null);
     }
 
     private boolean loadFragment(Fragment fragment, String userName) {
         //switching fragment
         Bundle bundle = new Bundle();
         bundle.putString("userName", userName);
-        bundle.putString("title", "navBar");
+        fragment.setArguments(bundle);
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean loadFragment1(Fragment fragment, String userName, String viewInfo) {
+        //switching fragment
+        Bundle bundle = new Bundle();
+        bundle.putString("userName", userName);
+        bundle.putString("title", viewInfo);
         fragment.setArguments(bundle);
         if (fragment != null) {
             getSupportFragmentManager()

@@ -5,12 +5,11 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="60dp"
     android:layout_marginRight="40dp"
-    android:layout_marginTop="100dp"
     tools:context=".RecommendedListView">
 
     <ListView
-        android:id="@+id/searchList"
+        android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="266dp" />
+        android:layout_height="257dp" />
 
 </FrameLayout>

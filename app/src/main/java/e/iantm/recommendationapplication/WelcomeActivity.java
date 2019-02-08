@@ -287,7 +287,7 @@ public class WelcomeActivity extends AppCompatActivity {
             if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
 
 
-                Toast.makeText(this,"Thanks You For Permission Granted ",Toast.LENGTH_LONG).show();
+                //Toast.makeText(this,"Thanks You For Permission Granted ",Toast.LENGTH_LONG).show();
 
                 getMailAddress();
 
