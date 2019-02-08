@@ -95,14 +95,11 @@ public class RecommendedListView extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 TextView selectedItem = (TextView) view.findViewById(R.id.title);
-                //String selectedItem1 = (String) listView.getItemAtPosition(position);
                 String selectedText = selectedItem.getText().toString();
 
-                //Toast.makeText(getContext(), selectedText, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.putExtra("viewInfo", selectedText);
                 startActivity(intent);
-                //loadFragment1(new ReviewFragment(), selectedItem.getText().toString());
             }
         });
 

@@ -52,10 +52,9 @@ public class ReviewFragment extends Fragment {
         Bundle bundle = getArguments();
         if(bundle!=null) {
             title = String.valueOf(bundle.get("title"));
-            //Toast.makeText(getContext(), title, Toast.LENGTH_SHORT).show();
 
             if (title.equals("null")) {
-                //loadFragment(new SearchListFragment(), null);
+
             } else {
                 loadFragment(new reviewListFragment(), title);
 

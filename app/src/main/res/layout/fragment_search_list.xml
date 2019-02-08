@@ -11,6 +11,7 @@
     <ListView
         android:id="@+id/searchList"
         android:layout_width="match_parent"
-        android:layout_height="266dp" />
+        android:layout_height="266dp"
+        android:isScrollContainer="false"/>
 
 </FrameLayout>
