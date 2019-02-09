@@ -180,11 +180,12 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, places, new Response.Listener<JSONObject>() {
+                                StringRequest stringRequest = new StringRequest(Request.Method.POST, places, new Response.Listener<String>() {
                                     @Override
-                                    public void onResponse(JSONObject response) {
+                                    public void onResponse(String response) {
                                         try {
-                                            JSONArray recommendations = response.getJSONArray("recommendations");
+                                            JSONObject jsonObject = new JSONObject(response.toString());
+                                            JSONArray recommendations = jsonObject.getJSONArray("recommendations");
                                             int length = recommendations.length();
                                             String[] name = new String[length];
                                             Double[] longitude = new Double[length];
@@ -221,8 +222,16 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                                     public void onErrorResponse(VolleyError error) {
 
                                     }
-                                });
-                                requestQueue.add(jsonObjectRequest);
+                                }) {
+                                    @Override
+                                    protected Map<String, String> getParams() throws AuthFailureError {
+                                        Map<String, String> parameters = new HashMap<String, String>();
+                                        parameters.put("user_name", userName);
+
+                                        return parameters;
+                                    }
+                                };
+                                requestQueue.add(stringRequest);
                                 }
                             }, 10000);
                             }

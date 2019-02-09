@@ -18,6 +18,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -49,11 +50,6 @@ public class reviewListFragment extends Fragment {
 
         }
         res = getResources();
-        Map<String, String> p = new HashMap<>();
-        p.put("business", "StarBucks");
-        /*Map<String, String> json = new HashMap<>();
-        json.put("place", title);*/
-        //String param = (res.getString(R.string.url) + "?param=Harlow");
 
         reviews = String.format(res.getString(R.string.reviews), res.getString(R.string.url));
         if(title != null) {
@@ -63,11 +59,12 @@ public class reviewListFragment extends Fragment {
             listView.addHeaderView(textView);
         }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, reviews, new JSONObject(p), new Response.Listener<JSONObject>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, reviews, new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(String response) {
                         try {
-                            JSONArray recommendations = response.getJSONArray("reviews");
+                            JSONObject jsonObject = new JSONObject(response.toString());
+                            JSONArray recommendations = jsonObject.getJSONArray("reviews");
                             int length = recommendations.length();
                             HashMap<String, String> item;
                             for(int i = 0; i < length; i++) {
@@ -94,7 +91,15 @@ public class reviewListFragment extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         //Toast.makeText(getContext(), "BROKEN", Toast.LENGTH_SHORT).show();
                     }
-                });
+                }) {
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> parameters = new HashMap<String, String>();
+                            parameters.put("business", title);
+
+                            return parameters;
+                        }
+        };
         /*{
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -104,7 +109,7 @@ public class reviewListFragment extends Fragment {
                 return parameters;
             }
         }*/
-        requestQueue.add(jsonObjectRequest);
+        requestQueue.add(stringRequest);
 
         return view;
     }
