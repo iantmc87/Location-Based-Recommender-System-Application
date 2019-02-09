@@ -366,32 +366,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(Preference preference, Object o) {
 
                 final boolean isWifiOn = (Boolean) o;
-                request = new StringRequest(Request.Method.POST, updateWifi, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+                switchMethod(request, updateWifi, isWifiOn, userName, "wifi", "Wififree", requestQueue);
 
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }){
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String, String> parameters = new HashMap<String, String>();
-                        if(isWifiOn) {
-                            parameters.put("wifi", "WiFifree");
-
-                        } else if(!isWifiOn) {
-                            parameters.put("wifi", "");
-                        }
-                        parameters.put("user_name", userName);
-                        return parameters;
-                    }
-                };
-
-                requestQueue.add(request);
                 return true;
             }
         });
@@ -402,31 +378,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(Preference preference, Object o) {
 
                 final boolean isDogOn = (Boolean) o;
-                request = new StringRequest(Request.Method.POST, updateDog, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }){
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String, String> parameters = new HashMap<String, String>();
-                        if(isDogOn) {
-                            parameters.put("dog", "DogsAllowedTrue");
-                        } else if (!isDogOn) {
-                            parameters.put("dog", "");
-                        }
-                            parameters.put("user_name", userName);
-
-                        return parameters;
-                    }
-                };
-                requestQueue.add(request);
+                switchMethod(request, updateDog, isDogOn, userName, "dog", "DogsAllowedTrue", requestQueue);
                 return true;
             }
         });
@@ -437,31 +389,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(Preference preference, Object o) {
 
                 final boolean isGroupsOn = (Boolean) o;
-                request = new StringRequest(Request.Method.POST, updateGroup, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+                switchMethod(request, updateGroup, isGroupsOn, userName, "group", "RestaurantsGoodForGroups", requestQueue);
 
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }){
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String, String> parameters = new HashMap<String, String>();
-                        if(isGroupsOn) {
-                            parameters.put("group", "RestaurantsGoodForGroupsTrue");
-                        } else if (!isGroupsOn) {
-                            parameters.put("group", "");
-                        }
-                            parameters.put("user_name", userName);
-
-                        return parameters;
-                    }
-                };
-                requestQueue.add(request);
                 return true;
             }
         });
@@ -472,35 +401,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(Preference preference, Object o) {
 
                 final boolean isWheelchairOn = (Boolean) o;
-                request = new StringRequest(Request.Method.POST, updateWheelchair, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
 
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }) {
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String, String> parameters = new HashMap<String, String>();
-                        if(isWheelchairOn) {
-                            parameters.put("wheelchair", "WheelChairAccessibleTrue");
-                        } else if (!isWheelchairOn) {
-                            parameters.put("wheelchair", "");
-                        }
-                            parameters.put("user_name", userName);
-
-
-
-                        return parameters;
-
-                    }
-                };
-                requestQueue.add(request);
-
+                switchMethod(request, updateWheelchair, isWheelchairOn, userName, "wheelchair", "WheelchairAccessibleTrue", requestQueue);
 
                 return true;
             }
@@ -512,33 +414,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(Preference preference, Object o) {
 
                 final boolean isKidsOn = (Boolean) o;
-                request = new StringRequest(Request.Method.POST, updateKids, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
 
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }) {
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String, String> parameters = new HashMap<String, String>();
-                        if(isKidsOn) {
-                            parameters.put("kids", "GoodForKidsTrue");
-                        } else if (!isKidsOn) {
-                            parameters.put("kids", "");
-                        }
-                        parameters.put("user_name", userName);
-
-                        return parameters;
-
-                    }
-                };
-                requestQueue.add(request);
-
+                switchMethod(request, updateKids, isKidsOn, userName, "kids", "GoodForKidsTrue", requestQueue);
 
                 return true;
             }
@@ -557,17 +434,34 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
     }
 
+    public void switchMethod (Request request, String url, final Boolean option, final String userName, final String param, final String text, RequestQueue requestQueue) {
+
+        request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parameters = new HashMap<String, String>();
+                if (option) {
+                    parameters.put(param, text);
+
+                } else if (!option) {
+                    parameters.put(param, "");
+                }
+                parameters.put("user_name", userName);
+                return parameters;
+            }
+        };
 
 
-
-
-
-    /*@Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.xml.settings, null);
-
-        Preference preference = (Preference)findPreference(R.id.)
-        return view;
-    }*/
+        requestQueue.add(request);
+    }
 }
