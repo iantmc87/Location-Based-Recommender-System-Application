@@ -10,7 +10,7 @@
         android:title="System Settings">
 
         <ListPreference
-            android:key="system"
+            android:key="system_choice"
             android:summary="%s"
             android:title="System"
             android:dialogTitle="Choose System"

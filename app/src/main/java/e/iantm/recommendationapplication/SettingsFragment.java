@@ -13,6 +13,7 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -23,6 +24,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.omadahealth.lollipin.lib.managers.AppLock;
+import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,23 +40,119 @@ public class SettingsFragment extends PreferenceFragmentCompat {
    /* MultiSelectListPreference pricePreference;*/
     RequestQueue requestQueue;
     Request request;
+    StringRequest stringRequest;
     String systemValue, radiusValue;//, priceValue;
     String updateSystem, updateRadius, /*updatePrice,*/ updateKids, updateGroup, updateWheelchair, updateWifi, updateDog;
     Resources res;
     Preference pinChange;
-    String userName;
+    String userName, getSettings, getSystem = null, getRadius = null, getGoodForKids = null, getGoodForGroups = null, getDogsAllowed = null, getWifi = null, getWheelchair = null, getParking = null;
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings);
         requestQueue = Volley.newRequestQueue(getContext());
         res = getResources();
+        systemPreference = (ListPreference)findPreference("system_choice");
+        radiusPreference = (ListPreference)findPreference("radius");
+        wifiPreference = (SwitchPreference)findPreference("wifi");
+        dogPreference = (SwitchPreference)findPreference("dogs");
+        groupPreference = (SwitchPreference)findPreference("groups");
+        wheelchairPreference = (SwitchPreference)findPreference("wheelchair");
+        kidsPreference = (SwitchPreference)findPreference("kids");
 
         Bundle bundle = getArguments();
         if(bundle != null) {
             userName = String.valueOf(bundle.get("userName"));
         }
 
-        systemPreference = (ListPreference)findPreference("system");
+        getSettings = String.format(res.getString(R.string.singleSettings), res.getString(R.string.url));
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getSettings, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.toString());
+                    JSONArray recommendations = jsonObject.getJSONArray("get_settings");
+
+                    Toast.makeText(getContext(), recommendations.toString(), Toast.LENGTH_SHORT).show();
+                    JSONObject obj = recommendations.getJSONObject(0);
+
+                    /*getSystem = obj.getString("system");
+                    if(getSystem == null) {
+                        systemPreference.setValue("1");
+                    } else {
+                        if(getSystem.equals("Content-Based")){
+                            systemPreference.setValue("1");
+                        } else if (getSystem.equals("Collaborative")) {
+                            systemPreference.setValue("2");
+                        } else if (getSystem.equals("Hybrid")) {
+                            systemPreference.setValue("3");
+                        }
+                    }
+                    getRadius = obj.getString("radius");
+                    radiusPreference.setValue(getRadius);
+
+
+                    getGoodForKids = obj.getString("good_for_kids");
+                    if(getGoodForKids != null){
+                        kidsPreference.setChecked(true);
+                    } else {
+                        kidsPreference.setChecked(false);
+                    }
+
+                    getGoodForGroups = obj.getString("good_for_groups");
+                    if(getGoodForGroups != null) {
+                        groupPreference.setChecked(true);
+                    } else {
+                        groupPreference.setChecked(false);
+                    }
+
+                    getDogsAllowed = obj.getString("dogs_allowed");
+                    if(getDogsAllowed != null) {
+                        dogPreference.setChecked(true);
+                    } else {
+                        dogPreference.setChecked(false);
+                    }
+
+                    getWifi = obj.getString("wifi");
+                    if(getWifi != null) {
+                        wifiPreference.setChecked(true);
+                    } else {
+                        wifiPreference.setChecked(false);
+                    }
+
+                    getWheelchair = obj.getString("wheelchair_accessible");
+                    if(getWheelchair != null) {
+                        wheelchairPreference.setChecked(true);
+                    } else {
+                        wheelchairPreference.setChecked(false);
+                    }
+
+                    getParking = obj.getString("parking");
+
+                    Toast.makeText(getContext(), getSystem, Toast.LENGTH_SHORT).show();*/
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parameters = new HashMap<String, String>();
+                parameters.put("user_name", userName);
+
+                return parameters;
+            }
+        };
+        requestQueue.add(stringRequest);
+
+
         systemPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
@@ -92,7 +194,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
         updateRadius = String.format(res.getString(R.string.updateRadius), res.getString(R.string.url));
-        radiusPreference = (ListPreference)findPreference("radius");
         radiusPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
@@ -260,7 +361,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });*/ //end price preference on change listener
 
         updateWifi = String.format(res.getString(R.string.updateWifi), res.getString(R.string.url));
-        wifiPreference = (SwitchPreference)findPreference("wifi");
         wifiPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
@@ -282,9 +382,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         Map<String, String> parameters = new HashMap<String, String>();
                         if(isWifiOn) {
                             parameters.put("wifi", "WiFifree");
-                            parameters.put("user_name", userName);
-                        }
 
+                        } else if(!isWifiOn) {
+                            parameters.put("wifi", "");
+                        }
+                        parameters.put("user_name", userName);
                         return parameters;
                     }
                 };
@@ -295,7 +397,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
 
         updateDog = String.format(res.getString(R.string.updateDog), res.getString(R.string.url));
-        dogPreference = (SwitchPreference)findPreference("dogs");
         dogPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
@@ -317,8 +418,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         Map<String, String> parameters = new HashMap<String, String>();
                         if(isDogOn) {
                             parameters.put("dog", "DogsAllowedTrue");
-                            parameters.put("user_name", userName);
+                        } else if (!isDogOn) {
+                            parameters.put("dog", "");
                         }
+                            parameters.put("user_name", userName);
 
                         return parameters;
                     }
@@ -329,7 +432,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
 
         updateGroup = String.format(res.getString(R.string.updateGroup), res.getString(R.string.url));
-        groupPreference = (SwitchPreference)findPreference("groups");
         groupPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
@@ -351,8 +453,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         Map<String, String> parameters = new HashMap<String, String>();
                         if(isGroupsOn) {
                             parameters.put("group", "RestaurantsGoodForGroupsTrue");
-                            parameters.put("user_name", userName);
+                        } else if (!isGroupsOn) {
+                            parameters.put("group", "");
                         }
+                            parameters.put("user_name", userName);
 
                         return parameters;
                     }
@@ -363,7 +467,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
 
         updateWheelchair = String.format(res.getString(R.string.updateWheelchair), res.getString(R.string.url));
-        wheelchairPreference = (SwitchPreference)findPreference("wheelchair");
         wheelchairPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
@@ -385,9 +488,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         Map<String, String> parameters = new HashMap<String, String>();
                         if(isWheelchairOn) {
                             parameters.put("wheelchair", "WheelChairAccessibleTrue");
+                        } else if (!isWheelchairOn) {
+                            parameters.put("wheelchair", "");
+                        }
                             parameters.put("user_name", userName);
 
-                        }
+
 
                         return parameters;
 
@@ -401,7 +507,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }); //end radius preference on change listener
 
         updateKids = String.format(res.getString(R.string.updateKids), res.getString(R.string.url));
-        kidsPreference = (SwitchPreference)findPreference("kids");
         kidsPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
@@ -423,8 +528,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         Map<String, String> parameters = new HashMap<String, String>();
                         if(isKidsOn) {
                             parameters.put("kids", "GoodForKidsTrue");
-                            parameters.put("user_name", userName);
+                        } else if (!isKidsOn) {
+                            parameters.put("kids", "");
                         }
+                        parameters.put("user_name", userName);
 
                         return parameters;
 
