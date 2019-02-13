@@ -34,31 +34,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setContentView(R.layout.activity_main);
         getMailAddress();
 
-        /*SharedPreferences pref = getSharedPreferences("e.iantm.recommendationapplication", MODE_PRIVATE);
-        if(!pref.getBoolean("pinFirstStart", true)) {
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putBoolean("pinFirstStart", false);
-            editor.commit();
-
-            loadFragment(new SettingsFragment());
-            /*Intent intent = new Intent(MainActivity.this, CustomPinActivity.class);
-            intent.putExtra(AppLock.EXTRA_TYPE, AppLock.ENABLE_PINLOCK);
-            startActivityForResult(intent, REQUEST_CODE_ENABLE);
-        }
-
-        /*Intent intent = new Intent(MainActivity.this, CustomPinActivity.class);
-        intent.putExtra(AppLock.EXTRA_TYPE, AppLock.UNLOCK_PIN);
-        startActivity(intent);*/
-
-
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
 
         Intent intent = getIntent();
         viewInfo = intent.getStringExtra("viewInfo");
         if(viewInfo != null) {
+            navigation.setSelectedItemId(R.id.navigation_reviews);
             loadFragment1(new ReviewFragment(), userName, viewInfo);
             setTitle("Reviews");
+
         } else {
             loadFragment1(new HomeFragment(), userName, null);
             setTitle("Recommendations");

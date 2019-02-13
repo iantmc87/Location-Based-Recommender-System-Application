@@ -7,12 +7,12 @@
     <color name="colorNavText">#01294b</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#ff4081</color>
 
     <!-- Screens background color-->
     <color name="bg_screen1">#f64c73</color>
     <color name="bg_screen2">#20d2bb</color>
-    <color name="bg_screen3">#3395ff</color>
+    <color name="bg_screen3">#0d76e7</color>
     <color name="bg_screen4">#c873f4</color>
 
     <!-- dots inactive colors -->

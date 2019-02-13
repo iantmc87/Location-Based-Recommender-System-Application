@@ -1,8 +1,10 @@
 package e.iantm.recommendationapplication;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,26 +40,27 @@ public class reviewListFragment extends Fragment {
     View view;
     Resources res;
     ListView listView;
+    TextView business, categories, address;
+    FloatingActionButton addReview;
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_review_list, null);
         listView = (ListView) view.findViewById(R.id.review_list);
+        business = (TextView)view.findViewById(R.id.business_name);
+        categories = (TextView)view.findViewById(R.id.categories);
+        address = (TextView)view.findViewById(R.id.address);
         requestQueue = Volley.newRequestQueue(getContext());
+        addReview = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
 
         Bundle bundle = getArguments();
         if(bundle != null) {
             title = bundle.get("place").toString();
+            business.setText(title);
         } else {
 
         }
         res = getResources();
 
         reviews = String.format(res.getString(R.string.reviews), res.getString(R.string.url));
-        if(title != null) {
-            TextView textView = new TextView(getContext());
-            textView.setText(title);
-
-            listView.addHeaderView(textView);
-        }
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, reviews, new Response.Listener<String>() {
                     @Override
@@ -100,17 +103,33 @@ public class reviewListFragment extends Fragment {
                             return parameters;
                         }
         };
-        /*{
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> parameters = new HashMap<String, String>();
-                parameters.put("business", title);
-
-                return parameters;
-            }
-        }*/
         requestQueue.add(stringRequest);
 
+        addReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent (getActivity(), MainActivity.class);
+                intent.putExtra("viewInfo", "addReview");
+                startActivity(intent);
+            }
+        });
+
         return view;
+    }
+
+    private boolean loadFragment1(Fragment fragment, String title) {
+        //switching fragment
+
+        Bundle bundle = new Bundle();
+        bundle.putString("title", title);
+        fragment.setArguments(bundle);
+        if (fragment != null) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
     }
 }

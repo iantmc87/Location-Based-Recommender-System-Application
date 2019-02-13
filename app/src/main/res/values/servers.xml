@@ -1,5 +1,5 @@
 <resources>
-    <string name="url">http://192.168.1.158</string>
+    <string name="url">***INSERT SERVER URL HERE***</string>
     <string name="systemPHP">%1$s/update_system.php</string>
     <string name="recommendations">%1$s/recommendations.php</string>
     <string name="updateLocation">%1$s/update_location.php</string>
@@ -14,5 +14,7 @@
     <string name="updateDog">%1$s/update_dog.php</string>
     <string name="search">%1$s/search_places.php</string>
     <string name="singleSettings">%1$s/get_single_settings.php</string>
+    <string name="autocompletePostcode">%1$s/autocomplete_postcode.php</string>
+    <string name="autocompleteName">%1$s/autocomplete_name.php</string>
 
 </resources>

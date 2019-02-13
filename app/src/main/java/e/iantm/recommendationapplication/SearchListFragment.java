@@ -16,11 +16,13 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -29,13 +31,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class SearchListFragment extends Fragment {
 
     RequestQueue requestQueue;
     Resources res;
     ListView listView;
-    String places;
+    String places, userName;
     SimpleAdapter adapter;
     ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
     @Nullable
@@ -47,12 +50,18 @@ public class SearchListFragment extends Fragment {
         requestQueue = Volley.newRequestQueue(getContext());
         res = getResources();
         places = String.format(res.getString(R.string.recommendations), res.getString(R.string.url));
+        Bundle bundle = getArguments();
+        if(bundle!=null){
+            userName = String.valueOf(bundle.get("userName"));
+        }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, places, new Response.Listener<JSONObject>() {
+
+        StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST, places, new Response.Listener<String>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(String response) {
                 try {
-                    JSONArray recommendations = response.getJSONArray("recommendations");
+                    JSONObject jsonObject = new JSONObject(response.toString());
+                    JSONArray recommendations = jsonObject.getJSONArray("recommendations");
                     int length = recommendations.length();
                     HashMap<String, String> item;
                     for(int i = 0; i < length; i++) {
@@ -78,7 +87,15 @@ public class SearchListFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
 
             }
-        });
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parameters = new HashMap<String, String>();
+                parameters.put("user_name", userName);
+
+                return parameters;
+            }
+        };
         requestQueue.add(jsonObjectRequest);
 
         /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

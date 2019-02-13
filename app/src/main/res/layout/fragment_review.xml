@@ -17,14 +17,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search"
-        app:layout_constraintVertical_bias="0.872">
+        app:layout_constraintStart_toStartOf="parent">
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -50,7 +48,7 @@
         </RelativeLayout>
     </android.support.constraint.ConstraintLayout>
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/search"
         android:layout_width="263dp"
         android:layout_height="wrap_content"
@@ -76,5 +74,35 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.45" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="220dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="35dp"
+        android:orientation='horizontal'
+        app:layout_constraintEnd_toStartOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search">
+
+        <RadioButton
+            android:id="@+id/radioButtonPostcode"
+            style="@style/Widget.AppCompat.CompoundButton.RadioButton"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Postcode"
+            android:textSize="8sp"
+            android:checked="true"/>
+
+        <RadioButton
+            android:id="@+id/radioButtonRestaurant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Restaurant"
+            android:textSize="8sp" />
+    </RadioGroup>
 
 </android.support.constraint.ConstraintLayout>
