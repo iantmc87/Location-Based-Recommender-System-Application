@@ -72,10 +72,11 @@ public class ReviewFragment extends Fragment {
         autoPostcode = String.format(res.getString(R.string.autocompletePostcode), res.getString(R.string.url));
         autoName = String.format(res.getString(R.string.autocompleteName), res.getString(R.string.url));
 
-
-        Bundle bundle = getArguments();
-        if(bundle!=null) {
-            title = String.valueOf(bundle.get("title"));
+        Bundle bundle1 = getArguments();
+        if(bundle1 != null) {
+            userName = String.valueOf(bundle1.get("userName"));
+            title = String.valueOf(bundle1.get("title"));
+        }
 
             if (title.equals("null")) {
 
@@ -84,12 +85,7 @@ public class ReviewFragment extends Fragment {
             } else {
                 loadFragment(new reviewListFragment(), title, userName);
             }
-        }
 
-        Bundle bundle1 = getArguments();
-        if(bundle1 != null) {
-            userName = String.valueOf(bundle.get("userName"));
-        }
 
         search = (AutoCompleteTextView) view.findViewById(R.id.search);
         switchSearch(searchRequest, autoPostcode, "title", requestQueue);
@@ -123,43 +119,49 @@ public class ReviewFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                progressBar.setVisibility(View.VISIBLE);
+                Toast.makeText(getContext(), radioButton.getText().toString(), Toast.LENGTH_SHORT).show();
+
 
                 final String searchText = search.getText().toString();
                 request = new StringRequest(Request.Method.POST, searchPlaces, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                while (pStatus <= 100) {
-                                    handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            progressBar.setProgress(pStatus);
-                                            textProgress.setText(pStatus + " %");
+
+                        if (radioButton.getText().toString().equals("Postcode")) {
+                            progressBar.setVisibility(View.VISIBLE);
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    while (pStatus <= 100) {
+                                        handler.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                progressBar.setProgress(pStatus);
+                                                textProgress.setText(pStatus + " %");
+                                            }
+                                        });
+                                        try {
+                                            Thread.sleep(96);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
                                         }
-                                    });
-                                    try {
-                                        Thread.sleep(96);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
+                                        pStatus++;
                                     }
-                                    pStatus++;
                                 }
-                            }
-                        }).start();
+                            }).start();
 
-                        final Handler handler = new Handler();
-                                            handler.postDelayed(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    loadFragment(new SearchListFragment(), null, userName);
-                                                    progressBar.setVisibility(View.INVISIBLE);
-                                                    textProgress.setVisibility(View.INVISIBLE);
-                                                }
-                                            }, 10000);
-
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loadFragment(new SearchListFragment(), null, userName);
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                    textProgress.setVisibility(View.INVISIBLE);
+                                }
+                            }, 10000);
+                        } else if (radioButton.getText().toString().equals("Restaurant")) {
+                            loadFragment(new reviewListFragment(), searchText, userName);
+                        }
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -184,6 +186,7 @@ public class ReviewFragment extends Fragment {
     }
 
     public void switchSearch (StringRequest request, String url, final String getVariable, RequestQueue requestQueue) {
+
         request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
 
             @Override
@@ -203,7 +206,7 @@ public class ReviewFragment extends Fragment {
                                     ArrayAdapter(getContext(),android.R.layout.simple_list_item_1,languages);*/
 
                     adapter = new
-                            ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_2, list);
+                            ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, list);
 
                     search.setThreshold(1);
                     search.setAdapter(adapter);
