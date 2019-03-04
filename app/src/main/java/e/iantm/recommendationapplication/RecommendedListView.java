@@ -1,6 +1,7 @@
 package e.iantm.recommendationapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,9 +32,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class RecommendedListView extends Fragment {
 
@@ -54,6 +58,9 @@ public class RecommendedListView extends Fragment {
         view =  inflater.inflate(R.layout.fragment_recommended_list_view, null);
         listView = (ListView) view.findViewById(R.id.list);
         requestQueue = Volley.newRequestQueue(getContext());
+        SharedPreferences pref = getContext().getSharedPreferences("location", MODE_PRIVATE);
+        final Double latitude = Double.parseDouble(pref.getString("latitude", null));
+        final Double longitude = Double.parseDouble(pref.getString("longitude", null));
 
         Bundle bundle = getArguments();
         if(bundle != null) {
@@ -73,11 +80,14 @@ public class RecommendedListView extends Fragment {
                         item = new HashMap<String, String>();
                         item.put("title", obj.getString("name"));
                         item.put("summary", obj.getString("categories"));
+                        DecimalFormat format = new DecimalFormat("0.00");
+                        String distance = format.format(obj.getDouble("distance"));
+                        item.put("distance", distance);
                         list.add(item);
                     }
 
                     adapter = new SimpleAdapter(getContext(), list, R.layout.recommendlistview,
-                            new String[] {"title", "summary"}, new int []{R.id.title, R.id.summary});
+                            new String[] {"title", "summary", "distance"}, new int []{R.id.title, R.id.summary, R.id.distanceFrom});
 
                     listView.setAdapter(adapter);
 
@@ -96,6 +106,8 @@ public class RecommendedListView extends Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
                 parameters.put("user_name", userName);
+                parameters.put("latitude", latitude.toString());
+                parameters.put("longitude", longitude.toString());
 
                 return parameters;
             }

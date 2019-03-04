@@ -47,10 +47,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view =  inflater.inflate(R.layout.fragment_home, null);
-        SharedPreferences pref = getContext().getSharedPreferences("location", Context.MODE_PRIVATE);
-        Double latitude = Double.parseDouble(pref.getString("latitude", null));
-        Double longitude = Double.parseDouble(pref.getString("longitude", null));
-        Toast.makeText(getContext(), latitude.toString(), Toast.LENGTH_SHORT).show();
+
         Bundle bundle = getArguments();
         if(bundle != null) {
             userName = String.valueOf(bundle.get("userName"));
@@ -65,7 +62,12 @@ public class HomeFragment extends Fragment {
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
+                                    /*SharedPreferences pref = getContext().getSharedPreferences("location", Context.MODE_PRIVATE);
+                                    Double latitude = Double.parseDouble(pref.getString("latitude", null));
+                                    Double longitude = Double.parseDouble(pref.getString("longitude", null));*/
+                                   // Toast.makeText(getContext(), latitude.toString(), Toast.LENGTH_SHORT).show();
                                     loadFragment1(new RecommendedListView(), userName);
+
                                 }
                             }, 10000);
 

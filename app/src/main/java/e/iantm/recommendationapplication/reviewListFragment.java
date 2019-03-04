@@ -70,13 +70,8 @@ public class reviewListFragment extends Fragment {
                         JSONObject obj = info.getJSONObject(0);
                         business.setText(obj.getString("name"));
                         categories.setText(obj.getString("categories"));
-
-                        JSONObject jsonObject1 = new JSONObject(response.toString());
-                        JSONArray info1 = jsonObject1.getJSONArray("info1");
-                        JSONObject obj1 = info1.getJSONObject(0);
-                        Toast.makeText(getContext(), info1.toString(), Toast.LENGTH_SHORT).show();
-                        String address1 = obj1.getString("constituency") + "\n" +
-                                obj1.getString("district") + "\n" + obj1.getString("postcode");
+                        String address1 = obj.getString("constituency") + "\n" +
+                                obj.getString("district") + "\n" + obj.getString("postcode");
                         address.setText(address1);
 
 

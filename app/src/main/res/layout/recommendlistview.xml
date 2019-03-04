@@ -53,16 +53,28 @@
 
     <TextView
         android:id="@+id/distanceFrom"
-        android:layout_width="68dp"
-        android:layout_height="15dp"
-        android:layout_marginStart="47dp"
+        android:layout_width="34dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="52dp"
         android:layout_marginTop="1dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="37dp"
         android:text="Distance"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.894"
+        app:layout_constraintEnd_toStartOf="@+id/textView"
         app:layout_constraintStart_toEndOf="@+id/summary"
         app:layout_constraintTop_toBottomOf="@+id/ratingBar2" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="37dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="4dp"
+        android:text="miles"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar2"
+        app:layout_constraintVertical_bias="0.615" />
 
 </android.support.constraint.ConstraintLayout>

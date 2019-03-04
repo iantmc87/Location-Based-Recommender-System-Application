@@ -2,6 +2,7 @@ package e.iantm.recommendationapplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,9 +30,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class SearchListFragment extends Fragment {
 
@@ -51,6 +55,9 @@ public class SearchListFragment extends Fragment {
         res = getResources();
         places = String.format(res.getString(R.string.recommendations), res.getString(R.string.url));
         Bundle bundle = getArguments();
+        SharedPreferences pref = getContext().getSharedPreferences("location", MODE_PRIVATE);
+        final Double latitude = Double.parseDouble(pref.getString("latitude", null));
+        final Double longitude = Double.parseDouble(pref.getString("longitude", null));
         if(bundle!=null){
             userName = String.valueOf(bundle.get("userName"));
         }
@@ -69,11 +76,14 @@ public class SearchListFragment extends Fragment {
                         item = new HashMap<String, String>();
                         item.put("title", obj.getString("name"));
                         item.put("summary", obj.getString("categories"));
+                        DecimalFormat format = new DecimalFormat("0.00");
+                        String distance = format.format(obj.getDouble("distance"));
+                        item.put("distance", distance);
                         list.add(item);
                     }
 
                     adapter = new SimpleAdapter(getContext(), list, R.layout.recommendlistview,
-                            new String[] {"title", "summary"}, new int []{R.id.title, R.id.summary});
+                            new String[] {"title", "summary", "distance"}, new int []{R.id.title, R.id.summary, R.id.distanceFrom});
 
                     listView.setAdapter(adapter);
 
@@ -92,6 +102,8 @@ public class SearchListFragment extends Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
                 parameters.put("user_name", userName);
+                parameters.put("latitude", latitude.toString());
+                parameters.put("longitude", longitude.toString());
 
                 return parameters;
             }

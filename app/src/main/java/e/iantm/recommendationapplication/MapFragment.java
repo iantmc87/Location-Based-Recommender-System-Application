@@ -92,8 +92,14 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
         if (mMap == null) {
             getMapAsync(this);
+
         }
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+        // Turn on the My Location layer and the related control on the map.
+        updateLocationUI();
+
+        // Get the current location of the device and set the position of the map.
+        getDeviceLocation();
     }
 
     @Override
@@ -121,7 +127,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     }
 
-    private void getDeviceLocation() {
+    public void getDeviceLocation() {
         /*
          * Get the best and most recent location of the device, which may be null in rare
          * cases when a location is not available.
