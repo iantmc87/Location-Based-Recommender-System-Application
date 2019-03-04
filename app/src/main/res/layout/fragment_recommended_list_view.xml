@@ -3,13 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="60dp"
-    android:layout_marginRight="40dp"
     tools:context=".RecommendedListView">
 
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="257dp" />
+        android:layout_height="285dp" />
 
 </FrameLayout>

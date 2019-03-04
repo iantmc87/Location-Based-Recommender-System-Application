@@ -3,25 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#E0E0E0">
 
 
-    <ListView
-        android:id="@+id/review_list"
+    <FrameLayout
+        android:id="@+id/review_child_fragment_container"
         android:layout_width="388dp"
-        android:layout_height="269dp"
-        android:layout_marginTop="43dp"
+        android:layout_height="353dp"
+        android:layout_marginTop="113dp"
+        android:layout_marginBottom="9dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.304"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/address" />
+        app:layout_constraintTop_toBottomOf="@+id/address"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 
     <TextView
         android:id="@+id/business_name"
         android:layout_width="226dp"
         android:layout_height="20dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="143dp"
         android:background="#EEE"
         android:text="Business Name"
@@ -32,10 +37,10 @@
 
     <TextView
         android:id="@+id/categories"
-        android:layout_width="229dp"
-        android:layout_height="26dp"
+        android:layout_width="226dp"
+        android:layout_height="20dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="140dp"
         android:background="#EEE"
         android:text="Categories"
@@ -46,15 +51,15 @@
 
     <TextView
         android:id="@+id/address"
-        android:layout_width="234dp"
+        android:layout_width="226dp"
         android:layout_height="113dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="61dp"
         android:background="#EEE"
         android:text="Address"
         app:layout_constraintEnd_toStartOf="@+id/floatingActionButton"
-        app:layout_constraintHorizontal_bias="0.076"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/categories" />
 
@@ -63,16 +68,17 @@
         android:layout_width="51dp"
         android:layout_height="50dp"
         android:layout_marginTop="112dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="28dp"
         android:layout_marginBottom="106dp"
         android:clickable="true"
         app:backgroundTint="@color/bg_screen3"
         app:backgroundTintMode="src_over"
         app:fabCustomSize="50dp"
         app:fabSize="normal"
-        app:layout_constraintBottom_toTopOf="@+id/review_list"
+        app:layout_constraintBottom_toTopOf="@+id/review_child_fragment_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         app:rippleColor="@color/colorAccent"
         app:srcCompat="@android:drawable/ic_menu_add" />
 

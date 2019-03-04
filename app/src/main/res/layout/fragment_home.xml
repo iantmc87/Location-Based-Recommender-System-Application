@@ -5,7 +5,7 @@
     android:id="@+id/parent_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EAEAEA"
+    android:background="#E0E0E0"
     tools:context=".HomeFragment">
 
     <FrameLayout
@@ -20,10 +20,13 @@
 
     <FrameLayout
         android:id="@+id/child_fragment_container_list"
-        android:layout_width="match_parent"
-        android:layout_height="270dp"
+        android:layout_width="346dp"
+        android:layout_height="287dp"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="27dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="51dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:text="@string/title_home"
         app:layout_constraintBottom_toTopOf="@+id/child_fragment_container_map"
         app:layout_constraintEnd_toEndOf="parent"

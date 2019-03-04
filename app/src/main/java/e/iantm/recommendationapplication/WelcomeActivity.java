@@ -6,6 +6,7 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -315,6 +316,11 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         }
         userName = acName;
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("account", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("username", userName);
+        editor.commit();
         requestQueue = Volley.newRequestQueue(this);
         res = getResources();
         newUser = String.format(res.getString(R.string.newUser), res.getString(R.string.url));

@@ -1,26 +1,20 @@
 package e.iantm.recommendationapplication;
 
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -81,9 +75,9 @@ public class ReviewFragment extends Fragment {
             if (title.equals("null")) {
 
             } else if (title.equals("addReview")) {
-                loadFragment(new AddReviewFragment(), title, userName);
+                loadFragment(new AddReviewFragment(), title, userName, "addReview");
             } else {
-                loadFragment(new reviewListFragment(), title, userName);
+                loadFragment(new reviewListFragment(), title, userName, "showReviews");
             }
 
 
@@ -119,9 +113,6 @@ public class ReviewFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(getContext(), radioButton.getText().toString(), Toast.LENGTH_SHORT).show();
-
-
                 final String searchText = search.getText().toString();
                 request = new StringRequest(Request.Method.POST, searchPlaces, new Response.Listener<String>() {
                     @Override
@@ -154,13 +145,13 @@ public class ReviewFragment extends Fragment {
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    loadFragment(new SearchListFragment(), null, userName);
+                                    loadFragment(new SearchListFragment(), null, userName, null);
                                     progressBar.setVisibility(View.INVISIBLE);
                                     textProgress.setVisibility(View.INVISIBLE);
                                 }
                             }, 10000);
                         } else if (radioButton.getText().toString().equals("Restaurant")) {
-                            loadFragment(new reviewListFragment(), searchText, userName);
+                            loadFragment(new reviewListFragment(), searchText, userName, "showReviews");
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -225,11 +216,12 @@ public class ReviewFragment extends Fragment {
         requestQueue.add(request);
     }
 
-    private boolean loadFragment(Fragment fragment, String title, String userName) {
+    private boolean loadFragment(Fragment fragment, String title, String userName, String option) {
         //switching fragment
         Bundle bundle1 = new Bundle();
         bundle1.putString("userName", userName);
         bundle1.putString("place", title);
+        bundle1.putString("option", option);
         fragment.setArguments(bundle1);
 
         if (fragment != null) {

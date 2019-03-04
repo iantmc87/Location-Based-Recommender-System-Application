@@ -16,5 +16,8 @@
     <string name="singleSettings">%1$s/get_single_settings.php</string>
     <string name="autocompletePostcode">%1$s/autocomplete_postcode.php</string>
     <string name="autocompleteName">%1$s/autocomplete_name.php</string>
+    <string name="newReview">%1$s/new_review.php</string>
+    <string name="updateCuisine">%1$s/update_cuisine.php</string>
+    <string name="getBusinessInfo">%1$s/get_business_info.php</string>
 
 </resources>

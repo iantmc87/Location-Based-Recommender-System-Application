@@ -1,5 +1,7 @@
 package e.iantm.recommendationapplication;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,6 +38,7 @@ public class HomeFragment extends Fragment {
 
     String places, reviews;
     ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+    SharedPreferences pref;
 
     View view;
     String userName;
@@ -44,6 +47,10 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view =  inflater.inflate(R.layout.fragment_home, null);
+        SharedPreferences pref = getContext().getSharedPreferences("location", Context.MODE_PRIVATE);
+        Double latitude = Double.parseDouble(pref.getString("latitude", null));
+        Double longitude = Double.parseDouble(pref.getString("longitude", null));
+        Toast.makeText(getContext(), latitude.toString(), Toast.LENGTH_SHORT).show();
         Bundle bundle = getArguments();
         if(bundle != null) {
             userName = String.valueOf(bundle.get("userName"));

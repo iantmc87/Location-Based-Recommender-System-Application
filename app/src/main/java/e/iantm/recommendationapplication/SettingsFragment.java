@@ -1,10 +1,12 @@
 package e.iantm.recommendationapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v14.preference.MultiSelectListPreference;
 import android.support.v14.preference.SwitchPreference;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.preference.SwitchPreferenceCompat;
 import android.support.annotation.Nullable;
 import android.support.v7.preference.ListPreference;
@@ -30,22 +32,28 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
-    ListPreference systemPreference, radiusPreference, cuisinePreference, ambiencePreference;
+    ListPreference systemPreference, radiusPreference;
     SwitchPreference wifiPreference, kidsPreference, groupPreference, wheelchairPreference, dogPreference;
-   /* MultiSelectListPreference pricePreference;*/
+    MultiSelectListPreference pricePreference, cuisinePreference, ambiencePreference;
     RequestQueue requestQueue;
     Request request;
     StringRequest stringRequest;
     String systemValue, radiusValue;//, priceValue;
-    String updateSystem, updateRadius, /*updatePrice,*/ updateKids, updateGroup, updateWheelchair, updateWifi, updateDog;
+    String updateSystem, updateRadius, updateCuisine, /*updatePrice,*/ updateKids, updateGroup, updateWheelchair, updateWifi, updateDog;
+    final List<String> cuisineValues = new ArrayList<String>();
+    String cuisineValuesText;
     Resources res;
     Preference pinChange;
-    String userName, getSettings, getSystem = null, getRadius = null, getGoodForKids = null, getGoodForGroups = null, getDogsAllowed = null, getWifi = null, getWheelchair = null, getParking = null;
+    String currValue, userName, getSettings, getSystem = null, getRadius = null, getGoodForKids = null, getGoodForGroups = null, getDogsAllowed = null, getWifi = null, getWheelchair = null, getParking = null;
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings);
@@ -75,7 +83,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     Toast.makeText(getContext(), recommendations.toString(), Toast.LENGTH_SHORT).show();
                     JSONObject obj = recommendations.getJSONObject(0);
 
-                    /*getSystem = obj.getString("system");
+                    getSystem = obj.getString("system");
                     if(getSystem == null) {
                         systemPreference.setValue("1");
                     } else {
@@ -92,41 +100,41 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
                     getGoodForKids = obj.getString("good_for_kids");
-                    if(getGoodForKids != null){
+                    if(getGoodForKids.equals("GoodForKidsTrue")){
                         kidsPreference.setChecked(true);
                     } else {
                         kidsPreference.setChecked(false);
                     }
 
                     getGoodForGroups = obj.getString("good_for_groups");
-                    if(getGoodForGroups != null) {
+                    if(getGoodForGroups.equals("RestaurantsGoodForGroups")) {
                         groupPreference.setChecked(true);
                     } else {
                         groupPreference.setChecked(false);
                     }
 
                     getDogsAllowed = obj.getString("dogs_allowed");
-                    if(getDogsAllowed != null) {
+                    if(getDogsAllowed.equals("DogsAllowedTrue")) {
                         dogPreference.setChecked(true);
                     } else {
                         dogPreference.setChecked(false);
                     }
 
                     getWifi = obj.getString("wifi");
-                    if(getWifi != null) {
+                    if(getWifi.equals("Wififree")) {
                         wifiPreference.setChecked(true);
                     } else {
                         wifiPreference.setChecked(false);
                     }
 
                     getWheelchair = obj.getString("wheelchair_accessible");
-                    if(getWheelchair != null) {
+                    if(getWheelchair.equals("WheelchairAccessibleTrue")) {
                         wheelchairPreference.setChecked(true);
                     } else {
                         wheelchairPreference.setChecked(false);
                     }
 
-                    getParking = obj.getString("parking");
+                    /*getParking = obj.getString("parking");
 
                     Toast.makeText(getContext(), getSystem, Toast.LENGTH_SHORT).show();*/
 
@@ -151,7 +159,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         };
         requestQueue.add(stringRequest);
-
 
         systemPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -226,14 +233,49 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         }); //end radius preference on change listener
 
-        /*cuisinePreference = (ListPreference)findPreference("cuisine");
+        updateCuisine = String.format(res.getString(R.string.updateCuisine), res.getString(R.string.url));
+        cuisinePreference = (MultiSelectListPreference) findPreference("cuisine");
         cuisinePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
 
-                textValue = o.toString();
-                Toast.makeText(getContext(), updateSystem, Toast.LENGTH_SHORT).show();
-                request = new StringRequest(Request.Method.POST, updateSystem, new Response.Listener<String>() {
+                //Set<String> currValue = cuisinePreference.getValues();
+                currValue = o.toString();
+
+
+                if(currValue.contains("2")) {
+                    cuisineValues.add("American");
+                } if(currValue.contains("3")) {
+                       cuisineValues.add("Caribbean");
+                } if(currValue.contains("4")) {
+                    cuisineValues.add("Chinese");
+                } if(currValue.contains("5")) {
+                    cuisineValues.add("English");
+                } if(currValue.contains("6")) {
+                    cuisineValues.add("French");
+                } if(currValue.contains("7")) {
+                    cuisineValues.add("German");
+                } if(currValue.contains("8")) {
+                    cuisineValues.add("Indian");
+                } if(currValue.contains("9")) {
+                    cuisineValues.add("Italian");
+                } if(currValue.contains("10")) {
+                    cuisineValues.add("Japanese");
+                } if(currValue.contains("11")) {
+                    cuisineValues.add("Korean");
+                } if(currValue.contains("12")) {
+                    cuisineValues.add("Mexican");
+                } if(currValue.contains("13")) {
+                    cuisineValues.add("Thai");
+                } if(currValue.contains("14")) {
+                    cuisineValues.add("Vietnamese");
+
+                }
+                cuisineValuesText = cuisineValues.toString();
+                cuisineValuesText.replace("[", "");
+                Toast.makeText(getContext(), cuisineValuesText, Toast.LENGTH_SHORT).show();
+
+                request = new StringRequest(Request.Method.POST, updateCuisine, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
@@ -247,23 +289,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> parameters = new HashMap<String, String>();
-                        if(textValue.equals("1")) {
-                            parameters.put("system", "Chinese");
-                        } else if(textValue.equals("2")) {
-                            parameters.put("system", "English");
-                        } else if(textValue.equals("3")) {
-                            parameters.put("system", "American");
-                        } else if(textValue.equals("4")) {
-                            parameters.put("system", "Indian");
-                        } else if(textValue.equals("5")) {
-                            parameters.put("system", "Mexican");
-                        } else if(textValue.equals("6")) {
-                            parameters.put("system", "Thai");
-                        } else if(textValue.equals("7")) {
-                            parameters.put("system", "Korean");
-                        } else if(textValue.equals("8")) {
-                            parameters.put("system", "Japanese");
-                        }
+                        parameters.put("cuisine", cuisineValuesText);
+
 
                         return parameters;
                     }
@@ -275,7 +302,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         }); //end cuisine preference on change listener
 
-        ambiencePreference = (ListPreference)findPreference("ambience");
+       /* ambiencePreference = (ListPreference)findPreference("ambience");
         ambiencePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {

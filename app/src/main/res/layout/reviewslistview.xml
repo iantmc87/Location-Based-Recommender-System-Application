@@ -11,21 +11,21 @@
         android:id="@+id/name"
         android:layout_width="125dp"
         android:layout_height="29dp"
-        android:layout_marginEnd="23dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
         android:text="Username"
         android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@+id/summary"
-        app:layout_constraintEnd_toStartOf="@+id/ratingBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/usertext"
-        android:layout_width="336dp"
+        android:layout_width="313dp"
         android:layout_height="177dp"
-        android:layout_marginBottom="6dp"
+        android:layout_marginStart="4dp"
         android:text="TextView"
         android:textColor="#000000"
         android:textSize="14sp"
@@ -37,28 +37,31 @@
         android:id="@+id/date"
         android:layout_width="125dp"
         android:layout_height="32dp"
-        android:layout_marginEnd="23dp"
+        android:layout_marginStart="4dp"
         android:layout_marginBottom="6dp"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/usertext"
-        app:layout_constraintEnd_toStartOf="@+id/ratingBar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name" />
+        app:layout_constraintTop_toBottomOf="@+id/name"
+        app:layout_constraintVertical_bias="1.0" />
 
     <RatingBar
         android:id="@+id/ratingBar"
-        android:layout_width="wrap_content"
+        style="@style/Widget.AppCompat.RatingBar.Indicator"
+        android:layout_width="177dp"
         android:layout_height="49dp"
-        android:isIndicator="true"
-        android:layout_marginStart="23dp"
+        android:layout_marginStart="77dp"
         android:layout_marginTop="3dp"
+        android:layout_marginEnd="28dp"
         android:layout_marginBottom="7dp"
+        android:isIndicator="true"
         android:rating="2.5"
         android:scaleX=".6"
         android:scaleY=".6"
         app:layout_constraintBottom_toTopOf="@+id/usertext"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/name"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.071" />
 
 </android.support.constraint.ConstraintLayout>

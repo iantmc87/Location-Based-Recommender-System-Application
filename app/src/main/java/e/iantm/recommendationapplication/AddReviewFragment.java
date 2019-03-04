@@ -11,7 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -34,21 +37,59 @@ import java.util.Map;
 
 public class AddReviewFragment extends Fragment {
 
-    String places, reviews;
-    RequestQueue requestQueue;
-    ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-    SimpleAdapter adapter;
     View view;
+    EditText reviewText;
+    Button save;
     Resources res;
-    ListView listView;
-    String userName;
-    TextView textView;
+    StringRequest stringRequest;
+    RequestQueue requestQueue;
+    String getReviews;
+    String userName, title;
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
 
-        view =  inflater.inflate(R.layout.fragment_recommended_list_view, null);
-       textView = (TextView)view.findViewById(R.id.textView);
+        view =  inflater.inflate(R.layout.fragment_add_review, null);
+        reviewText = (EditText)view.findViewById(R.id.editText);
+        save = (Button)view.findViewById(R.id.button);
+        requestQueue = Volley.newRequestQueue(getContext());
+        res = getResources();
+        getReviews = String.format(res.getString(R.string.newReview), res.getString(R.string.url));
+        Bundle bundle1 = getArguments();
+        if(bundle1 != null) {
+            userName = String.valueOf(bundle1.get("userName"));
+            title = String.valueOf(bundle1.get("title"));
+        }
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String getText = reviewText.getText().toString();
+                stringRequest = new StringRequest(Request.Method.POST, getReviews, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> parameters = new HashMap<String, String>();
+                        parameters.put("text", getText);
+                        parameters.put("user_name", userName);
+                        parameters.put("title", title);
+                        return parameters;
+                    }
+
+                };
+                requestQueue.add(stringRequest);
+            }
+        });
 
         return view;
     }
@@ -64,23 +105,4 @@ public class AddReviewFragment extends Fragment {
         }
         return false;
     }
-
-    private boolean loadFragment1(Fragment fragment, String title) {
-        //switching fragment
-
-        Bundle bundle = new Bundle();
-        bundle.putString("title", title);
-        bundle.putString("userName", userName);
-        fragment.setArguments(bundle);
-        if (fragment != null) {
-            getFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
-                    .commit();
-            return true;
-        }
-        return false;
-    }
-
-
 }

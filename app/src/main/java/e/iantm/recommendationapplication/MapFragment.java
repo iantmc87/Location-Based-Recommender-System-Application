@@ -2,8 +2,10 @@ package e.iantm.recommendationapplication;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
@@ -103,7 +105,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
             userName = String.valueOf(bundle.get("userName"));
         }
         mMap = googleMap;
-        //Toast.makeText(getContext(), userName, Toast.LENGTH_SHORT).show();
 
         // Use a custom info window adapter to handle multiple lines of text in the
         // info window contents.
@@ -138,6 +139,13 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                             if(mLastKnownLocation != null) {
                                 latitude = mLastKnownLocation.getLatitude();
                                 longitude = mLastKnownLocation.getLongitude();
+
+                                SharedPreferences pref = getContext().getSharedPreferences("location", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = pref.edit();
+
+                                editor.putString("latitude", latitude.toString());
+                                editor.putString("longitude", longitude.toString());
+                                editor.commit();
                                 requestQueue = Volley.newRequestQueue(getContext());
                                 res = getResources();
                                 updateLocation = String.format(res.getString(R.string.updateLocation), res.getString(R.string.url));

@@ -22,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,7 +34,7 @@ import java.util.Map;
 
 public class reviewListFragment extends Fragment {
 
-    String reviews, title;
+    String reviews, title, option, userName, getBusinessInfo;
     RequestQueue requestQueue;
     ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
     SimpleAdapter adapter;
@@ -44,89 +45,96 @@ public class reviewListFragment extends Fragment {
     FloatingActionButton addReview;
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_review_list, null);
-        listView = (ListView) view.findViewById(R.id.review_list);
         business = (TextView)view.findViewById(R.id.business_name);
         categories = (TextView)view.findViewById(R.id.categories);
         address = (TextView)view.findViewById(R.id.address);
         requestQueue = Volley.newRequestQueue(getContext());
         addReview = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
+        res = getResources();
+        getBusinessInfo = String.format(res.getString(R.string.getBusinessInfo), res.getString(R.string.url));
 
-        Bundle bundle = getArguments();
+
+        final Bundle bundle = getArguments();
         if(bundle != null) {
-            title = bundle.get("place").toString();
-            business.setText(title);
-        } else {
+            title = String.valueOf(bundle.get("place"));
+            option = String.valueOf(bundle.get("option"));
+            userName = String.valueOf(bundle.get("user_name"));
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, getBusinessInfo, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.toString());
+                        JSONArray info = jsonObject.getJSONArray("info");
+                        JSONObject obj = info.getJSONObject(0);
+                        business.setText(obj.getString("name"));
+                        categories.setText(obj.getString("categories"));
+
+                        JSONObject jsonObject1 = new JSONObject(response.toString());
+                        JSONArray info1 = jsonObject1.getJSONArray("info1");
+                        JSONObject obj1 = info1.getJSONObject(0);
+                        Toast.makeText(getContext(), info1.toString(), Toast.LENGTH_SHORT).show();
+                        String address1 = obj1.getString("constituency") + "\n" +
+                                obj1.getString("district") + "\n" + obj1.getString("postcode");
+                        address.setText(address1);
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> parameters = new HashMap<String, String>();
+                    parameters.put("business", title);
+
+                    return parameters;
+                }
+            };
+            requestQueue.add(stringRequest);
 
         }
-        res = getResources();
+            if(option.equals("showReviews")){
+                Toast.makeText(getContext(), title, Toast.LENGTH_SHORT).show();
+            loadFragment1(new ShowReviewsFragment(), title, null);
+            }
+             else {
 
-        reviews = String.format(res.getString(R.string.reviews), res.getString(R.string.url));
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, reviews, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response.toString());
-                            JSONArray recommendations = jsonObject.getJSONArray("reviews");
-                            int length = recommendations.length();
-                            HashMap<String, String> item;
-                            for(int i = 0; i < length; i++) {
-                                JSONObject obj = recommendations.getJSONObject(i);
-                                item = new HashMap<String, String>();
-                                item.put("id", String.valueOf(obj.getInt("id")));
-                                item.put("date", obj.getString("date"));
-                                item.put("rating", obj.getString("stars"));
-                                item.put("review", obj.getString("text"));
-                                list.add(item);
-                            }
-                            adapter = new SimpleAdapter(getContext(), list, R.layout.reviewslistview,
-                                    new String[] {"id", "date"/*, "stars"*/, "review"}, new int []{R.id.name, R.id.date/*, R.id.name*/, R.id.usertext});
-
-                            listView.setAdapter(adapter);
+        }
 
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //Toast.makeText(getContext(), "BROKEN", Toast.LENGTH_SHORT).show();
-                    }
-                }) {
-                        @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
-                            Map<String, String> parameters = new HashMap<String, String>();
-                            parameters.put("business", title);
 
-                            return parameters;
-                        }
-        };
-        requestQueue.add(stringRequest);
+
+
 
         addReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent (getActivity(), MainActivity.class);
-                intent.putExtra("viewInfo", "addReview");
-                startActivity(intent);
+                loadFragment1(new AddReviewFragment(), title, userName);
             }
         });
 
         return view;
     }
 
-    private boolean loadFragment1(Fragment fragment, String title) {
+    private boolean loadFragment1(Fragment fragment, String title, String userName) {
         //switching fragment
 
         Bundle bundle = new Bundle();
         bundle.putString("title", title);
+        bundle.putString("userName", userName);
         fragment.setArguments(bundle);
         if (fragment != null) {
             getFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
+                    .replace(R.id.review_child_fragment_container, fragment)
                     .commit();
             return true;
         }
