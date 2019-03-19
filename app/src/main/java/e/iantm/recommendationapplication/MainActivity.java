@@ -28,25 +28,34 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private static final int REQUEST_CODE_ENABLE = 11;
     String userName = null;
     String viewInfo = null;
+    String firstLoad = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getMailAddress();
+        userName = getMailAddress();
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
 
         Intent intent = getIntent();
         viewInfo = intent.getStringExtra("viewInfo");
-        if(viewInfo != null) {
-            navigation.setSelectedItemId(R.id.navigation_reviews);
-            loadFragment1(new ReviewFragment(), userName, viewInfo);
-            setTitle("Reviews");
+        firstLoad = intent.getStringExtra("settings");
 
+        if (firstLoad != null) {
+            navigation.setSelectedItemId(R.id.navigation_settings);
+            loadFragment1(new SettingsFragment(), userName, null);
         } else {
-            loadFragment1(new HomeFragment(), userName, null);
-            setTitle("Recommendations");
+
+            if (viewInfo != null) {
+                navigation.setSelectedItemId(R.id.navigation_reviews);
+                loadFragment1(new ReviewFragment(), userName, viewInfo);
+                setTitle("Reviews");
+
+            } else {
+                loadFragment1(new HomeFragment(), userName, null);
+                setTitle("Recommendations");
+            }
         }
     }
 

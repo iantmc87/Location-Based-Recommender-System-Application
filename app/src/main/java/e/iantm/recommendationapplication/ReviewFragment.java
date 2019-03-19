@@ -49,6 +49,7 @@ public class ReviewFragment extends Fragment {
     StringRequest searchRequest;
     RequestQueue requestQueue;
     ArrayAdapter<String> adapter;
+    RadioButton postCode, restaurant;
     private int pStatus = 0;
     private Handler handler = new Handler();
     @Nullable
@@ -60,12 +61,15 @@ public class ReviewFragment extends Fragment {
         textProgress = (TextView)view.findViewById(R.id.txtProgress);
         startSearch = (ImageView)view.findViewById(R.id.imageView);
         radioGroup = (RadioGroup)view.findViewById(R.id.radioGroup);
+        postCode = (RadioButton) view.findViewById(R.id.radioButtonPostcode);
 
         requestQueue = Volley.newRequestQueue(getContext());
         res = getResources();
         autoPostcode = String.format(res.getString(R.string.autocompletePostcode), res.getString(R.string.url));
         autoName = String.format(res.getString(R.string.autocompleteName), res.getString(R.string.url));
 
+
+        search = (AutoCompleteTextView) view.findViewById(R.id.search);
         Bundle bundle1 = getArguments();
         if(bundle1 != null) {
             userName = String.valueOf(bundle1.get("userName"));
@@ -73,6 +77,8 @@ public class ReviewFragment extends Fragment {
         }
 
             if (title.equals("null")) {
+                radioGroup.clearCheck();
+                search.setHint("Choose search option");
 
             } else if (title.equals("addReview")) {
                 loadFragment(new AddReviewFragment(), title, userName, "addReview");
@@ -81,7 +87,7 @@ public class ReviewFragment extends Fragment {
             }
 
 
-        search = (AutoCompleteTextView) view.findViewById(R.id.search);
+
         switchSearch(searchRequest, autoPostcode, "title", requestQueue);
 
         //switchSearch(searchRequest, autoPostcode, "postcode", requestQueue);
@@ -101,7 +107,9 @@ public class ReviewFragment extends Fragment {
                 if(radioButtonText.equals("Postcode")) {
 
                     switchSearch(searchRequest, autoPostcode, "postcode", requestQueue);
+                    search.setHint("Enter Postcode");
                 } else if (radioButtonText.equals("Restaurant")) {
+                    search.setHint("Enter Restaurant");
                     switchSearch(searchRequest, autoName, "title", requestQueue);
                 }
 
@@ -114,11 +122,13 @@ public class ReviewFragment extends Fragment {
             public void onClick(View v) {
 
                 final String searchText = search.getText().toString();
+
                 request = new StringRequest(Request.Method.POST, searchPlaces, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
                         if (radioButton.getText().toString().equals("Postcode")) {
+
                             progressBar.setVisibility(View.VISIBLE);
                             new Thread(new Runnable() {
                                 @Override
@@ -153,6 +163,7 @@ public class ReviewFragment extends Fragment {
                         } else if (radioButton.getText().toString().equals("Restaurant")) {
                             loadFragment(new reviewListFragment(), searchText, userName, "showReviews");
                         }
+                        search.setText("");
                     }
                 }, new Response.ErrorListener() {
                     @Override

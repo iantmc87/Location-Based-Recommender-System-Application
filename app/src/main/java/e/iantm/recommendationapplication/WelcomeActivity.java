@@ -172,6 +172,7 @@ public class WelcomeActivity extends AppCompatActivity {
         prefManager.setFirstTimeLaunch(false);
         Intent intent = new Intent(WelcomeActivity.this, CustomPinActivity.class);
         intent.putExtra(AppLock.EXTRA_TYPE, AppLock.ENABLE_PINLOCK);
+        intent.putExtra("first", "first");
         startActivityForResult(intent, REQUEST_CODE_ENABLE);
         finish();
     }

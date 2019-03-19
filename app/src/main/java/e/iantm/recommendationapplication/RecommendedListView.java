@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -83,12 +84,13 @@ public class RecommendedListView extends Fragment {
                         DecimalFormat format = new DecimalFormat("0.00");
                         String distance = format.format(obj.getDouble("distance"));
                         item.put("distance", distance);
+                        item.put("rating", obj.getString("rating"));
                         list.add(item);
                     }
 
                     adapter = new SimpleAdapter(getContext(), list, R.layout.recommendlistview,
-                            new String[] {"title", "summary", "distance"}, new int []{R.id.title, R.id.summary, R.id.distanceFrom});
-
+                            new String[] {"title", "summary", "distance", "rating"}, new int []{R.id.title, R.id.summary, R.id.distanceFrom, R.id.ratingBar2});
+                    adapter.setViewBinder(new MyBinder());
                     listView.setAdapter(adapter);
 
 
@@ -159,5 +161,17 @@ public class RecommendedListView extends Fragment {
         return false;
     }
 
-
+    class MyBinder implements SimpleAdapter.ViewBinder {
+        @Override
+        public boolean setViewValue(View view, Object data, String textRepresentation) {
+            if(view.getId() == R.id.ratingBar2){
+                String stringval = (String) data;
+                float ratingValue = Float.parseFloat(stringval);
+                RatingBar ratingBar = (RatingBar) view;
+                ratingBar.setRating(ratingValue);
+                return true;
+            }
+            return false;
+        }
+    }
 }

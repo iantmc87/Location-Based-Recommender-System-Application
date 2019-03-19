@@ -1,6 +1,7 @@
 package e.iantm.recommendationapplication;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -99,39 +100,39 @@ public class ExpandableHelpListAdapter extends BaseExpandableListAdapter {
     }
 
     public static Map<String, List<String>> getData() {
-        Map<String, List<String>> expandableListDetail = new HashMap<String, List<String>>();
+        Map<String, List<String>> expandableListDetail = new LinkedHashMap<String, List<String>>();
 
         List question1 = new ArrayList();
-        question1.add("Answer");
+        question1.add("If current location is not showing on the map, you may have location services turned off or you are in a low signal area. Please check both of these and try again.");
         List question2 = new ArrayList();
-        question2.add("Answer");
+        question2.add("No, as the username is taken directly from your device, upon installation all data held on our database will be automatically re-downloaded.");
         List question3 = new ArrayList();
-        question3.add("Answer");
+        question3.add("Currently, accounts are unable to be deleted automatically from within the application. Please contact support at support@recommendations.co.uk and ask for your account to be deleted.");
         List question4 = new ArrayList();
-        question4.add("Answer");
+        question4.add("Try adding more of your preferred features, to enable a wider range of restaurants to be recommended.");
         List question5 = new ArrayList();
-        question5.add("Answer");
+        question5.add("Please contact support with your username and issue at support@recommendations.co.uk");
         List question6 = new ArrayList();
-        question6.add("Answer");
+        question6.add("You may be experiencing a network connectivity issue, please check your internet connection and try again.");
         List question7 = new ArrayList();
-        question7.add("Answer");
+        question7.add("Currently the recommendation system doesn't cover all locations in the UK, we are adding more places constantly, please check again at a later date.");
         List question8 = new ArrayList();
-        question8.add("Answer");
+        question8.add("To enable these systems a review needs to be added first, please search for your favourite places visited and leave a review.");
         List question9 = new ArrayList();
-        question9.add("Answer");
+        question9.add("Please check settings page to see if notifications are turned off, if still having issues check notification settings on your device, to see notifications are allowed for this application.");
         List question10 = new ArrayList();
-        question10.add("Answer");
+        question10.add("Unfortunately at this moment in time there is no option to change your username, please check back for future updates.");
 
-        expandableListDetail.put("Question 1", question1);
-        expandableListDetail.put("Question 2", question2);
-        expandableListDetail.put("Question 3", question3);
-        expandableListDetail.put("Question 4", question4);
-        expandableListDetail.put("Question 5", question5);
-        expandableListDetail.put("Question 6", question6);
-        expandableListDetail.put("Question 7", question7);
-        expandableListDetail.put("Question 8", question8);
-        expandableListDetail.put("Question 9", question9);
-        expandableListDetail.put("Question 10", question10);
+        expandableListDetail.put("Why is my location not showing on the map?", question1);
+        expandableListDetail.put("Why am I not getting any recommendations?", question6);
+        expandableListDetail.put("I need to reinstall the application will I lose all my data?", question2);
+        expandableListDetail.put("I don't like any of the recommended places suggested!", question4);
+        expandableListDetail.put("I want to change my username!", question10);
+        expandableListDetail.put("Postcode not appearing in search bar autocomplete?", question7);
+        expandableListDetail.put("Why can't I choose Collaborative/Hybrid systems?", question8);
+        expandableListDetail.put("I want to delete my account!", question3);
+        expandableListDetail.put("Why am I not receiving notifications?", question9);
+        expandableListDetail.put("Still having problems?", question5);
 
         return expandableListDetail;
     }

@@ -42,7 +42,7 @@ import java.util.Set;
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     ListPreference systemPreference, radiusPreference;
-    SwitchPreference wifiPreference, kidsPreference, groupPreference, wheelchairPreference, dogPreference;
+    SwitchPreference wifiPreference, kidsPreference, groupPreference, wheelchairPreference, dogPreference, parkingPreference;
     MultiSelectListPreference pricePreference, cuisinePreference, ambiencePreference;
     RequestQueue requestQueue;
     Request request;
@@ -66,6 +66,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         groupPreference = (SwitchPreference)findPreference("groups");
         wheelchairPreference = (SwitchPreference)findPreference("wheelchair");
         kidsPreference = (SwitchPreference)findPreference("kids");
+        parkingPreference = (SwitchPreference)findPreference("parking");
 
         Bundle bundle = getArguments();
         if(bundle != null) {
@@ -80,7 +81,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     JSONObject jsonObject = new JSONObject(response.toString());
                     JSONArray recommendations = jsonObject.getJSONArray("get_settings");
 
-                    Toast.makeText(getContext(), recommendations.toString(), Toast.LENGTH_SHORT).show();
                     JSONObject obj = recommendations.getJSONObject(0);
 
                     getSystem = obj.getString("system");
@@ -100,44 +100,72 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
                     getGoodForKids = obj.getString("good_for_kids");
-                    if(getGoodForKids.equals("GoodForKidsTrue")){
-                        kidsPreference.setChecked(true);
-                    } else {
+                    if(getGoodForKids == null) {
                         kidsPreference.setChecked(false);
+                    } else {
+                        if(getGoodForKids.equals("GoodForKidsTrue")){
+                            kidsPreference.setChecked(true);
+                        } else {
+                            kidsPreference.setChecked(false);
+                        }
+
                     }
 
+
                     getGoodForGroups = obj.getString("good_for_groups");
-                    if(getGoodForGroups.equals("RestaurantsGoodForGroups")) {
-                        groupPreference.setChecked(true);
-                    } else {
+                    if(getGoodForGroups == null){
                         groupPreference.setChecked(false);
+                    } else {
+                        if (getGoodForGroups.equals("RestaurantsGoodForGroups")) {
+                            groupPreference.setChecked(true);
+                        } else {
+                            groupPreference.setChecked(false);
+                        }
                     }
 
                     getDogsAllowed = obj.getString("dogs_allowed");
-                    if(getDogsAllowed.equals("DogsAllowedTrue")) {
-                        dogPreference.setChecked(true);
-                    } else {
+                    if(getDogsAllowed == null) {
                         dogPreference.setChecked(false);
+                    } else {
+                        if (getDogsAllowed.equals("DogsAllowedTrue")) {
+                            dogPreference.setChecked(true);
+                        } else {
+                            dogPreference.setChecked(false);
+                        }
                     }
 
                     getWifi = obj.getString("wifi");
-                    if(getWifi.equals("Wififree")) {
-                        wifiPreference.setChecked(true);
-                    } else {
+                    if(getWifi == null){
                         wifiPreference.setChecked(false);
+                    } else {
+                        if (getWifi.equals("Wififree")) {
+                            wifiPreference.setChecked(true);
+                        } else {
+                            wifiPreference.setChecked(false);
+                        }
                     }
 
                     getWheelchair = obj.getString("wheelchair_accessible");
-                    if(getWheelchair.equals("WheelchairAccessibleTrue")) {
-                        wheelchairPreference.setChecked(true);
-                    } else {
+                    if(getWheelchair == null) {
                         wheelchairPreference.setChecked(false);
+                    } else {
+                        if (getWheelchair.equals("WheelchairAccessibleTrue")) {
+                            wheelchairPreference.setChecked(true);
+                        } else {
+                            wheelchairPreference.setChecked(false);
+                        }
                     }
 
-                    /*getParking = obj.getString("parking");
-
-                    Toast.makeText(getContext(), getSystem, Toast.LENGTH_SHORT).show();*/
-
+                    getParking = obj.getString("parking");
+                    if(getParking == null) {
+                        parkingPreference.setChecked(false);
+                    } else {
+                        if(getParking.equals("ParkingTrue")){
+                            parkingPreference.setChecked(true);
+                        } else {
+                            parkingPreference.setChecked(false);
+                        }
+                    }
 
 
                 } catch (JSONException e) {
@@ -242,11 +270,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 //Set<String> currValue = cuisinePreference.getValues();
                 currValue = o.toString();
 
-
                 if(currValue.contains("2")) {
                     cuisineValues.add("American");
                 } if(currValue.contains("3")) {
-                       cuisineValues.add("Caribbean");
+                    cuisineValues.add("Caribbean");
                 } if(currValue.contains("4")) {
                     cuisineValues.add("Chinese");
                 } if(currValue.contains("5")) {
