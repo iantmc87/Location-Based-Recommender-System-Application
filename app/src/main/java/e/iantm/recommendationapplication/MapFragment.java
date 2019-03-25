@@ -241,6 +241,8 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                                     protected Map<String, String> getParams() throws AuthFailureError {
                                         Map<String, String> parameters = new HashMap<String, String>();
                                         parameters.put("user_name", userName);
+                                        parameters.put("longitude", longitude.toString());
+                                        parameters.put("latitude", latitude.toString());
 
                                         return parameters;
                                     }

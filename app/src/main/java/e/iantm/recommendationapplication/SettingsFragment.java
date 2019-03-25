@@ -43,14 +43,18 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     ListPreference systemPreference, radiusPreference;
     SwitchPreference wifiPreference, kidsPreference, groupPreference, wheelchairPreference, dogPreference, parkingPreference;
-    MultiSelectListPreference pricePreference, cuisinePreference, ambiencePreference;
+    MultiSelectListPreference pricePreference, cuisinePreference, ambiencePreference, alcoholPreference;
     RequestQueue requestQueue;
     Request request;
     StringRequest stringRequest;
     String systemValue, radiusValue;//, priceValue;
-    String updateSystem, updateRadius, updateCuisine, /*updatePrice,*/ updateKids, updateGroup, updateWheelchair, updateWifi, updateDog;
+    String updateSystem, updateRadius, updateCuisine, updateAlcohol, updateAmbience, updatePrice, updateKids, updateGroup, updateWheelchair, updateWifi, updateDog;
     final List<String> cuisineValues = new ArrayList<String>();
-    String cuisineValuesText;
+    final List<String> AmbienceValues = new ArrayList<String>();
+    final List<String> priceRangeValues = new ArrayList<String>();
+    final List<String> alcoholValues = new ArrayList<String>();
+
+    String cuisineValuesText, ambienceValuesText, priceRangeValuesText, alcoholValuesText;
     Resources res;
     Preference pinChange;
     String currValue, userName, getSettings, getSystem = null, getRadius = null, getGoodForKids = null, getGoodForGroups = null, getDogsAllowed = null, getWifi = null, getWheelchair = null, getParking = null;
@@ -268,6 +272,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(Preference preference, Object o) {
 
                 //Set<String> currValue = cuisinePreference.getValues();
+                cuisineValues.clear();
                 currValue = o.toString();
 
                 if(currValue.contains("2")) {
@@ -299,8 +304,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                 }
                 cuisineValuesText = cuisineValues.toString();
-                cuisineValuesText.replace("[", "");
-                Toast.makeText(getContext(), cuisineValuesText, Toast.LENGTH_SHORT).show();
+                //cuisineValuesText.replace("[", "");
+               // Toast.makeText(getContext(), cuisineValuesText, Toast.LENGTH_SHORT).show();
 
                 request = new StringRequest(Request.Method.POST, updateCuisine, new Response.Listener<String>() {
                     @Override
@@ -317,6 +322,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> parameters = new HashMap<String, String>();
                         parameters.put("cuisine", cuisineValuesText);
+                        parameters.put("user_name", userName);
 
 
                         return parameters;
@@ -329,14 +335,38 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         }); //end cuisine preference on change listener
 
-       /* ambiencePreference = (ListPreference)findPreference("ambience");
+        updateAmbience = String.format(res.getString(R.string.updateAmbience), res.getString(R.string.url));
+        ambiencePreference = (MultiSelectListPreference)findPreference("ambience");
         ambiencePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
 
-                textValue = o.toString();
-                Toast.makeText(getContext(), updateSystem, Toast.LENGTH_SHORT).show();
-                request = new StringRequest(Request.Method.POST, updateSystem, new Response.Listener<String>() {
+                AmbienceValues.clear();
+                currValue = o.toString();
+
+                if(currValue.contains("2")) {
+                    AmbienceValues.add("casual");
+                } if(currValue.contains("3")) {
+                    AmbienceValues.add("classy");
+                } if(currValue.contains("4")) {
+                    AmbienceValues.add("divey");
+                } if(currValue.contains("5")) {
+                    AmbienceValues.add("hipster");
+                } if(currValue.contains("6")) {
+                    AmbienceValues.add("intimate");
+                } if(currValue.contains("7")) {
+                    AmbienceValues.add("romantic");
+                } if(currValue.contains("8")) {
+                    AmbienceValues.add("trendy");
+                } if(currValue.contains("9")) {
+                    AmbienceValues.add("touristy");
+                } if(currValue.contains("10")) {
+                    AmbienceValues.add("upscale");
+                }
+
+                ambienceValuesText = AmbienceValues.toString();
+
+                request = new StringRequest(Request.Method.POST, updateAmbience, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
@@ -350,26 +380,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> parameters = new HashMap<String, String>();
-                        if(textValue.equals("1")) {
-                        parameters.put("system", "Casual");
-                        } else if(textValue.equals("2")) {
-                            parameters.put("system", "Classy");
-                        } else if(textValue.equals("3")) {
-                            parameters.put("system", "Divey");
-                        } else if(textValue.equals("4")) {
-                            parameters.put("system", "Hipster");
-                        } else if(textValue.equals("5")) {
-                            parameters.put("system", "Intimate");
-                        } else if(textValue.equals("6")) {
-                            parameters.put("system", "Romantic");
-                        } else if(textValue.equals("7")) {
-                            parameters.put("system", "Trendy");
-                        } else if(textValue.equals("8")) {
-                            parameters.put("system", "Touristy");
-                        } else if(textValue.equals("9")) {
-                            parameters.put("system", "Upscale");
-                        }
-
+                        parameters.put("ambience", ambienceValuesText);
+                        parameters.put("user_name", userName);
                         return parameters;
                     }
                 };
@@ -378,17 +390,31 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                 return true;
             }
-        }); //end ambience preference on change listener*/
+        }); //end ambience preference on change listener
 
-       /* pricePreference = (MultiSelectListPreference) findPreference("price");
+        updatePrice = String.format(res.getString(R.string.updatePriceRange), res.getString(R.string.url));
+        pricePreference = (MultiSelectListPreference) findPreference("price");
         pricePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
 
-                priceValue = o.toString();
-                updatePrice = String.format(res.getString(R.string.updatePrice), res.getString(R.string.url));
-                Toast.makeText(getContext(), updatePrice, Toast.LENGTH_SHORT).show();
-                request = new StringRequest(Request.Method.POST, updateSystem, new Response.Listener<String>() {
+                priceRangeValues.clear();
+                currValue = o.toString();
+
+                if(currValue.contains("2")) {
+                    priceRangeValues.add("cheap");
+                } if(currValue.contains("3")) {
+                    priceRangeValues.add("good value");
+                } if(currValue.contains("4")) {
+                    priceRangeValues.add("average");
+                } if(currValue.contains("5")) {
+                    priceRangeValues.add("expensive");
+                }
+
+                priceRangeValuesText = priceRangeValues.toString();
+                Toast.makeText(getContext(), priceRangeValuesText, Toast.LENGTH_SHORT).show();
+
+                request = new StringRequest(Request.Method.POST, updatePrice, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
@@ -402,7 +428,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> parameters = new HashMap<String, String>();
-                        parameters.put("system", String.valueOf(priceValue));
+                        parameters.put("price", priceRangeValuesText);
+                        parameters.put("user_name", userName);
 
                         return parameters;
                     }
@@ -412,7 +439,56 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                 return true;
             }
-        });*/ //end price preference on change listener
+        }); //end price preference on change listener
+
+        updateAlcohol = String.format(res.getString(R.string.updateAlcohol), res.getString(R.string.url));
+        alcoholPreference = (MultiSelectListPreference) findPreference("alcohol");
+        alcoholPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+
+                alcoholValues.clear();
+                currValue = o.toString();
+
+                if(currValue.contains("2")) {
+                    alcoholValues.add("none");
+                } if(currValue.contains("3")) {
+                    alcoholValues.add("beer and wine");
+                } if(currValue.contains("4")) {
+                    alcoholValues.add("full bar");
+                } if(currValue.contains("5")) {
+                    alcoholValues.add("byob");
+                }
+
+                alcoholValuesText = alcoholValues.toString();
+                Toast.makeText(getContext(), alcoholValuesText, Toast.LENGTH_SHORT).show();
+
+                request = new StringRequest(Request.Method.POST, updateAlcohol, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> parameters = new HashMap<String, String>();
+                        parameters.put("alcohol", alcoholValuesText);
+                        parameters.put("user_name", userName);
+                        return parameters;
+                    }
+                };
+                requestQueue.add(request);
+
+                return true;
+            }
+        });
+
+
 
         updateWifi = String.format(res.getString(R.string.updateWifi), res.getString(R.string.url));
         wifiPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
