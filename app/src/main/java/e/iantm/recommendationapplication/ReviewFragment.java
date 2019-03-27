@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,9 +83,9 @@ public class ReviewFragment extends Fragment {
                 search.setHint("Choose search option");
 
             } else if (title.equals("addReview")) {
-                loadFragment(new AddReviewFragment(), title, userName, "addReview");
+                loadFragment(new AddReviewFragment(), title, userName, "addReview", "addReview");
             } else {
-                loadFragment(new reviewListFragment(), title, userName, "showReviews");
+                loadFragment(new reviewListFragment(), title, userName, "showReviews", "reviewList");
             }
 
 
@@ -121,6 +123,20 @@ public class ReviewFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                Fragment myFragment = (Fragment)getChildFragmentManager().findFragmentByTag("reviewList");
+                Fragment myFragment1 = (Fragment)getChildFragmentManager().findFragmentByTag("searchList");
+                Fragment myFragment2 = (Fragment)getChildFragmentManager().findFragmentByTag("addReview");
+
+
+                if(myFragment != null && myFragment.isVisible()) {
+                    getChildFragmentManager().beginTransaction().remove(myFragment).commit();
+                } else if (myFragment1 != null && myFragment1.isVisible()) {
+                    getChildFragmentManager().beginTransaction().remove(myFragment1).commit();
+
+                } else if (myFragment2 != null && myFragment2.isVisible()) {
+                    getChildFragmentManager().beginTransaction().remove(myFragment2).commit();
+
+                }
                 final String searchText = search.getText().toString();
 
                 request = new StringRequest(Request.Method.POST, searchPlaces, new Response.Listener<String>() {
@@ -155,13 +171,13 @@ public class ReviewFragment extends Fragment {
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    loadFragment(new SearchListFragment(), null, userName, null);
+                                    loadFragment(new SearchListFragment(), null, userName, null, "searchList");
                                     progressBar.setVisibility(View.INVISIBLE);
                                     textProgress.setVisibility(View.INVISIBLE);
                                 }
                             }, 10000);
                         } else if (radioButton.getText().toString().equals("Restaurant")) {
-                            loadFragment(new reviewListFragment(), searchText, userName, "showReviews");
+                            loadFragment(new reviewListFragment(), searchText, userName, "showReviews", "reviewList");
                         }
                         search.setText("");
                     }
@@ -227,7 +243,7 @@ public class ReviewFragment extends Fragment {
         requestQueue.add(request);
     }
 
-    private boolean loadFragment(Fragment fragment, String title, String userName, String option) {
+    private boolean loadFragment(Fragment fragment, String title, String userName, String option, String tag) {
         //switching fragment
         Bundle bundle1 = new Bundle();
         bundle1.putString("userName", userName);
@@ -238,10 +254,18 @@ public class ReviewFragment extends Fragment {
         if (fragment != null) {
             getChildFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.child_fragment_container, fragment)
+                    .replace(R.id.child_fragment_container, fragment, tag)
                     .commit();
             return true;
         }
         return false;
+    }
+
+    private void removeFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragmentTransaction.remove(fragment);
+        fragmentTransaction.commit();
     }
 }
