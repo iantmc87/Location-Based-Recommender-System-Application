@@ -42,7 +42,7 @@ import java.util.Set;
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     ListPreference systemPreference, radiusPreference;
-    SwitchPreference wifiPreference, kidsPreference, groupPreference, wheelchairPreference, dogPreference, parkingPreference;
+    SwitchPreference wifiPreference, kidsPreference, groupPreference, wheelchairPreference, dogPreference, parkingPreference, pinLock;
     MultiSelectListPreference pricePreference, cuisinePreference, ambiencePreference, alcoholPreference;
     RequestQueue requestQueue;
     Request request;
@@ -71,6 +71,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         wheelchairPreference = (SwitchPreference)findPreference("wheelchair");
         kidsPreference = (SwitchPreference)findPreference("kids");
         parkingPreference = (SwitchPreference)findPreference("parking");
+
 
         Bundle bundle = getArguments();
         if(bundle != null) {
@@ -550,6 +551,26 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             }
         }); //end radius preference on change listener
+
+        pinLock = (SwitchPreference)findPreference("pincode");
+        pinLock.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+
+                final Boolean isLockOn = (Boolean) o;
+
+                if(isLockOn) {
+                    Intent intent = new Intent(getActivity(), CustomPinActivity.class);
+                    intent.putExtra(AppLock.EXTRA_TYPE, AppLock.ENABLE_PINLOCK);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(getActivity(), CustomPinActivity.class);
+                    intent.putExtra(AppLock.EXTRA_TYPE, AppLock.DISABLE_PINLOCK);
+                    startActivity(intent);
+                }
+                return true;
+            }
+        });
 
         pinChange = (Preference)findPreference("changepin");
         pinChange.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

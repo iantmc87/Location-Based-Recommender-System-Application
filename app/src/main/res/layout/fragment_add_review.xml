@@ -41,6 +41,7 @@
         android:layout_marginEnd="90dp"
         android:isIndicator="false"
         android:scaleX=".7"
+        android:stepSize="1.0"
         android:scaleY=".8"
         app:layout_constraintEnd_toStartOf="@+id/button"
         app:layout_constraintStart_toStartOf="parent"

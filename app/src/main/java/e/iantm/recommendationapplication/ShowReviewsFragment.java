@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,8 +76,8 @@ public class ShowReviewsFragment extends Fragment {
                         list.add(item);
                     }
                     adapter = new SimpleAdapter(getContext(), list, R.layout.reviewslistview,
-                            new String[] {"id", "date"/*, "stars"*/, "review"}, new int []{R.id.name, R.id.date/*, R.id.name*/, R.id.usertext});
-
+                            new String[] {"id", "date", "rating", "review"}, new int []{R.id.name, R.id.date, R.id.ratingBar2, R.id.usertext});
+                    adapter.setViewBinder(new MyBinder());
                     listView.setAdapter(adapter);
                     Toast.makeText(getContext(), "entered", Toast.LENGTH_SHORT).show();
 
@@ -102,5 +103,19 @@ public class ShowReviewsFragment extends Fragment {
         requestQueue.add(stringRequest);
 
         return view;
+    }
+
+    class MyBinder implements SimpleAdapter.ViewBinder {
+        @Override
+        public boolean setViewValue(View view, Object data, String textRepresentation) {
+            if(view.getId() == R.id.ratingBar2){
+                String stringval = (String) data;
+                float ratingValue = Float.parseFloat(stringval);
+                RatingBar ratingBar = (RatingBar) view;
+                ratingBar.setRating(ratingValue);
+                return true;
+            }
+            return false;
+        }
     }
 }
