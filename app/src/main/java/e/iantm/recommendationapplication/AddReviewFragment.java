@@ -45,7 +45,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class AddReviewFragment extends Fragment {
 
     View view;
-    EditText reviewText;
+    EditText reviewText, name;
     Button save;
     Resources res;
     StringRequest stringRequest;
@@ -60,6 +60,7 @@ public class AddReviewFragment extends Fragment {
 
         view =  inflater.inflate(R.layout.fragment_add_review, null);
         SharedPreferences pref = getContext().getSharedPreferences("account", MODE_PRIVATE);
+        name = (EditText)view.findViewById(R.id.editText2);
         userName = pref.getString("username", null);
         reviewText = (EditText)view.findViewById(R.id.editText);
         ratingBar = (RatingBar)view.findViewById(R.id.ratingBar);
@@ -77,6 +78,7 @@ public class AddReviewFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final String getText = reviewText.getText().toString();
+                final String getName = name.getText().toString();
 
                 final double stars = ratingBar.getRating();
                 final String starsText = String.valueOf(stars);
@@ -104,6 +106,7 @@ public class AddReviewFragment extends Fragment {
                         parameters.put("text", getText);
                         parameters.put("rating", starsText);
                         parameters.put("user_name", userName);
+                        parameters.put("name", getName);
                         parameters.put("title", title);
                         parameters.put("date", todayDate);
                         return parameters;

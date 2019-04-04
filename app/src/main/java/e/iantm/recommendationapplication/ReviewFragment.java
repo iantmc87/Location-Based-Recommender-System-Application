@@ -70,9 +70,10 @@ public class ReviewFragment extends Fragment {
         autoPostcode = String.format(res.getString(R.string.autocompletePostcode), res.getString(R.string.url));
         autoName = String.format(res.getString(R.string.autocompleteName), res.getString(R.string.url));
 
+
+        search = (AutoCompleteTextView) view.findViewById(R.id.search);
         radioGroup.clearCheck();
         search.setHint("Choose search option");
-        search = (AutoCompleteTextView) view.findViewById(R.id.search);
         Bundle bundle1 = getArguments();
         if(bundle1 != null) {
             userName = String.valueOf(bundle1.get("userName"));

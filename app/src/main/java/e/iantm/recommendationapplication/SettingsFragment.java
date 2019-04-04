@@ -35,6 +35,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -57,13 +58,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     String cuisineValuesText, ambienceValuesText, priceRangeValuesText, alcoholValuesText;
     Resources res;
     Preference pinChange;
-    String currValue, userName, getSettings, getSystem = null, getRadius = null, getGoodForKids = null, getGoodForGroups = null, getDogsAllowed = null, getWifi = null, getWheelchair = null, getParking = null;
+    String currValue, userName, getSettings, getAlcohol = null, getAmbience = null, getPriceRange = null, getCategories = null, getSystem = null, getRadius = null, getGoodForKids = null, getGoodForGroups = null, getDogsAllowed = null, getWifi = null, getWheelchair = null, getParking = null;
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings);
         requestQueue = Volley.newRequestQueue(getContext());
         res = getResources();
         systemPreference = (ListPreference)findPreference("system_choice");
+        cuisinePreference = (MultiSelectListPreference) findPreference("cuisine");
         radiusPreference = (ListPreference)findPreference("radius");
         wifiPreference = (SwitchPreference)findPreference("wifi");
         dogPreference = (SwitchPreference)findPreference("dogs");
@@ -71,6 +73,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         wheelchairPreference = (SwitchPreference)findPreference("wheelchair");
         kidsPreference = (SwitchPreference)findPreference("kids");
         parkingPreference = (SwitchPreference)findPreference("parking");
+        alcoholPreference = (MultiSelectListPreference) findPreference("alcohol");
+        ambiencePreference = (MultiSelectListPreference)findPreference("ambience");
+        pricePreference = (MultiSelectListPreference) findPreference("price");
+
 
 
         Bundle bundle = getArguments();
@@ -102,6 +108,132 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     }
                     getRadius = obj.getString("radius");
                     radiusPreference.setValue(getRadius);
+
+                    Set<String> alcohol = new HashSet<String>();
+                    getAlcohol = obj.getString("alcohol");
+                    Toast.makeText(getContext(), getAlcohol, Toast.LENGTH_SHORT).show();
+                    if(getAlcohol == null){
+                        alcohol.add("3");
+                    } else {
+                        if(getAlcohol.contains("none")) {
+                            alcohol.add("2");
+                        }
+                        if(getAlcohol.contains("beer and wine")) {
+                            alcohol.add("3");
+                        }
+                        if(getAlcohol.contains("full bar")) {
+                            alcohol.add("4");
+                        }
+                        if(getAlcohol.contains("byob")) {
+                            alcohol.add("5");
+                        }
+
+                        alcoholPreference.setValues(alcohol);
+                    }
+
+                    Set<String> ambience = new HashSet<String>();
+                    getAmbience = obj.getString("ambience");
+                    if(getAmbience == null) {
+
+                    } else {
+                        if(getAmbience.contains("casual")){
+                            ambience.add("2");
+                        }
+                        if(getAmbience.contains("classy")){
+                            ambience.add("3");
+                        }
+                        if(getAmbience.contains("divey")){
+                            ambience.add("4");
+                        }
+                        if(getAmbience.contains("hipster")){
+                            ambience.add("5");
+                        }
+                        if(getAmbience.contains("intimate")){
+                            ambience.add("6");
+                        }
+                        if(getAmbience.contains("romantic")){
+                            ambience.add("7");
+                        }
+                        if(getAmbience.contains("trendy")){
+                            ambience.add("8");
+                        }
+                        if(getAmbience.contains("touristy")){
+                            ambience.add("9");
+                        }
+                        if(getAmbience.contains("upscale")){
+                            ambience.add("10");
+                        }
+
+                        ambiencePreference.setValues(ambience);
+                    }
+
+                    Set<String> price = new HashSet<String>();
+                    getPriceRange = obj.getString("price");
+                    if(getPriceRange == null) {
+
+                    } else {
+                        if(getPriceRange.equals("cheap")){
+                            price.add("2");
+                        }
+                        if(getPriceRange.equals("good value")){
+                            price.add("3");
+                        }
+                        if(getPriceRange.equals("average")){
+                            price.add("4");
+                        }
+                        if(getPriceRange.equals("expensive")){
+                            price.add("5");
+                        }
+                    }
+
+                    Set<String> cuisine = new HashSet<String>();
+                    getCategories = obj.getString("categories");
+                    if(getCategories == null) {
+
+                    } else {
+                        if(getCategories.contains("American")) {
+                            cuisine.add("2");
+                        }
+                        if(getCategories.contains("Caribbean")) {
+                            cuisine.add("3");
+                        }
+                        if(getCategories.contains("Chinese")) {
+                            cuisine.add("4");
+                        }
+                        if(getCategories.contains("English")) {
+                            cuisine.add("5");
+                        }
+                        if(getCategories.contains("French")) {
+                            cuisine.add("6");
+                        }
+                        if(getCategories.contains("German")) {
+                            cuisine.add("7");
+                        }
+                        if(getCategories.contains("Indian")) {
+                            cuisine.add("8");
+                        }
+                        if(getCategories.contains("Italian")) {
+                            cuisine.add("9");
+                        }
+                        if(getCategories.contains("Japanese")) {
+                            cuisine.add("10");
+                        }
+                        if(getCategories.contains("Korean")) {
+                            cuisine.add("11");
+                        }
+                        if(getCategories.contains("Mexican")) {
+                            cuisine.add("12");
+                        }
+                        if(getCategories.contains("Thai")) {
+                            cuisine.add("13");
+                        }if(getCategories.contains("Vietnamese")) {
+                            cuisine.add("14");
+                        }
+
+
+
+                        cuisinePreference.setValues(cuisine);
+                    }
 
 
                     getGoodForKids = obj.getString("good_for_kids");
@@ -267,7 +399,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }); //end radius preference on change listener
 
         updateCuisine = String.format(res.getString(R.string.updateCuisine), res.getString(R.string.url));
-        cuisinePreference = (MultiSelectListPreference) findPreference("cuisine");
+
         cuisinePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
@@ -337,7 +469,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }); //end cuisine preference on change listener
 
         updateAmbience = String.format(res.getString(R.string.updateAmbience), res.getString(R.string.url));
-        ambiencePreference = (MultiSelectListPreference)findPreference("ambience");
+
         ambiencePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
@@ -394,7 +526,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }); //end ambience preference on change listener
 
         updatePrice = String.format(res.getString(R.string.updatePriceRange), res.getString(R.string.url));
-        pricePreference = (MultiSelectListPreference) findPreference("price");
+
         pricePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
@@ -443,7 +575,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }); //end price preference on change listener
 
         updateAlcohol = String.format(res.getString(R.string.updateAlcohol), res.getString(R.string.url));
-        alcoholPreference = (MultiSelectListPreference) findPreference("alcohol");
         alcoholPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
