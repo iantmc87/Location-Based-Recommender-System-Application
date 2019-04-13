@@ -34,9 +34,15 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".LocationAlertIntentService" android:allowBackup="true"/>
+
+
+
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_welcome"/>
+            android:label="@string/title_activity_welcome"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".CustomPinActivity"/>
 

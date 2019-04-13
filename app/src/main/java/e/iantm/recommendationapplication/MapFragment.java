@@ -1,7 +1,9 @@
 package e.iantm.recommendationapplication;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,6 +31,9 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingClient;
+import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -51,6 +56,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
+
+import static java.lang.System.err;
 
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback {
 
@@ -77,9 +84,21 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
 
+    private static final int LOC_PERM_REQ_CODE = 1;
+    private static final int GEOFENCE_RADIUS = 100000;
+    private static final int GEOFENCE_EXPIRATION = 6000;
+
+    private GeofencingClient geofencingClient ;
+    private Context mContext;
+
     // The geographical location where the device is currently located. That is, the last-known
     // location retrieved by the Fused Location Provider.
     private Location mLastKnownLocation;
+
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
 
     @Override
     public void onResume() {
@@ -114,6 +133,10 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
         // Use a custom info window adapter to handle multiple lines of text in the
         // info window contents.
+
+        geofencingClient = LocationServices.getGeofencingClient(mContext);
+
+        addLocationAlert(53.755, -2.366);
 
         // Prompt the user for permission.
         getLocationPermission();
@@ -324,4 +347,72 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
             Log.e("Exception: %s", e.getMessage());
         }
     }
+
+    @SuppressLint("MissingPermission")
+    private void addLocationAlert(double lat, double lng) {
+        if(mLocationPermissionGranted) {
+            getLocationPermission();
+        } else {
+            String key = ""+lat+"-"+lng;
+            Geofence geofence = getGeofence(lat, lng, key);
+            geofencingClient.addGeofences(getGeofencingRequest(geofence),
+                    getGeofencePendingIntent())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()) {
+                                Toast.makeText(getContext(), "Location alters have been added", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getContext(), "Location alters could not be added", Toast.LENGTH_SHORT).show();
+                                Log.e(TAG, "" + err);
+                            }
+                        }
+                    });
+        }
     }
+
+    private void removeLocationAlert() {
+        if(mLocationPermissionGranted) {
+            getLocationPermission();
+        } else {
+            geofencingClient.removeGeofences(getGeofencePendingIntent())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getContext(),
+                                        "Location alters have been removed",
+                                        Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(getContext(),
+                                        "Location alters could not be removed",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+    }
+
+    private PendingIntent getGeofencePendingIntent() {
+        Intent intent = new Intent(getContext(), LocationAlertIntentService.class);
+        return PendingIntent.getService(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private GeofencingRequest getGeofencingRequest(Geofence geofence) {
+        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL);
+        builder.addGeofence(geofence);
+        return builder.build();
+    }
+
+    private Geofence getGeofence(double lat, double lang, String key) {
+        return new Geofence.Builder()
+                .setRequestId(key)
+                .setCircularRegion(lat, lang, GEOFENCE_RADIUS)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL)
+                .setLoiteringDelay(1000)
+                .build();
+    }
+
+}
