@@ -27,22 +27,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="notifications"
-        android:title="Notifications">
-
-        <SwitchPreference
-            android:key="notifications_new_message"
-            android:defaultValue="true"
-            android:title="Recommended Notifications" />
-
-        <SwitchPreference
-            android:key="vibrate"
-            android:title="Vibrate"
-            android:summary="Vibrate upon notification"
-            android:dependency="notifications_new_message"/>
-    </PreferenceCategory>
-
-    <PreferenceCategory
         android:key="Preferences"
         android:title="Preferences">
 
@@ -107,6 +91,22 @@
             android:key="parking"
             android:title="Car Park"
             android:summary="Preferred restaurant with car parking"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="notifications"
+        android:title="Notifications">
+
+        <SwitchPreference
+            android:key="notifications_new_message"
+            android:defaultValue="true"
+            android:title="Recommended Notifications" />
+
+        <SwitchPreference
+            android:key="vibrate"
+            android:title="Vibrate"
+            android:summary="Vibrate upon notification"
+            android:dependency="notifications_new_message"/>
     </PreferenceCategory>
 
     <PreferenceCategory

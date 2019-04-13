@@ -1,5 +1,7 @@
 package e.iantm.recommendationapplication;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -54,11 +56,17 @@ public class ReviewFragment extends Fragment {
     RadioButton postCode, restaurant;
     private int pStatus = 0;
     private Handler handler = new Handler();
+    SharedPreferences instructionsPref;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.fragment_review, null);
+        instructionsPref = (getContext().getSharedPreferences("instructions", Context.MODE_PRIVATE));
+        SharedPreferences.Editor editor = instructionsPref.edit();
+        editor.putString("review", "false");
+        editor.commit();
+
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         textProgress = (TextView)view.findViewById(R.id.txtProgress);
         startSearch = (ImageView)view.findViewById(R.id.imageView);

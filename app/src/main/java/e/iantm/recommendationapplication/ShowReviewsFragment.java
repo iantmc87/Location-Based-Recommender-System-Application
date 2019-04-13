@@ -69,14 +69,14 @@ public class ShowReviewsFragment extends Fragment {
                     for(int i = 0; i < length; i++) {
                         JSONObject obj = recommendations.getJSONObject(i);
                         item = new HashMap<String, String>();
-                        item.put("id", String.valueOf(obj.getInt("id")));
+                        item.put("name", obj.getString("name"));
                         item.put("date", obj.getString("date"));
                         item.put("rating", obj.getString("stars"));
                         item.put("review", obj.getString("text"));
                         list.add(item);
                     }
                     adapter = new SimpleAdapter(getContext(), list, R.layout.reviewslistview,
-                            new String[] {"id", "date", "rating", "review"}, new int []{R.id.name, R.id.date, R.id.ratingBar2, R.id.usertext});
+                            new String[] {"name", "date", "rating", "review"}, new int []{R.id.name, R.id.date, R.id.ratingBar2, R.id.usertext});
                     adapter.setViewBinder(new MyBinder());
                     listView.setAdapter(adapter);
                     Toast.makeText(getContext(), "entered", Toast.LENGTH_SHORT).show();

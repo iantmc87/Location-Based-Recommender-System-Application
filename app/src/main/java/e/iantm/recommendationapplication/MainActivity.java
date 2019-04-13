@@ -2,6 +2,7 @@ package e.iantm.recommendationapplication;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     String userName = null;
     String viewInfo = null;
     String firstLoad = null;
+    SharedPreferences instructionsPref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +45,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         firstLoad = intent.getStringExtra("settings");
 
         if (firstLoad != null) {
+            instructionsPref = (this.getSharedPreferences("instructions", Context.MODE_PRIVATE));
+            SharedPreferences.Editor editor = instructionsPref.edit();
+
+            editor.putString("home", "true");
+            editor.putString("review", "true");
+            editor.putString("settings", "true");
+            editor.commit();
             navigation.setSelectedItemId(R.id.navigation_settings);
-            loadFragment1(new SettingsFragment(), userName, null);
+            loadFragmentFirst(new SettingsFragment(), new SettingsInstructionsFragment(), userName, null);
+            //loadFragment1(new SettingsFragment(), userName, null);
         } else {
 
             if (viewInfo != null) {
@@ -54,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
             } else {
                 loadFragment1(new HomeFragment(), userName, null);
-                setTitle("Recommendations");
+                   setTitle("Recommendations");
             }
         }
     }
@@ -62,20 +72,43 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
+        Fragment fragment2 = null;
+        SharedPreferences preferences = getSharedPreferences("instructions", 0);
 
         switch (item.getItemId()) {
             case R.id.navigation_home:
-                fragment = new HomeFragment();
+                String home = preferences.getString("home", null);
+                if (home.equals("true")) {
+                    fragment = new HomeFragment();
+                    fragment2 = new HomeInstructionsFragment();
+                    return loadFragmentFirst(fragment, fragment2, userName, null);
+                } else {
+                    fragment = new HomeFragment();
+                }
                 setTitle("Recommendations");
                 break;
 
             case R.id.navigation_reviews:
-                fragment = new ReviewFragment();
+                String review = preferences.getString("review", null);
+                if (review.equals("true")) {
+                    fragment = new ReviewFragment();
+                    fragment2 = new ReviewsInstructionsFragment();
+                    return loadFragmentFirst(fragment, fragment2, userName, null);
+                } else {
+                    fragment = new ReviewFragment();
+                }
                 setTitle("Reviews");
                 break;
 
             case R.id.navigation_settings:
-                fragment = new SettingsFragment();
+                String settings = preferences.getString("settings", null);
+                if(settings.equals("true")) {
+                    fragment = new SettingsFragment();
+                    fragment2 = new SettingsInstructionsFragment();
+                    return loadFragmentFirst(fragment, fragment2, userName, null);
+                } else {
+                    fragment = new SettingsFragment();
+                }
                 setTitle("Settings");
                 break;
 
@@ -112,6 +145,23 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean loadFragmentFirst(Fragment fragment, Fragment fragment1, String userName, String viewInfo) {
+        //switching fragment
+        Bundle bundle = new Bundle();
+        bundle.putString("userName", userName);
+        bundle.putString("title", viewInfo);
+        fragment.setArguments(bundle);
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .replace(R.id.help_overview_container, fragment1)
                     .commit();
             return true;
         }

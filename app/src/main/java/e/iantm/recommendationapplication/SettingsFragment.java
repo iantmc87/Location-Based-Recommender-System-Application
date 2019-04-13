@@ -1,5 +1,6 @@
 package e.iantm.recommendationapplication;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -58,6 +59,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     String cuisineValuesText, ambienceValuesText, priceRangeValuesText, alcoholValuesText;
     Resources res;
     Preference pinChange;
+    SharedPreferences instructionsPref;
     String currValue, userName, getSettings, getAlcohol = null, getAmbience = null, getPriceRange = null, getCategories = null, getSystem = null, getRadius = null, getGoodForKids = null, getGoodForGroups = null, getDogsAllowed = null, getWifi = null, getWheelchair = null, getParking = null;
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -76,6 +78,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         alcoholPreference = (MultiSelectListPreference) findPreference("alcohol");
         ambiencePreference = (MultiSelectListPreference)findPreference("ambience");
         pricePreference = (MultiSelectListPreference) findPreference("price");
+
+        instructionsPref = (getContext().getSharedPreferences("instructions", Context.MODE_PRIVATE));
+        SharedPreferences.Editor editor = instructionsPref.edit();
+        editor.putString("settings", "false");
+        editor.commit();
 
 
 
@@ -111,7 +118,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                     Set<String> alcohol = new HashSet<String>();
                     getAlcohol = obj.getString("alcohol");
-                    Toast.makeText(getContext(), getAlcohol, Toast.LENGTH_SHORT).show();
                     if(getAlcohol == null){
                         alcohol.add("3");
                     } else {

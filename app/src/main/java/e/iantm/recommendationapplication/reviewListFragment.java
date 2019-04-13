@@ -3,14 +3,17 @@ package e.iantm.recommendationapplication;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.SwitchPreference;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +46,7 @@ public class reviewListFragment extends Fragment {
     ListView listView;
     TextView business, categories, address;
     FloatingActionButton addReview;
+    Switch map;
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_review_list, null);
         business = (TextView)view.findViewById(R.id.business_name);
@@ -52,7 +56,7 @@ public class reviewListFragment extends Fragment {
         addReview = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
         res = getResources();
         getBusinessInfo = String.format(res.getString(R.string.getBusinessInfo), res.getString(R.string.url));
-
+        map = (Switch) view.findViewById(R.id.switch1);
 
         final Bundle bundle = getArguments();
         if(bundle != null) {
@@ -104,7 +108,16 @@ public class reviewListFragment extends Fragment {
 
         }
 
-
+        map.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    loadFragment1(new BusinessMapFragment(), title, null);
+                } else {
+                    loadFragment1(new ShowReviewsFragment(), title, null);
+                }
+            }
+        });
 
 
 
@@ -112,7 +125,10 @@ public class reviewListFragment extends Fragment {
         addReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                map.setOnCheckedChangeListener(null);
+                map.setChecked(false);
                 loadFragment1(new AddReviewFragment(), title, userName);
+
             }
         });
 

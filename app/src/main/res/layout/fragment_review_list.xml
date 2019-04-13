@@ -68,7 +68,7 @@
         android:layout_width="51dp"
         android:layout_height="50dp"
         android:layout_marginTop="112dp"
-        android:layout_marginEnd="28dp"
+        android:layout_marginEnd="25dp"
         android:clickable="true"
         app:backgroundTint="@color/bg_screen3"
         app:backgroundTintMode="src_over"
@@ -85,12 +85,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="13dp"
         android:layout_marginBottom="109dp"
         android:text="Add Review"
         app:layout_constraintBottom_toTopOf="@+id/review_child_fragment_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/floatingActionButton"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="107dp"
+        android:layout_height="21dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="29dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="1dp"
+        android:text="Show On Map"
+        app:layout_constraintBottom_toTopOf="@+id/switch1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/business_name"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="78dp"
+        android:layout_marginTop="49dp"
+        android:layout_marginEnd="75dp"
+        android:layout_marginBottom="36dp"
+        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/categories"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>

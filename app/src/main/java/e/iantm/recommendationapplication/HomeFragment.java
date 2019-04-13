@@ -38,7 +38,7 @@ public class HomeFragment extends Fragment {
 
     String places, reviews;
     ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-    SharedPreferences pref;
+    SharedPreferences pref, instructionsPref;
 
     View view;
     String userName;
@@ -48,13 +48,19 @@ public class HomeFragment extends Fragment {
 
         view =  inflater.inflate(R.layout.fragment_home, null);
 
+        instructionsPref = (getContext().getSharedPreferences("instructions", Context.MODE_PRIVATE));
+        SharedPreferences.Editor editor = instructionsPref.edit();
+
+        editor.putString("home", "false");
+        editor.commit();
         Bundle bundle = getArguments();
         if(bundle != null) {
             userName = String.valueOf(bundle.get("userName"));
         }
         //Toast.makeText(getContext(), userName, Toast.LENGTH_SHORT).show();
 
-        loadFragment(new MapFragment(), userName );
+        loadFragment(new MapFragment(), userName);
+
 
         loadFragment1(new WaitingScreenFragment(), userName);
 
@@ -67,6 +73,8 @@ public class HomeFragment extends Fragment {
                                     Double longitude = Double.parseDouble(pref.getString("longitude", null));*/
                                    // Toast.makeText(getContext(), latitude.toString(), Toast.LENGTH_SHORT).show();
                                     loadFragment1(new RecommendedListView(), userName);
+                                    //loadFragment3(new RecommendedListView(), new RecommendationsInstructions(), userName);
+                                    //loadFragment2(new MapFragment(), new MapInstructionsFragment(), userName );
 
                                 }
                             }, 10000);
@@ -99,6 +107,36 @@ public class HomeFragment extends Fragment {
             getChildFragmentManager()
                     .beginTransaction()
                     .replace(R.id.child_fragment_container_list, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean loadFragment2 (Fragment fragment, Fragment fragment1, String userName) {
+        Bundle bundle = new Bundle();
+        bundle.putString("userName", userName);
+        fragment.setArguments(bundle);
+        if (fragment != null) {
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.child_fragment_container_map, fragment)
+                    .replace(R.id.mapInstructions, fragment1)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean loadFragment3 (Fragment fragment, Fragment fragment1, String userName) {
+        Bundle bundle = new Bundle();
+        bundle.putString("userName", userName);
+        fragment.setArguments(bundle);
+        if (fragment != null) {
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.child_fragment_container_list, fragment)
+                    .replace(R.id.recommendationsInstructions, fragment1)
                     .commit();
             return true;
         }

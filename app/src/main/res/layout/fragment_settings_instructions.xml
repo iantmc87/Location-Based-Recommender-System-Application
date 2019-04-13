@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#999"
+    android:alpha="0.8"
+    tools:context=".SettingsInstructionsFragment">
+
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="21dp"
+        android:layout_marginBottom="25dp"
+        android:src="@mipmap/gotit" />
+
+    <ImageView
+        android:id="@+id/imageView17"
+        android:layout_width="163dp"
+        android:layout_height="162dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="96dp"
+        android:layout_marginEnd="8dp"
+        android:src="@mipmap/systemlist" />
+
+    <ImageView
+        android:id="@+id/imageView18"
+        android:layout_width="324dp"
+        android:layout_height="106dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="0dp"
+        android:src="@mipmap/system" />
+
+    <ImageView
+        android:id="@+id/imageView19"
+        android:layout_width="155dp"
+        android:layout_height="82dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="109dp"
+        android:src="@mipmap/radius" />
+
+    <ImageView
+        android:id="@+id/imageView20"
+        android:layout_width="195dp"
+        android:layout_height="151dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="82dp"
+        android:src="@mipmap/preferences" />
+
+
+</RelativeLayout>

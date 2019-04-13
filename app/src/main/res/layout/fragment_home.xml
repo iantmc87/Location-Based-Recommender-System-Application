@@ -9,17 +9,28 @@
     tools:context=".HomeFragment">
 
     <FrameLayout
-        android:id="@+id/child_fragment_container_map"
+        android:id="@+id/mapFrame"
         android:layout_width="match_parent"
         android:layout_height="270dp"
         android:layout_alignParentStart="true"
         android:text="@string/title_home"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+    <FrameLayout
+        android:id="@+id/child_fragment_container_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+        <FrameLayout
+            android:id="@+id/mapInstructions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/child_fragment_container_list"
+        android:id="@+id/recommendationsFrame"
         android:layout_width="346dp"
         android:layout_height="287dp"
         android:layout_alignParentStart="true"
@@ -28,10 +39,19 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:text="@string/title_home"
-        app:layout_constraintBottom_toTopOf="@+id/child_fragment_container_map"
+        app:layout_constraintBottom_toTopOf="@+id/mapFrame"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+    <FrameLayout
+        android:id="@+id/child_fragment_container_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+        <FrameLayout
+            android:id="@+id/recommendationsInstructions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
 
 
 </android.support.constraint.ConstraintLayout>
