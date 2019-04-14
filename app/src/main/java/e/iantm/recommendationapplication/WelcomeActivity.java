@@ -3,7 +3,6 @@ package e.iantm.recommendationapplication;
 import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,7 +40,6 @@ import com.github.omadahealth.lollipin.lib.managers.AppLock;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class WelcomeActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
@@ -59,7 +57,6 @@ public class WelcomeActivity extends AppCompatActivity {
     RequestQueue requestQueue;
     StringRequest request;
     String userName = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +76,10 @@ public class WelcomeActivity extends AppCompatActivity {
         if(android.os.Build.VERSION.SDK_INT > 22){
             if(isGETACCOUNTSAllowed()){
                 // do your task
-
                 getMailAddress();
             }else{
                 requestGET_ACCOUNTSPermission();
             }
-
         }
 
         setContentView(R.layout.activity_welcome);
@@ -93,7 +88,6 @@ public class WelcomeActivity extends AppCompatActivity {
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnSkip = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
-
 
         // layouts of all welcome sliders
         // add few more layouts if you want
@@ -247,7 +241,6 @@ public class WelcomeActivity extends AppCompatActivity {
             return view == obj;
         }
 
-
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             View view = (View) object;
@@ -266,7 +259,6 @@ public class WelcomeActivity extends AppCompatActivity {
         //If permission is not granted returning false
         return false;
     }
-
 
     //if you don't have the permission then Requesting for permission
     private void requestGET_ACCOUNTSPermission(){
@@ -298,11 +290,9 @@ public class WelcomeActivity extends AppCompatActivity {
                 Toast.makeText(this,"Oops you just denied the permission",Toast.LENGTH_LONG).show();
             }
         }
-
     }
 
     public void getMailAddress(){
-
 
         AccountManager am = AccountManager.get(this); // "this" references the current Context
         String acName = null;

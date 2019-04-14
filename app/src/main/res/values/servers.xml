@@ -22,5 +22,6 @@
     <string name="updateAmbience">%1$s/update_ambience.php</string>
     <string name="updatePriceRange">%1$s/update_price_range.php</string>
     <string name="updateAlcohol">%1$s/update_alcohol.php</string>
+    <string name="viewReviews">%1$s/view_reviews.php</string>
 
 </resources>

@@ -7,16 +7,9 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v14.preference.MultiSelectListPreference;
 import android.support.v14.preference.SwitchPreference;
-import android.support.v7.preference.PreferenceManager;
-import android.support.v7.preference.SwitchPreferenceCompat;
-import android.support.annotation.Nullable;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -27,14 +20,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.omadahealth.lollipin.lib.managers.AppLock;
-import com.google.gson.JsonObject;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -48,8 +38,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     MultiSelectListPreference pricePreference, cuisinePreference, ambiencePreference, alcoholPreference;
     RequestQueue requestQueue;
     Request request;
-    StringRequest stringRequest;
-    String systemValue, radiusValue;//, priceValue;
+    String systemValue, radiusValue;
     String updateSystem, updateRadius, updateCuisine, updateAlcohol, updateAmbience, updatePrice, updateKids, updateGroup, updateWheelchair, updateWifi, updateDog;
     final List<String> cuisineValues = new ArrayList<String>();
     final List<String> AmbienceValues = new ArrayList<String>();
@@ -58,7 +47,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     String cuisineValuesText, ambienceValuesText, priceRangeValuesText, alcoholValuesText;
     Resources res;
-    Preference pinChange;
+    Preference pinChange, viewReviews, resetInstructions;
     SharedPreferences instructionsPref;
     String currValue, userName, getSettings, getAlcohol = null, getAmbience = null, getPriceRange = null, getCategories = null, getSystem = null, getRadius = null, getGoodForKids = null, getGoodForGroups = null, getDogsAllowed = null, getWifi = null, getWheelchair = null, getParking = null;
     @Override
@@ -78,6 +67,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         alcoholPreference = (MultiSelectListPreference) findPreference("alcohol");
         ambiencePreference = (MultiSelectListPreference)findPreference("ambience");
         pricePreference = (MultiSelectListPreference) findPreference("price");
+        viewReviews = (Preference)findPreference("viewReviews");
+        resetInstructions = (Preference)findPreference("instructions");
 
         instructionsPref = (getContext().getSharedPreferences("instructions", Context.MODE_PRIVATE));
         SharedPreferences.Editor editor = instructionsPref.edit();
@@ -123,17 +114,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     } else {
                         if(getAlcohol.contains("none")) {
                             alcohol.add("2");
-                        }
-                        if(getAlcohol.contains("beer and wine")) {
+                        } if(getAlcohol.contains("beer and wine")) {
                             alcohol.add("3");
-                        }
-                        if(getAlcohol.contains("full bar")) {
+                        } if(getAlcohol.contains("full bar")) {
                             alcohol.add("4");
-                        }
-                        if(getAlcohol.contains("byob")) {
+                        } if(getAlcohol.contains("byob")) {
                             alcohol.add("5");
                         }
-
                         alcoholPreference.setValues(alcohol);
                     }
 
@@ -144,32 +131,23 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     } else {
                         if(getAmbience.contains("casual")){
                             ambience.add("2");
-                        }
-                        if(getAmbience.contains("classy")){
+                        } if(getAmbience.contains("classy")){
                             ambience.add("3");
-                        }
-                        if(getAmbience.contains("divey")){
+                        } if(getAmbience.contains("divey")){
                             ambience.add("4");
-                        }
-                        if(getAmbience.contains("hipster")){
+                        } if(getAmbience.contains("hipster")){
                             ambience.add("5");
-                        }
-                        if(getAmbience.contains("intimate")){
+                        } if(getAmbience.contains("intimate")){
                             ambience.add("6");
-                        }
-                        if(getAmbience.contains("romantic")){
+                        } if(getAmbience.contains("romantic")){
                             ambience.add("7");
-                        }
-                        if(getAmbience.contains("trendy")){
+                        } if(getAmbience.contains("trendy")){
                             ambience.add("8");
-                        }
-                        if(getAmbience.contains("touristy")){
+                        } if(getAmbience.contains("touristy")){
                             ambience.add("9");
-                        }
-                        if(getAmbience.contains("upscale")){
+                        } if(getAmbience.contains("upscale")){
                             ambience.add("10");
                         }
-
                         ambiencePreference.setValues(ambience);
                     }
 
@@ -180,14 +158,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     } else {
                         if(getPriceRange.equals("cheap")){
                             price.add("2");
-                        }
-                        if(getPriceRange.equals("good value")){
+                        }  if(getPriceRange.equals("good value")){
                             price.add("3");
-                        }
-                        if(getPriceRange.equals("average")){
+                        } if(getPriceRange.equals("average")){
                             price.add("4");
-                        }
-                        if(getPriceRange.equals("expensive")){
+                        } if(getPriceRange.equals("expensive")){
                             price.add("5");
                         }
                     }
@@ -199,45 +174,31 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     } else {
                         if(getCategories.contains("American")) {
                             cuisine.add("2");
-                        }
-                        if(getCategories.contains("Caribbean")) {
+                        } if(getCategories.contains("Caribbean")) {
                             cuisine.add("3");
-                        }
-                        if(getCategories.contains("Chinese")) {
+                        } if(getCategories.contains("Chinese")) {
                             cuisine.add("4");
-                        }
-                        if(getCategories.contains("English")) {
+                        } if(getCategories.contains("English")) {
                             cuisine.add("5");
-                        }
-                        if(getCategories.contains("French")) {
+                        } if(getCategories.contains("French")) {
                             cuisine.add("6");
-                        }
-                        if(getCategories.contains("German")) {
+                        } if(getCategories.contains("German")) {
                             cuisine.add("7");
-                        }
-                        if(getCategories.contains("Indian")) {
+                        } if(getCategories.contains("Indian")) {
                             cuisine.add("8");
-                        }
-                        if(getCategories.contains("Italian")) {
+                        } if(getCategories.contains("Italian")) {
                             cuisine.add("9");
-                        }
-                        if(getCategories.contains("Japanese")) {
+                        } if(getCategories.contains("Japanese")) {
                             cuisine.add("10");
-                        }
-                        if(getCategories.contains("Korean")) {
+                        } if(getCategories.contains("Korean")) {
                             cuisine.add("11");
-                        }
-                        if(getCategories.contains("Mexican")) {
+                        } if(getCategories.contains("Mexican")) {
                             cuisine.add("12");
-                        }
-                        if(getCategories.contains("Thai")) {
+                        } if(getCategories.contains("Thai")) {
                             cuisine.add("13");
-                        }if(getCategories.contains("Vietnamese")) {
+                        } if(getCategories.contains("Vietnamese")) {
                             cuisine.add("14");
                         }
-
-
-
                         cuisinePreference.setValues(cuisine);
                     }
 
@@ -251,7 +212,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         } else {
                             kidsPreference.setChecked(false);
                         }
-
                     }
 
 
@@ -309,8 +269,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                             parkingPreference.setChecked(false);
                         }
                     }
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -365,7 +323,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     };
                 requestQueue.add(request);
 
-
                 return true;
             }
         }); //end system preference on change listener
@@ -398,7 +355,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     }
                 };
                 requestQueue.add(request);
-
 
                 return true;
             }
@@ -463,12 +419,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         parameters.put("cuisine", cuisineValuesText);
                         parameters.put("user_name", userName);
 
-
                         return parameters;
                     }
                 };
                 requestQueue.add(request);
-
 
                 return true;
             }
@@ -526,7 +480,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 };
                 requestQueue.add(request);
 
-
                 return true;
             }
         }); //end ambience preference on change listener
@@ -574,7 +527,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     }
                 };
                 requestQueue.add(request);
-
 
                 return true;
             }
@@ -625,8 +577,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             }
         });
-
-
 
         updateWifi = String.format(res.getString(R.string.updateWifi), res.getString(R.string.url));
         wifiPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -720,6 +670,34 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             }
         });
+
+        viewReviews.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.putExtra("viewInfo", "viewReviews");
+                //intent.putExtra("username", userName);
+                Toast.makeText(getContext(), userName, Toast.LENGTH_SHORT).show();
+                startActivity(intent);
+                return true;
+            }
+        });
+
+        resetInstructions.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                instructionsPref = (getContext().getSharedPreferences("instructions", Context.MODE_PRIVATE));
+                SharedPreferences.Editor editor = instructionsPref.edit();
+
+                editor.putString("home", "true");
+                editor.putString("review", "true");
+                editor.putString("settings", "true");
+                editor.commit();
+
+                Toast.makeText(getContext(), "Instructions Reset", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
     }
 
     public void switchMethod (Request request, String url, final Boolean option, final String userName, final String param, final String text, RequestQueue requestQueue) {
@@ -748,7 +726,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return parameters;
             }
         };
-
 
         requestQueue.add(request);
     }

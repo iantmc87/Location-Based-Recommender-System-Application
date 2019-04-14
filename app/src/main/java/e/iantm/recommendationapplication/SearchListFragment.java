@@ -1,10 +1,8 @@
 package e.iantm.recommendationapplication;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.SimpleAdapter;
@@ -23,7 +20,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -63,7 +59,6 @@ public class SearchListFragment extends Fragment {
             userName = String.valueOf(bundle.get("userName"));
         }
 
-
         StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST, places, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -88,7 +83,6 @@ public class SearchListFragment extends Fragment {
                             new String[] {"title", "summary", "distance", "rating"}, new int []{R.id.title, R.id.summary, R.id.distanceFrom, R.id.ratingBar2});
                     adapter.setViewBinder(new MyBinder());
                     listView.setAdapter(adapter);
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -125,22 +119,6 @@ public class SearchListFragment extends Fragment {
             }
         });
 
-        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                TextView selectedItem = (TextView) view.findViewById(R.id.title);
-                //String selectedItem1 = (String) listView.getItemAtPosition(position);
-                String selectedText = selectedItem.getText().toString();
-
-                //Toast.makeText(getContext(), selectedText, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                intent.putExtra("viewInfo", selectedText);
-                startActivity(intent);
-                //loadFragment1(new ReviewFragment(), selectedItem.getText().toString());
-            }
-        });*/
-
         return view;
     }
 
@@ -163,7 +141,7 @@ public class SearchListFragment extends Fragment {
     class MyBinder implements SimpleAdapter.ViewBinder {
         @Override
         public boolean setViewValue(View view, Object data, String textRepresentation) {
-            if(view.getId() == R.id.ratingBar2){
+            if(view.getId() == R.id.ratingBar){
                 String stringval = (String) data;
                 float ratingValue = Float.parseFloat(stringval);
                 RatingBar ratingBar = (RatingBar) view;

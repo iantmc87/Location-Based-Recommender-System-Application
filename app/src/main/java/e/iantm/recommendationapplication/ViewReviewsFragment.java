@@ -1,5 +1,6 @@
 package e.iantm.recommendationapplication;
 
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,9 +30,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ShowReviewsFragment extends Fragment {
+import static android.content.Context.MODE_PRIVATE;
 
-    String reviews, title;
+public class ViewReviewsFragment extends Fragment {
+
+    String reviews, userName;
     RequestQueue requestQueue;
     ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
     SimpleAdapter adapter;
@@ -40,20 +43,15 @@ public class ShowReviewsFragment extends Fragment {
     ListView listView;
     FloatingActionButton addReview;
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_show_reviews, null);
+        view = inflater.inflate(R.layout.fragment_view_reviews, null);
         listView = (ListView) view.findViewById(R.id.list_view);
         requestQueue = Volley.newRequestQueue(getContext());
-        Bundle bundle = getArguments();
-        if(bundle != null) {
-            title = String.valueOf(bundle.get("title"));
-
-        } else {
-
-        }
+        SharedPreferences prefs = getActivity().getSharedPreferences("account", MODE_PRIVATE);
+        userName = prefs.getString("username", null);
 
         res = getResources();
 
-        reviews = String.format(res.getString(R.string.reviews), res.getString(R.string.url));
+        reviews = String.format(res.getString(R.string.viewReviews), res.getString(R.string.url));
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, reviews, new Response.Listener<String>() {
             @Override
@@ -66,18 +64,18 @@ public class ShowReviewsFragment extends Fragment {
                     for(int i = 0; i < length; i++) {
                         JSONObject obj = recommendations.getJSONObject(i);
                         item = new HashMap<String, String>();
+                        //item.put("id", obj.getString("id"));
                         item.put("name", obj.getString("name"));
                         item.put("date", obj.getString("date"));
                         item.put("rating", obj.getString("stars"));
                         item.put("review", obj.getString("text"));
                         list.add(item);
                     }
-                    adapter = new SimpleAdapter(getContext(), list, R.layout.reviewslistview,
+                    adapter = new SimpleAdapter(getContext(), list, R.layout.viewreviewslistview,
                             new String[] {"name", "date", "rating", "review"}, new int []{R.id.name, R.id.date, R.id.ratingBar, R.id.usertext});
                     adapter.setViewBinder(new MyBinder());
                     listView.setAdapter(adapter);
                     Toast.makeText(getContext(), "entered", Toast.LENGTH_SHORT).show();
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -92,7 +90,7 @@ public class ShowReviewsFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
-                parameters.put("business", title);
+                parameters.put("user_name", userName);
 
                 return parameters;
             }

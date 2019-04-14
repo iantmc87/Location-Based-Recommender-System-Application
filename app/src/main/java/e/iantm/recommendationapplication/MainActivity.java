@@ -58,10 +58,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         } else {
 
             if (viewInfo != null) {
-                navigation.setSelectedItemId(R.id.navigation_reviews);
-                loadFragment1(new ReviewFragment(), userName, viewInfo);
-                setTitle("Reviews");
-
+                if(viewInfo.equals("viewReviews")) {
+                    navigation.setSelectedItemId(R.id.navigation_settings);
+                    loadFragment1(new ViewReviewsFragment(), userName, viewInfo);
+                    setTitle("Settings");
+                } else {
+                    navigation.setSelectedItemId(R.id.navigation_reviews);
+                    loadFragment1(new ReviewFragment(), userName, viewInfo);
+                    setTitle("Reviews");
+                }
             } else {
                 loadFragment1(new HomeFragment(), userName, null);
                    setTitle("Recommendations");

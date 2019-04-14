@@ -110,6 +110,21 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:key="other"
+        android:title="Other">
+        <Preference
+            android:key="viewReviews"
+            android:title="View Reviews"
+            android:summary="View and delete your reviews"
+            />
+        <Preference
+            android:key="instructions"
+            android:title="Reset Instructions"
+            android:summary="View initial setup instructions"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:key="pinscreen"
         android:title="Security">
 

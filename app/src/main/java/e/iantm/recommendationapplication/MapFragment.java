@@ -85,7 +85,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     private boolean mLocationPermissionGranted;
 
     private static final int LOC_PERM_REQ_CODE = 1;
-    private static final int GEOFENCE_RADIUS = 100000;
+    private static final int GEOFENCE_RADIUS = 1000;
     private static final int GEOFENCE_EXPIRATION = 6000;
 
     private GeofencingClient geofencingClient ;
@@ -136,7 +136,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
         geofencingClient = LocationServices.getGeofencingClient(mContext);
 
-        addLocationAlert(53.755, -2.366);
+        addLocationAlert(53.7816207, -2.3882367);
 
         // Prompt the user for permission.
         getLocationPermission();
@@ -353,7 +353,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         if(mLocationPermissionGranted) {
             getLocationPermission();
         } else {
-            String key = ""+lat+"-"+lng;
+            String key = "geofence";
             Geofence geofence = getGeofence(lat, lng, key);
             geofencingClient.addGeofences(getGeofencingRequest(geofence),
                     getGeofencePendingIntent())
@@ -411,7 +411,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                 .setCircularRegion(lat, lang, GEOFENCE_RADIUS)
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL)
-                .setLoiteringDelay(1000)
+                .setLoiteringDelay(60000)
                 .build();
     }
 

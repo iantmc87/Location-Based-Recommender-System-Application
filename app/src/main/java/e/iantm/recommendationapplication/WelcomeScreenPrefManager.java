@@ -16,7 +16,6 @@ public class WelcomeScreenPrefManager {
 
     private static final String IS_FIRST_TIME_LAUNCH = "welcomeFirstTimeLaunch";
 
-
     public WelcomeScreenPrefManager(Context context) {
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
