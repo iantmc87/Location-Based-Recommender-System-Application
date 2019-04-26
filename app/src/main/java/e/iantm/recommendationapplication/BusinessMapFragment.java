@@ -1,43 +1,31 @@
 package e.iantm.recommendationapplication;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -50,22 +38,24 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executor;
+
+/************************************************************
+ Author - Ian McManus
+ Version - 1.0.0
+ Date - 30/04/2019
+ Description - Fragment for the map showing business location
+
+ ************************************************************/
 
 public class BusinessMapFragment extends SupportMapFragment implements OnMapReadyCallback {
 
     GoogleMap mMap;
-    LocationRequest mLocationRequest;
-    GoogleApiClient mGoogleApiClient;
-    Location mLastLocation;
-    Marker mCurrLocationMarker;
     String places, updateLocation, userName;
     RequestQueue requestQueue;
     Double longitude, latitude;
     Resources res;
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private CameraPosition mCameraPosition;
 
     // The entry point to the Fused Location Provider.
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -190,42 +180,27 @@ public class BusinessMapFragment extends SupportMapFragment implements OnMapRead
                                 };
                                 requestQueue.add(request);
 
-                                final Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
                                         StringRequest stringRequest = new StringRequest(Request.Method.POST, places, new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
                                                 try {
                                                     JSONObject jsonObject = new JSONObject(response.toString());
                                                     JSONArray recommendations = jsonObject.getJSONArray("recommendations");
-                                                    int length = recommendations.length();
-                                                    String[] name = new String[length];
-                                                    Double[] longitude = new Double[length];
-                                                    Double[] latitude = new Double[length];
-                                                    Marker[] m = new Marker[length];
+                                                    String name;
+                                                    Double longitude;
+                                                    Double latitude;
+                                                    Marker m;
 
-                                                    for (int i = 0; i < length; i++) {
-                                                        JSONObject obj = recommendations.getJSONObject(i);
-                                                        name[i] = obj.getString("name");
-                                                        longitude[i] = obj.getDouble("longitude");
-                                                        latitude[i] = obj.getDouble("latitude");
-                                                        if (i == 0) {
-                                                            m[i] = mMap.addMarker(new MarkerOptions()
-                                                                    .position(new LatLng(latitude[i], longitude[i]))
-                                                                    .title(name[i])
-                                                                    .snippet("Ranking: " + (i + 1))
+
+                                                        JSONObject obj = recommendations.getJSONObject(0);
+                                                        name = obj.getString("name");
+                                                        longitude = obj.getDouble("longitude");
+                                                        latitude = obj.getDouble("latitude");
+
+                                                            mMap.addMarker(new MarkerOptions()
+                                                                    .position(new LatLng(latitude, longitude))
+                                                                    .title(name)
                                                                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
-                                                        } else {
-                                                            m[i] = mMap.addMarker(new MarkerOptions()
-                                                                    .position(new LatLng(latitude[i], longitude[i]))
-                                                                    .title(name[i])
-                                                                    .snippet("Ranking: " + (i + 1))
-                                                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-                                                        }
-                                                    }
-
 
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
@@ -248,8 +223,7 @@ public class BusinessMapFragment extends SupportMapFragment implements OnMapRead
                                             }
                                         };
                                         requestQueue.add(stringRequest);
-                                    }
-                                }, 10000);
+
                             }
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");

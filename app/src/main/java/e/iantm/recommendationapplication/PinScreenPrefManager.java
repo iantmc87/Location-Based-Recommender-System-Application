@@ -3,6 +3,14 @@ package e.iantm.recommendationapplication;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+/************************************************************
+ Author - Ian McManus
+ Version - 1.0.0
+ Date - 30/04/2019
+ Description - Preference Manager for Pin Lock Screen
+
+ ************************************************************/
+
 public class PinScreenPrefManager {
     SharedPreferences pref;
     SharedPreferences.Editor editor;

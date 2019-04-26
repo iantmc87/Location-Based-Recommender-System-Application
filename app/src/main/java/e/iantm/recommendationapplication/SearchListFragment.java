@@ -34,6 +34,14 @@ import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/************************************************************
+ Author - Ian McManus
+ Version - 1.0.0
+ Date - 30/04/2019
+ Description - Fragment for the postcode search results
+
+ ************************************************************/
+
 public class SearchListFragment extends Fragment {
 
     RequestQueue requestQueue;
@@ -141,7 +149,7 @@ public class SearchListFragment extends Fragment {
     class MyBinder implements SimpleAdapter.ViewBinder {
         @Override
         public boolean setViewValue(View view, Object data, String textRepresentation) {
-            if(view.getId() == R.id.ratingBar){
+            if(view.getId() == R.id.ratingBar2){
                 String stringval = (String) data;
                 float ratingValue = Float.parseFloat(stringval);
                 RatingBar ratingBar = (RatingBar) view;

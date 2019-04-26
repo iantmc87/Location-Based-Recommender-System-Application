@@ -31,6 +31,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/************************************************************
+ Author - Ian McManus
+ Version - 1.0.0
+ Date - 30/04/2019
+ Description - Fragment for the settings page
+
+ ************************************************************/
+
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     ListPreference systemPreference, radiusPreference;

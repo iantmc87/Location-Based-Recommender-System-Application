@@ -1,5 +1,5 @@
 <resources>
-    <string name="url">http://192.168.1.158</string>
+    <string name="url">***INSERT SERVER HERE***</string>
     <string name="systemPHP">%1$s/update_system.php</string>
     <string name="recommendations">%1$s/recommendations.php</string>
     <string name="updateLocation">%1$s/update_location.php</string>
@@ -23,5 +23,6 @@
     <string name="updatePriceRange">%1$s/update_price_range.php</string>
     <string name="updateAlcohol">%1$s/update_alcohol.php</string>
     <string name="viewReviews">%1$s/view_reviews.php</string>
+    <string name="deleteReviews">%1$s/delete_review.php</string>
 
 </resources>

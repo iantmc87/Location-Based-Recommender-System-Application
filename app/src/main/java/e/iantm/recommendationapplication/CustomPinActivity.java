@@ -8,15 +8,17 @@ import android.graphics.drawable.ColorDrawable;
 import android.widget.Toast;
 
 import com.github.omadahealth.lollipin.lib.managers.AppLockActivity;
-
-
-//import lollipin.orangegangsters.github.com.lollipin.R;
 import uk.me.lewisdeane.ldialogs.BaseDialog;
 import uk.me.lewisdeane.ldialogs.CustomDialog;
 
-/**
- * Created by oliviergoutay on 1/14/15.
- */
+/************************************************************
+ Author - Ian McManus
+ Version - 1.0.0
+ Date - 30/04/2019
+ Description - Fragment for adding a review to the database
+
+ ************************************************************/
+
 public class  CustomPinActivity extends AppLockActivity {
 
     @Override

@@ -37,6 +37,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/************************************************************
+ Author - Ian McManus
+ Version - 1.0.0
+ Date - 30/04/2019
+ Description - Fragment for the main review navigation bar
+
+ ************************************************************/
+
 public class ReviewFragment extends Fragment {
 
     String title, autoPostcode, autoName;
@@ -103,9 +111,6 @@ public class ReviewFragment extends Fragment {
 
 
         switchSearch(searchRequest, autoPostcode, "title", requestQueue);
-
-        //switchSearch(searchRequest, autoPostcode, "postcode", requestQueue);
-
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -228,12 +233,9 @@ public class ReviewFragment extends Fragment {
                     String item;
                     for (int i = 0; i < length; i++) {
                         JSONObject obj = recommendations.getJSONObject(i);
-                        //item = new HashMap<String, String>();
                         item = obj.getString(getVariable);
                         list.add(item);
                     }
-                                   /*ArrayAdapter adapter = new
-                                    ArrayAdapter(getContext(),android.R.layout.simple_list_item_1,languages);*/
 
                     adapter = new
                             ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, list);

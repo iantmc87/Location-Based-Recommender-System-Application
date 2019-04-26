@@ -29,6 +29,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/************************************************************
+ Author - Ian McManus
+ Version - 1.0.0
+ Date - 30/04/2019
+ Description - Fragment for showing restaurant reviews
+
+ ************************************************************/
+
 public class ShowReviewsFragment extends Fragment {
 
     String reviews, title;

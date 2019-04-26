@@ -18,6 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/************************************************************
+ Author - Ian McManus
+ Version - 1.0.0
+ Date - 30/04/2019
+ Description - Intent Service for location geofencing notifications
+
+ ************************************************************/
+
 public class LocationAlertIntentService extends IntentService {
     private static final String IDENTIFIER = "LocationAlertIS";
 

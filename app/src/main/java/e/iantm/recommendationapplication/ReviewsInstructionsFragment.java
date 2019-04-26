@@ -8,6 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+/************************************************************
+ Author - Ian McManus
+ Version - 1.0.0
+ Date - 30/04/2019
+ Description - Fragment for review page instructions
+
+ ************************************************************/
+
 public class ReviewsInstructionsFragment extends Fragment {
 
     @Nullable

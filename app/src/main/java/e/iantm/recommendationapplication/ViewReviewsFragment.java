@@ -9,9 +9,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -24,7 +26,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.JSONObject;;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,9 +34,17 @@ import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/************************************************************
+ Author - Ian McManus
+ Version - 1.0.0
+ Date - 30/04/2019
+ Description - Fragment for the viewing all users own reviews
+
+ ************************************************************/
+
 public class ViewReviewsFragment extends Fragment {
 
-    String reviews, userName;
+    String reviews, userName, deleteReview;
     RequestQueue requestQueue;
     ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
     SimpleAdapter adapter;
@@ -47,11 +57,13 @@ public class ViewReviewsFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.list_view);
         requestQueue = Volley.newRequestQueue(getContext());
         SharedPreferences prefs = getActivity().getSharedPreferences("account", MODE_PRIVATE);
-        userName = prefs.getString("username", null);
+        userName = prefs.getString("user", null);
+        Toast.makeText(getContext(), userName, Toast.LENGTH_SHORT).show();
 
         res = getResources();
 
         reviews = String.format(res.getString(R.string.viewReviews), res.getString(R.string.url));
+        deleteReview = String.format(res.getString(R.string.deleteReviews), res.getString(R.string.url));
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, reviews, new Response.Listener<String>() {
             @Override
@@ -96,6 +108,38 @@ public class ViewReviewsFragment extends Fragment {
             }
         };
         requestQueue.add(stringRequest);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final TextView business = (TextView)view.findViewById(R.id.name);
+                final String businessText = business.getText().toString();
+                Toast.makeText(getContext(), businessText, Toast.LENGTH_SHORT).show();
+
+                StringRequest request = new StringRequest(Request.Method.POST, deleteReview, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> parameters = new HashMap<String, String>();
+
+                        parameters.put("user_name", userName);
+                        parameters.put("business", businessText);
+                        return parameters;
+                    }
+                };
+
+                requestQueue.add(request);
+            }
+        });
 
         return view;
     }

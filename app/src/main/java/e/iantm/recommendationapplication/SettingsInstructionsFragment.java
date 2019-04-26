@@ -8,6 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+/************************************************************
+ Author - Ian McManus
+ Version - 1.0.0
+ Date - 30/04/2019
+ Description - Fragment the settings instructions on initial install
+
+ ************************************************************/
+
 public class SettingsInstructionsFragment extends Fragment {
 
     @Nullable

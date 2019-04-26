@@ -2,43 +2,30 @@ package e.iantm.recommendationapplication;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/************************************************************
+ Author - Ian McManus
+ Version - 1.0.0
+ Date - 30/04/2019
+ Description - Fragment for the main recommendations navigation page
+
+ ************************************************************/
+
 public class HomeFragment extends Fragment {
 
-    String places, reviews;
+    String reviews;
     ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-    SharedPreferences pref, instructionsPref;
+    SharedPreferences instructionsPref;
 
     View view;
     String userName;
@@ -57,7 +44,6 @@ public class HomeFragment extends Fragment {
         if(bundle != null) {
             userName = String.valueOf(bundle.get("userName"));
         }
-        //Toast.makeText(getContext(), userName, Toast.LENGTH_SHORT).show();
 
         loadFragment(new MapFragment(), userName);
 
@@ -68,13 +54,8 @@ public class HomeFragment extends Fragment {
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    /*SharedPreferences pref = getContext().getSharedPreferences("location", Context.MODE_PRIVATE);
-                                    Double latitude = Double.parseDouble(pref.getString("latitude", null));
-                                    Double longitude = Double.parseDouble(pref.getString("longitude", null));*/
-                                   // Toast.makeText(getContext(), latitude.toString(), Toast.LENGTH_SHORT).show();
+
                                     loadFragment1(new RecommendedListView(), userName);
-                                    //loadFragment3(new RecommendedListView(), new RecommendationsInstructions(), userName);
-                                    //loadFragment2(new MapFragment(), new MapInstructionsFragment(), userName );
 
                                 }
                             }, 10000);
@@ -107,36 +88,6 @@ public class HomeFragment extends Fragment {
             getChildFragmentManager()
                     .beginTransaction()
                     .replace(R.id.child_fragment_container_list, fragment)
-                    .commit();
-            return true;
-        }
-        return false;
-    }
-
-    private boolean loadFragment2 (Fragment fragment, Fragment fragment1, String userName) {
-        Bundle bundle = new Bundle();
-        bundle.putString("userName", userName);
-        fragment.setArguments(bundle);
-        if (fragment != null) {
-            getChildFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.child_fragment_container_map, fragment)
-                    .replace(R.id.mapInstructions, fragment1)
-                    .commit();
-            return true;
-        }
-        return false;
-    }
-
-    private boolean loadFragment3 (Fragment fragment, Fragment fragment1, String userName) {
-        Bundle bundle = new Bundle();
-        bundle.putString("userName", userName);
-        fragment.setArguments(bundle);
-        if (fragment != null) {
-            getChildFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.child_fragment_container_list, fragment)
-                    .replace(R.id.recommendationsInstructions, fragment1)
                     .commit();
             return true;
         }

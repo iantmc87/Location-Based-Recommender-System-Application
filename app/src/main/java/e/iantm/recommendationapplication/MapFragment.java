@@ -11,8 +11,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
-import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -25,24 +23,18 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -55,24 +47,27 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 import static java.lang.System.err;
+
+/************************************************************
+ Author - Ian McManus
+ Version - 1.0.0
+ Date - 30/04/2019
+ Description - Fragment for the recommended restaurant locations
+
+ ************************************************************/
 
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback {
 
     GoogleMap mMap;
-    LocationRequest mLocationRequest;
-    GoogleApiClient mGoogleApiClient;
-    Location mLastLocation;
-    Marker mCurrLocationMarker;
-    String places, updateLocation, userName;
+    String places, updateLocation, userName, location;
     RequestQueue requestQueue;
     Double longitude, latitude;
     Resources res;
+    SharedPreferences locationText;
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private CameraPosition mCameraPosition;
 
     // The entry point to the Fused Location Provider.
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -124,25 +119,48 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap)
     {
+        SharedPreferences locationFirst = getContext().getSharedPreferences("locationFirst", 0);
+        location = locationFirst.getString("first", null);
 
-        Bundle bundle = getArguments();
-        if(bundle != null) {
-            userName = String.valueOf(bundle.get("userName"));
-        }
+        SharedPreferences preferences = getContext().getSharedPreferences("account", 0);
+        userName = preferences.getString("user", null);
+
         mMap = googleMap;
+
+
+        if(location.equals("true")) {
+            AlertDialog.Builder account = new AlertDialog.Builder(getActivity());
+            account.setTitle("Permission");
+            account.setMessage("The app needs permission to access your location to generate " +
+                    "recommendations please accept on the next screen");
+
+            account.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    locationText = getContext().getSharedPreferences("locationFirst", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = locationText.edit();
+
+                    editor.putString("first", "false");
+                    editor.commit();
+                    getLocationPermission();
+                    updateLocationUI();
+                }
+            });
+            account.show();
+        } else {
+            updateLocationUI();
+        }
 
         // Use a custom info window adapter to handle multiple lines of text in the
         // info window contents.
 
         geofencingClient = LocationServices.getGeofencingClient(mContext);
-
         addLocationAlert(53.7816207, -2.3882367);
 
         // Prompt the user for permission.
-        getLocationPermission();
 
         // Turn on the My Location layer and the related control on the map.
-        updateLocationUI();
+        //updateLocationUI();
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
@@ -304,9 +322,11 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                 == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
         } else {
+
             ActivityCompat.requestPermissions((Activity) getContext(),
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
         }
     }
 
@@ -318,12 +338,16 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                                            @NonNull String permissions[],
                                            @NonNull int[] grantResults) {
         mLocationPermissionGranted = false;
+
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLocationPermissionGranted = true;
+                }
+                else {
+
                 }
             }
         }
