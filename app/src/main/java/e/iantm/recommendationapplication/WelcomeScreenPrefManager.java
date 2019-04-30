@@ -39,4 +39,4 @@ public class WelcomeScreenPrefManager {
         return pref.getBoolean(IS_FIRST_TIME_LAUNCH, true);
     }
 
-}
+}//end class

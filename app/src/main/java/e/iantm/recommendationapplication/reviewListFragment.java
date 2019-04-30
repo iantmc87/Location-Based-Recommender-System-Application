@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -40,13 +39,18 @@ import java.util.Map;
 public class reviewListFragment extends Fragment {
 
     String reviews, title, option, userName, getBusinessInfo;
-    RequestQueue requestQueue;
-    ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-    View view;
-    Resources res;
+    double businesslat, businessLong;
     TextView business, categories, address;
     FloatingActionButton addReview;
+
+    ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+
+    Resources res;
+    RequestQueue requestQueue;
+
     Switch map;
+    View view;
+
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_review_list, null);
         business = (TextView)view.findViewById(R.id.business_name);
@@ -63,6 +67,7 @@ public class reviewListFragment extends Fragment {
             title = String.valueOf(bundle.get("place"));
             option = String.valueOf(bundle.get("option"));
             userName = String.valueOf(bundle.get("user_name"));
+        }
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST, getBusinessInfo, new Response.Listener<String>() {
                 @Override
@@ -74,6 +79,8 @@ public class reviewListFragment extends Fragment {
                         JSONObject obj = info.getJSONObject(0);
                         business.setText(obj.getString("name"));
                         categories.setText(obj.getString("categories"));
+                        businesslat = obj.getDouble("latitude");
+                        businessLong = obj.getDouble("longitude");
                         String address1 = obj.getString("constituency") + "\n" +
                                 obj.getString("district") + "\n" + obj.getString("postcode");
                         address.setText(address1);
@@ -99,10 +106,10 @@ public class reviewListFragment extends Fragment {
             };
             requestQueue.add(stringRequest);
 
-        }
+
             if(option.equals("showReviews")){
-                Toast.makeText(getContext(), title, Toast.LENGTH_SHORT).show();
-            loadFragment1(new ShowReviewsFragment(), title, null);
+
+            loadFragment1(new ShowReviewsFragment(), title, null, 0.0, 0.0);
             }
              else {
 
@@ -112,9 +119,9 @@ public class reviewListFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
-                    loadFragment1(new BusinessMapFragment(), title, null);
+                    loadFragment1(new BusinessMapFragment(), title, null, businesslat, businessLong);
                 } else {
-                    loadFragment1(new ShowReviewsFragment(), title, null);
+                    loadFragment1(new ShowReviewsFragment(), title, null, 0.0, 0.0);
                 }
             }
         });
@@ -124,19 +131,21 @@ public class reviewListFragment extends Fragment {
             public void onClick(View v) {
                 map.setOnCheckedChangeListener(null);
                 map.setChecked(false);
-                loadFragment1(new AddReviewFragment(), title, userName);
+                loadFragment1(new AddReviewFragment(), title, userName, 0.0, 0.0);
             }
         });
 
         return view;
-    }
+    }//end onCreateView
 
-    private boolean loadFragment1(Fragment fragment, String title, String userName) {
+    private boolean loadFragment1(Fragment fragment, String title, String userName, double latitude, double longitude) {
         //switching fragment
 
         Bundle bundle = new Bundle();
         bundle.putString("title", title);
         bundle.putString("userName", userName);
+        bundle.putDouble("latitude", latitude);
+        bundle.putDouble("longitude", longitude);
         fragment.setArguments(bundle);
         if (fragment != null) {
             getFragmentManager()
@@ -146,5 +155,5 @@ public class reviewListFragment extends Fragment {
             return true;
         }
         return false;
-    }
-}
+    }//end load fragment method for map/reviews container
+}//end class

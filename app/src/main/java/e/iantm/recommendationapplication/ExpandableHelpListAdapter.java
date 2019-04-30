@@ -1,10 +1,10 @@
 package e.iantm.recommendationapplication;
 
+//imports packages
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -32,7 +32,7 @@ public class ExpandableHelpListAdapter extends BaseExpandableListAdapter {
         this.context = context;
         this.expandableListTitle = expandableListTitle;
         this.expandableListDetail = expandableListDetail;
-    }
+    }//end adapter constructor
 
     @Override
     public Object getChild(int listPosition, int expandedListPosition) {
@@ -143,5 +143,5 @@ public class ExpandableHelpListAdapter extends BaseExpandableListAdapter {
         expandableListDetail.put("Still having problems?", question5);
 
         return expandableListDetail;
-    }
-}
+    }//end method for populating questions and answers
+}//end class

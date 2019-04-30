@@ -47,24 +47,31 @@ import java.util.Map;
 
 public class ReviewFragment extends Fragment {
 
-    String title, autoPostcode, autoName;
-    RadioGroup radioGroup;
-    RadioButton radioButton;
-    AutoCompleteTextView search;
-    List<String> list = new ArrayList<String>();
+    String title, autoPostcode, autoName, searchPlaces, userName;
     TextView textProgress;
+
+    RadioGroup radioGroup;
+    RadioButton radioButton, postCode, restaurant;
+    AutoCompleteTextView search;
+
+    List<String> list = new ArrayList<String>();
+    ArrayAdapter<String> adapter;
+
     ProgressBar progressBar;
     ImageView startSearch;
-    String searchPlaces, userName;
-    Resources res;
-    Request request;
+
     StringRequest searchRequest;
     RequestQueue requestQueue;
-    ArrayAdapter<String> adapter;
-    RadioButton postCode, restaurant;
+    Resources res;
+    Request request;
+
+
+    SharedPreferences instructionsPref;
+
     private int pStatus = 0;
     private Handler handler = new Handler();
-    SharedPreferences instructionsPref;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -218,7 +225,7 @@ public class ReviewFragment extends Fragment {
 
 
         return view;
-    }
+    }//end onCreateView
 
     public void switchSearch (StringRequest request, String url, final String getVariable, RequestQueue requestQueue) {
 
@@ -255,7 +262,7 @@ public class ReviewFragment extends Fragment {
             }
         });
         requestQueue.add(request);
-    }
+    }//end switchSearch method
 
     private boolean loadFragment(Fragment fragment, String title, String userName, String option, String tag) {
         //switching fragment
@@ -273,7 +280,7 @@ public class ReviewFragment extends Fragment {
             return true;
         }
         return false;
-    }
+    }//end method for loading fragment for container
 
     private void removeFragment(Fragment fragment) {
         FragmentManager fragmentManager = getChildFragmentManager();
@@ -282,4 +289,4 @@ public class ReviewFragment extends Fragment {
         fragmentTransaction.remove(fragment);
         fragmentTransaction.commit();
     }
-}
+}//end class

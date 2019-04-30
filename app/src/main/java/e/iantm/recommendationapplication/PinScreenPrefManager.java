@@ -40,4 +40,4 @@ public class PinScreenPrefManager {
         return pref.getBoolean(IS_FIRST_TIME_LAUNCH, true);
     }
 
-}
+}//end class

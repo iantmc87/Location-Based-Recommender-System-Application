@@ -14,7 +14,6 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -45,22 +44,29 @@ import static android.content.Context.MODE_PRIVATE;
 public class ViewReviewsFragment extends Fragment {
 
     String reviews, userName, deleteReview;
-    RequestQueue requestQueue;
+
     ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
     SimpleAdapter adapter;
-    View view;
-    Resources res;
     ListView listView;
+
+    Resources res;
+    RequestQueue requestQueue;
+
+    View view;
+
     FloatingActionButton addReview;
+
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+
         view = inflater.inflate(R.layout.fragment_view_reviews, null);
+
         listView = (ListView) view.findViewById(R.id.list_view);
+
         requestQueue = Volley.newRequestQueue(getContext());
+        res = getResources();
+
         SharedPreferences prefs = getActivity().getSharedPreferences("account", MODE_PRIVATE);
         userName = prefs.getString("user", null);
-        Toast.makeText(getContext(), userName, Toast.LENGTH_SHORT).show();
-
-        res = getResources();
 
         reviews = String.format(res.getString(R.string.viewReviews), res.getString(R.string.url));
         deleteReview = String.format(res.getString(R.string.deleteReviews), res.getString(R.string.url));
@@ -87,7 +93,6 @@ public class ViewReviewsFragment extends Fragment {
                             new String[] {"name", "date", "rating", "review"}, new int []{R.id.name, R.id.date, R.id.ratingBar, R.id.usertext});
                     adapter.setViewBinder(new MyBinder());
                     listView.setAdapter(adapter);
-                    Toast.makeText(getContext(), "entered", Toast.LENGTH_SHORT).show();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -114,7 +119,6 @@ public class ViewReviewsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final TextView business = (TextView)view.findViewById(R.id.name);
                 final String businessText = business.getText().toString();
-                Toast.makeText(getContext(), businessText, Toast.LENGTH_SHORT).show();
 
                 StringRequest request = new StringRequest(Request.Method.POST, deleteReview, new Response.Listener<String>() {
                     @Override
@@ -142,7 +146,7 @@ public class ViewReviewsFragment extends Fragment {
         });
 
         return view;
-    }
+    }//end onCreateView
 
     class MyBinder implements SimpleAdapter.ViewBinder {
         @Override
@@ -156,5 +160,6 @@ public class ViewReviewsFragment extends Fragment {
             }
             return false;
         }
-    }
-}
+    }//end binder for rating bar adapter
+
+}//end class

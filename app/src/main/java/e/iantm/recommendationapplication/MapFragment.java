@@ -16,7 +16,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -62,9 +61,11 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     GoogleMap mMap;
     String places, updateLocation, userName, location;
-    RequestQueue requestQueue;
     Double longitude, latitude;
+
+    RequestQueue requestQueue;
     Resources res;
+
     SharedPreferences locationText;
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -93,14 +94,14 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-    }
+    }//end onAttach Fragment method
 
     @Override
     public void onResume() {
         super.onResume();
 
         setUpMapIfNeeded();
-    }
+    }//end map onResume method
 
     private void setUpMapIfNeeded() {
 
@@ -114,7 +115,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
-    }
+    }//end setUpMap method
 
     @Override
     public void onMapReady(GoogleMap googleMap)
@@ -166,7 +167,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         getDeviceLocation();
 
 
-    }
+    }//end on map ready method
 
     public void getDeviceLocation() {
         /*
@@ -305,7 +306,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
         }
-    }
+    }//end get device location method
 
 
     /**
@@ -328,7 +329,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
 
         }
-    }
+    }//end get location permission method
 
     /**
      * Handles the result of the request for location permissions.
@@ -352,7 +353,8 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
             }
         }
         updateLocationUI();
-    }
+    }//end method for when location permission chosen
+
     private void updateLocationUI() {
         if (mMap == null) {
             return;
@@ -370,7 +372,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
         }
-    }
+    }//end method of updating location UI
 
     @SuppressLint("MissingPermission")
     private void addLocationAlert(double lat, double lng) {
@@ -385,15 +387,15 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()) {
-                                Toast.makeText(getContext(), "Location alters have been added", Toast.LENGTH_SHORT).show();
+
                             } else {
-                                Toast.makeText(getContext(), "Location alters could not be added", Toast.LENGTH_SHORT).show();
+
                                 Log.e(TAG, "" + err);
                             }
                         }
                     });
         }
-    }
+    }//end method for adding location alert
 
     private void removeLocationAlert() {
         if(mLocationPermissionGranted) {
@@ -404,18 +406,14 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(getContext(),
-                                        "Location alters have been removed",
-                                        Toast.LENGTH_SHORT).show();
+
                             }else{
-                                Toast.makeText(getContext(),
-                                        "Location alters could not be removed",
-                                        Toast.LENGTH_SHORT).show();
+
                             }
                         }
                     });
         }
-    }
+    }//end method for removing location alert
 
     private PendingIntent getGeofencePendingIntent() {
         Intent intent = new Intent(getContext(), LocationAlertIntentService.class);
@@ -439,4 +437,4 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                 .build();
     }
 
-}
+}//end class

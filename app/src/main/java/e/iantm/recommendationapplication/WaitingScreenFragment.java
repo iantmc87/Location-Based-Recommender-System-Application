@@ -54,6 +54,6 @@ public class WaitingScreenFragment extends Fragment {
         }).start();
 
         return view;
-    }
+    }//end onCreateView
 
-}
+}//end class

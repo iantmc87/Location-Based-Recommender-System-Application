@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -39,26 +38,31 @@ import java.util.Map;
 
 public class ShowReviewsFragment extends Fragment {
 
-    String reviews, title;
-    RequestQueue requestQueue;
+    String reviews;
+    String title;
+
     ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
     SimpleAdapter adapter;
-    View view;
-    Resources res;
     ListView listView;
+
+    View view;
+
+    RequestQueue requestQueue;
+    Resources res;
+
     FloatingActionButton addReview;
+
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_show_reviews, null);
         listView = (ListView) view.findViewById(R.id.list_view);
         requestQueue = Volley.newRequestQueue(getContext());
         Bundle bundle = getArguments();
         if(bundle != null) {
-            title = String.valueOf(bundle.get("title"));
+            title = bundle.getString("title");
 
         } else {
 
         }
-
         res = getResources();
 
         reviews = String.format(res.getString(R.string.reviews), res.getString(R.string.url));
@@ -84,7 +88,6 @@ public class ShowReviewsFragment extends Fragment {
                             new String[] {"name", "date", "rating", "review"}, new int []{R.id.name, R.id.date, R.id.ratingBar, R.id.usertext});
                     adapter.setViewBinder(new MyBinder());
                     listView.setAdapter(adapter);
-                    Toast.makeText(getContext(), "entered", Toast.LENGTH_SHORT).show();
 
 
                 } catch (JSONException e) {
@@ -100,7 +103,7 @@ public class ShowReviewsFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
-                parameters.put("business", title);
+                parameters.put("business", String.valueOf(title));
 
                 return parameters;
             }
@@ -108,7 +111,7 @@ public class ShowReviewsFragment extends Fragment {
         requestQueue.add(stringRequest);
 
         return view;
-    }
+    }//end onCreateView
 
     class MyBinder implements SimpleAdapter.ViewBinder {
         @Override
@@ -122,5 +125,5 @@ public class ShowReviewsFragment extends Fragment {
             }
             return false;
         }
-    }
-}
+    }//end binder for rating bar adapter
+}//end class

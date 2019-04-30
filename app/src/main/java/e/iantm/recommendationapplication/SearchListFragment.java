@@ -14,7 +14,6 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,11 +21,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,12 +41,14 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class SearchListFragment extends Fragment {
 
+    String places, userName;
     RequestQueue requestQueue;
     Resources res;
-    ListView listView;
-    String places, userName;
+
     SimpleAdapter adapter;
     ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+    ListView listView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -128,23 +127,7 @@ public class SearchListFragment extends Fragment {
         });
 
         return view;
-    }
-
-    private boolean loadFragment(Fragment fragment, String title) {
-        //switching fragment
-        Bundle bundle1 = new Bundle();
-        bundle1.putString("place", title);
-        fragment.setArguments(bundle1);
-
-        if (fragment != null) {
-            getChildFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.child_fragment_container, fragment)
-                    .commit();
-            return true;
-        }
-        return false;
-    }
+    }//end onCreateView
 
     class MyBinder implements SimpleAdapter.ViewBinder {
         @Override
@@ -158,5 +141,5 @@ public class SearchListFragment extends Fragment {
             }
             return false;
         }
-    }
-}
+    }//end myBinder for ratings bar adapter
+}//end class

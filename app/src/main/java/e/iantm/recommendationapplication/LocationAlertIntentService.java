@@ -1,5 +1,6 @@
 package e.iantm.recommendationapplication;
 
+//import packages
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -9,11 +10,9 @@ import android.location.Geocoder;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
-
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
 import com.google.android.gms.location.GeofencingEvent;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -139,6 +138,9 @@ public class LocationAlertIntentService extends IntentService {
         }
     }
 
+    /**
+     *Creates notification bar
+     */
     private void notifyLocationAlert(String locTransitionType, String locationDetails) {
 
         String CHANNEL_ID = "Zoftino";
@@ -156,4 +158,4 @@ public class LocationAlertIntentService extends IntentService {
         mNotificationManager.notify(0, builder.build());
     }
 
-}
+}//end class

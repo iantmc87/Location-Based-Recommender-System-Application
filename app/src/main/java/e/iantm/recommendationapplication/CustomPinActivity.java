@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.widget.Toast;
-
 import com.github.omadahealth.lollipin.lib.managers.AppLockActivity;
 import uk.me.lewisdeane.ldialogs.BaseDialog;
 import uk.me.lewisdeane.ldialogs.CustomDialog;
@@ -65,12 +64,12 @@ public class  CustomPinActivity extends AppLockActivity {
 
         // Show the dialog.
         customDialog.show();
-    }
+    }//end method for forgot pin code method
 
     @Override
     public void onPinFailure(int attempts) {
 
-    }
+    }//end method for if pin entry unsuccessful
 
     @Override
     public void onPinSuccess(int attempts) {
@@ -84,10 +83,10 @@ public class  CustomPinActivity extends AppLockActivity {
             intent = new Intent(CustomPinActivity.this, MainActivity.class);
         }
         startActivity(intent);
-    }
+    }//end method for if pin successful
 
     @Override
     public int getPinLength() {
         return super.getPinLength();//you can override this method to change the pin length from the default 4
-    }
-}
+    }//end get pin length method
+}//end class

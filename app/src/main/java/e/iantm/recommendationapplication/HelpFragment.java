@@ -1,5 +1,6 @@
 package e.iantm.recommendationapplication;
 
+//imports packages
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +27,7 @@ public class HelpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view =  inflater.inflate(R.layout.fragment_help, null);
+
         ExpandableListView expandableListView;
         ExpandableHelpListAdapter expandableListAdapter;
         final List<String> expandableListTitle;
@@ -64,5 +65,5 @@ public class HelpFragment extends Fragment {
             });
 
         return view;
-    }
-}
+    }//end onCreateView
+}//end class

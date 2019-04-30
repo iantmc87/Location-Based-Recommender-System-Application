@@ -20,6 +20,7 @@ import android.widget.ImageView;
 public class HomeInstructionsFragment extends Fragment {
 
     ImageView exit, business, stars, distance, map, location;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class HomeInstructionsFragment extends Fragment {
         map = (ImageView) view.findViewById(R.id.imageView9);
         location = (ImageView) view.findViewById(R.id.imageView10);
 
+        //timer for how long before showing instructions
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -44,7 +46,7 @@ public class HomeInstructionsFragment extends Fragment {
                 map.setVisibility(View.VISIBLE);
                 location.setVisibility(View.VISIBLE);
                 }
-        }, 10000);
+        }, 10000);//end handler for instructions timer
 
 
         exit.setOnClickListener(new View.OnClickListener() {
@@ -53,9 +55,9 @@ public class HomeInstructionsFragment extends Fragment {
                 getFragmentManager().beginTransaction()
                         .remove(HomeInstructionsFragment.this).commit();
             }
-        });
+        });//end exit onClickListener
 
         return view;
-    }
+    }//end onCreateView
 
-}
+}//end class

@@ -41,23 +41,29 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class RecommendedListView extends Fragment {
 
-    String places, reviews;
-    RequestQueue requestQueue;
-    ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+    String places, reviews, userName;
+
     SimpleAdapter adapter;
-    View view;
-    Resources res;
+    ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+
     ListView listView;
-    String userName;
+
+    RequestQueue requestQueue;
+    Resources res;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view =  inflater.inflate(R.layout.fragment_recommended_list_view, null);
-        res = getResources();
-        places = String.format(res.getString(R.string.recommendations), res.getString(R.string.url));
+        View view =  inflater.inflate(R.layout.fragment_recommended_list_view, null);
+
         listView = (ListView) view.findViewById(R.id.list);
+
         requestQueue = Volley.newRequestQueue(getContext());
+        res = getResources();
+
+        places = String.format(res.getString(R.string.recommendations), res.getString(R.string.url));
+
         SharedPreferences pref = getContext().getSharedPreferences("location", MODE_PRIVATE);
         final Double latitude = Double.parseDouble(pref.getString("latitude", null));
         final Double longitude = Double.parseDouble(pref.getString("longitude", null));
@@ -129,7 +135,7 @@ public class RecommendedListView extends Fragment {
         });
 
         return view;
-    }
+    }//end onCreateView
 
     class MyBinder implements SimpleAdapter.ViewBinder {
         @Override
@@ -143,5 +149,5 @@ public class RecommendedListView extends Fragment {
             }
             return false;
         }
-    }
-}
+    }//end myBinder adapter for populating rating bars
+}//end Class

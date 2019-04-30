@@ -1,5 +1,6 @@
 package e.iantm.recommendationapplication;
 
+//imports packages
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,17 +22,19 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
     private static final int REQUEST_CODE_ENABLE = 11;
-    String userName = null;
-    String viewInfo = null;
-    String firstLoad = null;
+    String userName = null, viewInfo = null, firstLoad = null;
     SharedPreferences instructionsPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //gets username from sharedPreferences
         SharedPreferences preferences = getSharedPreferences("account", 0);
         userName = preferences.getString("user", null);
 
+        //creates bottom navigation bar
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
 
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         viewInfo = intent.getStringExtra("viewInfo");
         firstLoad = intent.getStringExtra("settings");
 
+        //if statement for checking if first load or not
         if (firstLoad != null) {
             instructionsPref = (this.getSharedPreferences("instructions", Context.MODE_PRIVATE));
             SharedPreferences.Editor editor = instructionsPref.edit();
@@ -66,8 +70,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                    setTitle("Recommendations");
             }
         }
-    }
+    }//end onCreate
 
+
+    /**
+     *Method for function of nav bar clicked
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
@@ -117,8 +125,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 break;
         }
         return loadFragment1(fragment, userName,null);
-    }
+    }//end navigation select method
 
+    /**
+     *loads fragments into container
+     */
     private boolean loadFragment1(Fragment fragment, String userName, String viewInfo) {
         //switching fragment
         Bundle bundle = new Bundle();
@@ -133,8 +144,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             return true;
         }
         return false;
-    }
+    }//end load fragment method for page containers
 
+    /**
+     * load fragment into container if first install
+     */
     private boolean loadFragmentFirst(Fragment fragment, Fragment fragment1, String userName, String viewInfo) {
         //switching fragment
         Bundle bundle = new Bundle();
@@ -150,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             return true;
         }
         return false;
-    }
+    }//end load fragment method for initial install
 
     private void checkFirstRun() {
         final String PREFS_NAME = "MyPrefsFile";
@@ -183,4 +197,4 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         prefs.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode).apply();
 
     }
-}
+}//end class

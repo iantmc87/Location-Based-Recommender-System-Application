@@ -36,7 +36,6 @@
     </string-array>
 
     <string-array name="cuisine_entries">
-        <item>All</item>
         <item>American</item>
         <item>Caribbean</item>
         <item>Chinese</item>
@@ -53,7 +52,6 @@
 
     </string-array>
     <string-array name="cuisine_values">
-        <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
@@ -70,7 +68,6 @@
     </string-array>
 
     <string-array name="ambience_entries">
-        <item>All</item>
         <item>Casual</item>
         <item>Classy</item>
         <item>Divey</item>
@@ -83,7 +80,6 @@
     </string-array>
 
     <string-array name="ambience_values">
-        <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
@@ -96,7 +92,6 @@
     </string-array>
 
     <string-array name="price_entries">
-        <item>All</item>
         <item>Cheap</item>
         <item>Good Value</item>
         <item>Average</item>
@@ -104,7 +99,6 @@
     </string-array>
 
     <string-array name="price_values">
-        <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
@@ -112,7 +106,6 @@
     </string-array>
 
     <string-array name="alcohol_entries">
-        <item>All</item>
         <item>None</item>
         <item>Beer and Wine</item>
         <item>Full Bar</item>
@@ -120,7 +113,6 @@
     </string-array>
 
     <string-array name="alcohol_values">
-        <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>

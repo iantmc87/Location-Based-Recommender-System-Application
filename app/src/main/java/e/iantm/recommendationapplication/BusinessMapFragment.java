@@ -1,8 +1,7 @@
 package e.iantm.recommendationapplication;
 
+//import packages
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
@@ -11,13 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -27,17 +20,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /************************************************************
  Author - Ian McManus
@@ -50,9 +35,10 @@ import java.util.Map;
 public class BusinessMapFragment extends SupportMapFragment implements OnMapReadyCallback {
 
     GoogleMap mMap;
-    String places, updateLocation, userName;
+    String places, updateLocation, userName, title;
+    Double longitude, latitude, businessLat, businessLong;
+
     RequestQueue requestQueue;
-    Double longitude, latitude;
     Resources res;
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -60,9 +46,9 @@ public class BusinessMapFragment extends SupportMapFragment implements OnMapRead
     // The entry point to the Fused Location Provider.
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
-    // A default location (Sydney, Australia) and default zoom to use when location permission is
+    // A default location and default zoom to use when location permission is
     // not granted.
-    private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
+    private final LatLng mDefaultLocation = new LatLng(53.7544, -2.3666);
     private static final int DEFAULT_ZOOM = 11;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
@@ -76,7 +62,7 @@ public class BusinessMapFragment extends SupportMapFragment implements OnMapRead
         super.onResume();
 
         setUpMapIfNeeded();
-    }
+    }// on map resume method
 
     private void setUpMapIfNeeded() {
 
@@ -90,7 +76,7 @@ public class BusinessMapFragment extends SupportMapFragment implements OnMapRead
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
-    }
+    }//end map set up function
 
     @Override
     public void onMapReady(GoogleMap googleMap)
@@ -99,6 +85,9 @@ public class BusinessMapFragment extends SupportMapFragment implements OnMapRead
         Bundle bundle = getArguments();
         if(bundle != null) {
             userName = String.valueOf(bundle.get("userName"));
+            businessLat = bundle.getDouble("latitude");
+            businessLong = bundle.getDouble("longitude");
+            title = String.valueOf(bundle.get("title"));
         }
         mMap = googleMap;
 
@@ -115,7 +104,7 @@ public class BusinessMapFragment extends SupportMapFragment implements OnMapRead
         getDeviceLocation();
 
 
-    }
+    }//end onMapReady method
 
     public void getDeviceLocation() {
         /*
@@ -132,16 +121,12 @@ public class BusinessMapFragment extends SupportMapFragment implements OnMapRead
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = task.getResult();
 
+                            //gets users location
                             if(mLastKnownLocation != null) {
                                 latitude = mLastKnownLocation.getLatitude();
                                 longitude = mLastKnownLocation.getLongitude();
 
-                                SharedPreferences pref = getContext().getSharedPreferences("location", Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = pref.edit();
-
-                                editor.putString("latitude", latitude.toString());
-                                editor.putString("longitude", longitude.toString());
-                                editor.commit();
+                                //creates volley request
                                 requestQueue = Volley.newRequestQueue(getContext());
                                 res = getResources();
                                 updateLocation = String.format(res.getString(R.string.updateLocation), res.getString(R.string.url));
@@ -149,80 +134,19 @@ public class BusinessMapFragment extends SupportMapFragment implements OnMapRead
 
                                 LatLng current = new LatLng(latitude, longitude);
 
+                                //add location marker to the map
                                 mMap.addMarker(new MarkerOptions()
                                         .position(current)
                                         .title("Current Position")
                                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(new LatLng(businessLat, businessLong))
+                                        .title(title)
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         current, DEFAULT_ZOOM));
-
-                                Request request = new StringRequest(Request.Method.POST, updateLocation, new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
-
-                                    }
-                                }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-
-                                    }
-                                }) {
-                                    @Override
-                                    protected Map<String, String> getParams() throws AuthFailureError {
-                                        Map<String, String> parameters = new HashMap<String, String>();
-                                        parameters.put("longitude", longitude.toString());
-                                        parameters.put("latitude", latitude.toString());
-                                        parameters.put("user_name", userName);
-
-                                        return parameters;
-                                    }
-                                };
-                                requestQueue.add(request);
-
-                                        StringRequest stringRequest = new StringRequest(Request.Method.POST, places, new Response.Listener<String>() {
-                                            @Override
-                                            public void onResponse(String response) {
-                                                try {
-                                                    JSONObject jsonObject = new JSONObject(response.toString());
-                                                    JSONArray recommendations = jsonObject.getJSONArray("recommendations");
-                                                    String name;
-                                                    Double longitude;
-                                                    Double latitude;
-                                                    Marker m;
-
-
-                                                        JSONObject obj = recommendations.getJSONObject(0);
-                                                        name = obj.getString("name");
-                                                        longitude = obj.getDouble("longitude");
-                                                        latitude = obj.getDouble("latitude");
-
-                                                            mMap.addMarker(new MarkerOptions()
-                                                                    .position(new LatLng(latitude, longitude))
-                                                                    .title(name)
-                                                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
-
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        }, new Response.ErrorListener() {
-                                            @Override
-                                            public void onErrorResponse(VolleyError error) {
-
-                                            }
-                                        }) {
-                                            @Override
-                                            protected Map<String, String> getParams() throws AuthFailureError {
-                                                Map<String, String> parameters = new HashMap<String, String>();
-                                                parameters.put("user_name", userName);
-                                                parameters.put("longitude", longitude.toString());
-                                                parameters.put("latitude", latitude.toString());
-
-                                                return parameters;
-                                            }
-                                        };
-                                        requestQueue.add(stringRequest);
 
                             }
                         } else {
@@ -238,7 +162,7 @@ public class BusinessMapFragment extends SupportMapFragment implements OnMapRead
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
         }
-    }
+    }//end get device location method
 
 
     /**
@@ -259,7 +183,7 @@ public class BusinessMapFragment extends SupportMapFragment implements OnMapRead
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
-    }
+    }//end get location permission method
 
     /**
      * Handles the result of the request for location permissions.
@@ -279,7 +203,11 @@ public class BusinessMapFragment extends SupportMapFragment implements OnMapRead
             }
         }
         updateLocationUI();
-    }
+    }//end method for when location permission is given
+
+    /**
+     * Updates the locationUI
+     */
     private void updateLocationUI() {
         if (mMap == null) {
             return;
@@ -297,5 +225,5 @@ public class BusinessMapFragment extends SupportMapFragment implements OnMapRead
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
         }
-    }
-}
+    }//end update location UI method
+}//end class

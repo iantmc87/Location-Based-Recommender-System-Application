@@ -35,7 +35,7 @@ public class ReviewsInstructionsFragment extends Fragment {
         });
 
         return view;
-    }
+    }//end onCreateView
 
 
-}
+}//end class

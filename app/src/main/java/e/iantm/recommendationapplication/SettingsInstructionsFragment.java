@@ -35,5 +35,5 @@ public class SettingsInstructionsFragment extends Fragment {
         });
 
         return view;
-    }
-}
+    }//end OnCreateView
+}//end class

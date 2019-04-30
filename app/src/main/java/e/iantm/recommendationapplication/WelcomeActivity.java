@@ -62,11 +62,11 @@ public class WelcomeActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_ENABLE = 11;
     private boolean accountsPermissionGranted;
     private static final int REQUEST_GET_ACCOUNT = 112;
-    String newUser;
+
     Resources res;
     RequestQueue requestQueue;
     StringRequest request;
-    String userName = null;
+    String userName = null, newUser;
     SharedPreferences accountName, locationFirst;
 
     @Override
@@ -165,7 +165,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 }
             }
         });
-    }
+    }//end onCreate
 
     private void addBottomDots(int currentPage) {
         dots = new TextView[layouts.length];
@@ -184,7 +184,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         if (dots.length > 0)
             dots[currentPage].setTextColor(colorsActive[currentPage]);
-    }
+    }//end method for adding bottom dots
 
     private int getItem(int i) {
         return viewPager.getCurrentItem() + i;
@@ -197,7 +197,7 @@ public class WelcomeActivity extends AppCompatActivity {
         intent.putExtra(AppLock.EXTRA_TYPE, AppLock.UNLOCK_PIN);
         startActivity(intent);
         finish();
-    }
+    }//end method for launching home screen
 
     private void launchPinCreate() {
         prefManager.setFirstTimeLaunch(false);
@@ -206,7 +206,7 @@ public class WelcomeActivity extends AppCompatActivity {
         intent.putExtra("first", "first");
         startActivityForResult(intent, REQUEST_CODE_ENABLE);
         finish();
-    }
+    }//end method for launching pin create screen
 
     //  viewpager change listener
     ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -295,7 +295,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         //If permission is not granted returning false
         return false;
-    }
+    }//end method for checking if accounts permission granted
 
     //if you don't have the permission then Requesting for permission
     private void requestGET_ACCOUNTSPermission(){
@@ -307,7 +307,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         //And finally ask for the permission
         ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.GET_ACCOUNTS},REQUEST_GET_ACCOUNT);
-    }
+    }//end method for getting accounts permission
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
@@ -376,7 +376,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
             }
         }
-    }
+    }//end method for when permission chosen
 
     public void getMailAddress(){
 
@@ -420,5 +420,5 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         };
         requestQueue.add(request);
-    }
-}
+    }//end method for getting account name
+}//end class
