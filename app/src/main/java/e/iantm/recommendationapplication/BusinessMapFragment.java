@@ -49,7 +49,7 @@ public class BusinessMapFragment extends SupportMapFragment implements OnMapRead
     // A default location and default zoom to use when location permission is
     // not granted.
     private final LatLng mDefaultLocation = new LatLng(53.7544, -2.3666);
-    private static final int DEFAULT_ZOOM = 11;
+    private static final int DEFAULT_ZOOM = 5;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
 

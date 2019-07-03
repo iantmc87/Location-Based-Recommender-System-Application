@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,7 +124,8 @@ public class ViewReviewsFragment extends Fragment {
                 StringRequest request = new StringRequest(Request.Method.POST, deleteReview, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.detach(ViewReviewsFragment.this).attach(ViewReviewsFragment.this).commit();
                     }
                 }, new Response.ErrorListener() {
                     @Override
