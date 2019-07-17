@@ -1,8 +1,7 @@
 # Location-Based-Recommender-System-Application
 Location based recommender system for restaurants - Mobile Application
 
-This project is the mobile application front-end for the recommender system created at <a href="https://github.com/iantmc87/Location-Based-Recommender-System-Server">Location-
-Based-Recommender-System-Server</a>. The application tracks the users location and sends the data to the server 
+This project is the mobile application front-end for the recommender system created at <a href="https://github.com/iantmc87/Location-Based-Recommender-System-Server">Location-Based-Recommender-System-Server</a>. The application tracks the users location and sends the data to the server 
 and then displays the recommended restaurants to the user.
 <br><br>
 The application has the following features:
@@ -46,3 +45,21 @@ The application has the following features:
 <hr>
 
 <h3>Screenshots</h3>
+
+<b>Home Page</b>
+![Alt text](/screenshots/homepage.jpg?raw=true "Home Page")
+
+<b>Review Page</b>
+![Alt text](/screenshots/reviewpage.jpg?raw=true "Review Page")
+
+<b>Add Review</b>
+![Alt text](/screenshots/addreview.jpg?raw=true "Add Review")
+
+<b>View Business on Map</b>
+![Alt text](/screenshots/viewbusinessonmap.jpg?raw=true "Business Map")
+
+<b>Settings</b>
+![Alt text](/screenshots/settings.jpg?raw=true "Settings")
+
+<b>Pinlock Screen</b>
+![Alt text](/screenshots/pinlock.jpg?raw=true "Pinlock Screen")
